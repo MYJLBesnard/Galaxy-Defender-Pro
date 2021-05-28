@@ -31,8 +31,8 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-         if (other.tag == "Player")
-         {
+        if (other.tag == "Player")
+        {
             PlayerScript player = other.transform.GetComponent<PlayerScript>();
 
             if (player != null)
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
             }
 
             Destroy(this.gameObject);
-         }
+        }
 
         if (other.tag == "LaserPlayer")
         {
@@ -50,3 +50,7 @@ public class Enemy : MonoBehaviour
         }
     }
 }
+
+
+
+
