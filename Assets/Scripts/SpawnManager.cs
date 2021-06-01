@@ -5,37 +5,29 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _enemy1;
+    private GameObject _enemyPrefab;
 
-    // Start is called before the first frame update
+    [SerializeField]
+    private GameObject _enemyContainer;
+
     void Start()
     {
-        
         StartCoroutine(SpawnRoutine());
-
     }
 
-    // Update is called once per frame
     void Update()
     {
-    }
 
-    // spawn game objects every 5 seconds
-    // Create a coroutine of type IEnumerator -- Yield Events
-    // use a While loop
+    }
 
     IEnumerator SpawnRoutine()
     {
-        // while loop (infinite loop)
-        // instantiate enemy prefab
-        // yield wait for 5 seconds
-
         while (true)
         {
-            transform.position = new Vector3(-5, 0, 0);
-            Instantiate(_enemy1, transform.position, Quaternion.identity);
+            Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
+            GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
+            newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(5.0f);
         }
     }
-
 }
