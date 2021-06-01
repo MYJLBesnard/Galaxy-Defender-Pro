@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657934, g: 0.4964136, b: 0.5748189, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -245,6 +245,7 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 4590086578092343861, guid: 384b282a7eed9447bb28358df1be4f47,
     type: 3}
   _enemyContainer: {fileID: 839137364}
+  _stopSpawning: 0
 --- !u!4 &113864090
 Transform:
   m_ObjectHideFlags: 0
@@ -328,6 +329,7 @@ MonoBehaviour:
     type: 3}
   _hasPlayerLaserCooledDown: 1
   _playerRateOfFire: 0.5
+  _spawnManager: {fileID: 113864089}
 --- !u!65 &1385678726
 BoxCollider:
   m_ObjectHideFlags: 0
