@@ -19,10 +19,19 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private float _playerRateOfFire = 0.5f;
 
+    [SerializeField]
+    private SpawnManager _spawnManager;
+
 
     void Start()
     {
         transform.position = new Vector3(-5, 0, 0);
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("The Spawn Manager is null.");
+        }
     }
 
     void Update()
@@ -74,6 +83,7 @@ public class PlayerScript : MonoBehaviour
 
         if (_lives < 1)
         {
+            _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
     }
