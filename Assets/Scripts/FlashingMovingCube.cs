@@ -7,31 +7,24 @@ public class FlashingMovingCube : MonoBehaviour
     [SerializeField]
     private int _speed = 5;
 
-    // Start is called before the first frame update
+    public bool isCoroutineRunning = false;
+
     void Start()
     {
-       
+
     }
 
-    // Update is called once per frame
     void Update()
     {
-       // StartCoroutine(NameOfCoroutine());
-        StartCoroutine(MoveThatCube());
+        MoveThatCube();
+
+        if (Input.GetKeyDown(KeyCode.Space) && isCoroutineRunning == false)
+        {
+            StartCoroutine(FirstCoroutine());
+        }
     }
 
-    IEnumerator NameOfCoroutine()
-    {
-        yield return null;
-        Debug.Log("Waited for a frame.");
-
-        yield return new WaitForSeconds(3.0f);
-        Debug.Log("Waited for 3 seconds");
-
-        yield return StartCoroutine(MoveThatCube());
-    }
-
-    IEnumerator MoveThatCube()
+    public void MoveThatCube()
     {
         transform.Translate(Vector3.right * _speed * Time.deltaTime);
         if (transform.position.x > 10)
@@ -42,8 +35,32 @@ public class FlashingMovingCube : MonoBehaviour
         {
             _speed *= -1;
         }
-        
+    }
+
+    IEnumerator FirstCoroutine()
+    {
+        isCoroutineRunning = true;
+        Debug.Log("User pressed the Space bar. I'm starting the first coroutine.");
 
         yield return null;
+        Debug.Log("Waited for a frame.");
+
+        yield return new WaitForSeconds(3.0f);
+        Debug.Log("Waited for 3 seconds");
+
+        yield return StartCoroutine(PrintAMessage());
+        Debug.Log("Back in the original Coroutine.  Ready for the Space bar again...");
+        isCoroutineRunning = false;
     }
+
+    IEnumerator PrintAMessage()
+    {
+        Debug.Log("Began the PrintAMessage() coroutine.");
+        yield return null;
+        Debug.Log("Hi World!");
+        yield return new WaitForSeconds(5f);
+        Debug.Log("Waited for 5 seconds. Leaving the PrintAMessage() coroutine.");
+    }
+
+   
 }
