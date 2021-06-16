@@ -11,11 +11,21 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemyContainer;
 
     [SerializeField]
+    private GameObject _playerTripleShotPowerUpPrefab;
+
+    [SerializeField]
+    private GameObject _playerShieldPowerUpPrefab;
+
+    [SerializeField]
+    private GameObject _playerSpeedPowerUpPrefab;
+
+    [SerializeField]
     private bool _stopSpawning = false;
 
     void Start()
     {
         StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerUps());
     }
 
     IEnumerator SpawnEnemyRoutine()
@@ -27,6 +37,17 @@ public class SpawnManager : MonoBehaviour
             GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(Random.Range(2f, 6f));
+        }
+    }
+
+    IEnumerator SpawnPowerUps()
+    {
+        yield return new WaitForSeconds(2.0f);
+        while (_stopSpawning == false)
+        {
+            Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
+            Instantiate(_playerTripleShotPowerUpPrefab, pxToSpawn, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(6f, 10f));
         }
     }
 

@@ -14,13 +14,26 @@ public class PlayerScript : MonoBehaviour
     private GameObject _playerLaserPrefab;
 
     [SerializeField]
+    private GameObject _playerTripleShotLaserPrefab;
+
+    [SerializeField]
     private bool _hasPlayerLaserCooledDown = true;
 
     [SerializeField]
-    private float _playerRateOfFire = 0.5f;
+    private float _playerRateOfFire = 0.15f;
 
     [SerializeField]
     private SpawnManager _spawnManager;
+
+    [SerializeField]
+    private bool _isPlayerTripleShotActive = false;
+
+    [SerializeField]
+    private bool _isPlayerShieldActive = false;
+
+    [SerializeField]
+    private bool _isPlayerSpeedBoostActive = false;
+
 
 
     void Start()
@@ -66,7 +79,15 @@ public class PlayerScript : MonoBehaviour
 
     void PlayerFireLaser()
     {
-        Instantiate(_playerLaserPrefab, transform.position + new Vector3(0, 0.7f, 0), Quaternion.identity);
+        if (_isPlayerTripleShotActive == true)
+        {
+            Instantiate(_playerTripleShotLaserPrefab, transform.position, Quaternion.identity);
+        }
+        else 
+        {
+            Instantiate(_playerLaserPrefab, transform.position + new Vector3(0, 0.7f, 0), Quaternion.identity);
+        }
+        
         _hasPlayerLaserCooledDown = false;
         StartCoroutine(PlayerLaserCoolDownTimer());
     }
@@ -86,5 +107,41 @@ public class PlayerScript : MonoBehaviour
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
+    }
+
+    public void TripleShotActivate()
+    {
+        _isPlayerTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownTimer());
+    }
+
+    public void ShieldActivate()
+    {
+        _isPlayerShieldActive = true;
+        StartCoroutine(ShieldPowerDownTimer());
+    }
+
+    public void SpeedBoostActivate()
+    {
+        _isPlayerSpeedBoostActive = true;
+        StartCoroutine(SpeedBoostPowerDownTimer());
+    }
+
+    IEnumerator TripleShotPowerDownTimer()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isPlayerTripleShotActive = false;
+    }
+
+    IEnumerator ShieldPowerDownTimer()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isPlayerShieldActive = false;
+    }
+
+    IEnumerator SpeedBoostPowerDownTimer()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _isPlayerSpeedBoostActive = false;
     }
 }
