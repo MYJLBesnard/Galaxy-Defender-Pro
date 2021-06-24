@@ -5,7 +5,7 @@ using UnityEngine;
 public class PowerUps : MonoBehaviour
 {
     [SerializeField]
-    private float _speedOfPowerUps = 3.0f;
+    private float _speedOfPowerUps = .5f;
 
     [SerializeField]
     private int _powerUpID;  // ID for PwrUp: 0 = Triple Shot, 1 = Speed Boost, 2 = Shields.
@@ -28,17 +28,17 @@ public class PowerUps : MonoBehaviour
 
             if (player != null)
             {
-                if (_powerUpID == 0)
+                switch (_powerUpID)
                 {
-                    player.TripleShotActivate();
-                }
-                else if (_powerUpID == 1)
-                {
-                    player.SpeedBoostActivate();
-                }
-                else if (_powerUpID == 2)
-                {
-                    player.ShieldActivate();
+                    case 0:
+                        player.TripleShotActivate();
+                        break;
+                    case 1:
+                        player.SpeedBoostActivate();
+                        break;
+                    case 2:
+                        player.ShieldActivate();
+                        break;
                 }
             }
 

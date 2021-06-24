@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6131767636904898458}
   - component: {fileID: 1158691267588027488}
   - component: {fileID: 3940978782445473057}
-  - component: {fileID: 875125552}
+  - component: {fileID: 423776478}
   m_Layer: 0
   m_Name: PlayerTripleShotPowerUp
   m_TagString: Untagged
@@ -135,7 +135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speedOfPowerUps: 3
---- !u!95 &875125552
+  _powerUpID: 0
+--- !u!95 &423776478
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -145,7 +146,7 @@ Animator:
   m_GameObject: {fileID: 1964161015771805903}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 063fdbcd24af945be940c8f2b5e9a75a, type: 2}
+  m_Controller: {fileID: 9100000, guid: 995faa77a23994e2282705d0479fafb4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

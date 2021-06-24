@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 5.0f;
+    private float _speedMultiplier = 1.75f;
 
     [SerializeField]
     private int _lives = 3;
@@ -15,6 +16,9 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private GameObject _playerTripleShotLaserPrefab;
+
+    [SerializeField]
+    private GameObject _playerShield;
 
     [SerializeField]
     private bool _hasPlayerLaserCooledDown = true;
@@ -35,10 +39,9 @@ public class PlayerScript : MonoBehaviour
     private bool _isPlayerSpeedBoostActive = false;
 
 
-
     void Start()
     {
-        transform.position = new Vector3(-5, 0, 0);
+        transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
 
         if (_spawnManager == null)
@@ -61,9 +64,11 @@ public class PlayerScript : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+
         transform.Translate(direction * _speed * Time.deltaTime);
+
+       // transform.Translate(direction * _speed * Time.deltaTime);
 
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
@@ -100,7 +105,15 @@ public class PlayerScript : MonoBehaviour
 
     public void Damage()
     {
-        _lives--;
+        if (_isPlayerShieldActive == true)
+        {
+            _isPlayerShieldActive = false;
+            _playerShield.SetActive(false);
+            return;
+        }
+        
+            _lives--;
+        
 
         if (_lives < 1)
         {
@@ -115,16 +128,17 @@ public class PlayerScript : MonoBehaviour
         StartCoroutine(TripleShotPowerDownTimer());
     }
 
-    public void ShieldActivate()
-    {
-        _isPlayerShieldActive = true;
-        StartCoroutine(ShieldPowerDownTimer());
-    }
-
     public void SpeedBoostActivate()
     {
         _isPlayerSpeedBoostActive = true;
+        _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownTimer());
+    }
+
+    public void ShieldActivate()
+    {
+        _isPlayerShieldActive = true;
+        _playerShield.SetActive(true);
     }
 
     IEnumerator TripleShotPowerDownTimer()
@@ -133,15 +147,10 @@ public class PlayerScript : MonoBehaviour
         _isPlayerTripleShotActive = false;
     }
 
-    IEnumerator ShieldPowerDownTimer()
-    {
-        yield return new WaitForSeconds(5.0f);
-        _isPlayerShieldActive = false;
-    }
-
     IEnumerator SpeedBoostPowerDownTimer()
     {
         yield return new WaitForSeconds(5.0f);
+        _speed /= _speedMultiplier;
         _isPlayerSpeedBoostActive = false;
     }
 }
