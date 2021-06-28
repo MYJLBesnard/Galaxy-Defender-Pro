@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float _enemyOneSpeed;
 
+    private PlayerScript _player;
+
     [SerializeField]
     private GameObject _enemyOnePrefab;
 
@@ -14,6 +16,12 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _enemyOneSpeed = Random.Range(2.5f, 4.5f);
+        _player = GameObject.Find("Player").GetComponent<PlayerScript>();
+
+        if (_player == null)
+        {
+            Debug.Log("The PlayerScript is null.");
+        }
     }
 
     // Update is called once per frame
@@ -46,6 +54,13 @@ public class Enemy : MonoBehaviour
         if (other.tag == "LaserPlayer")
         {
             Destroy(other.gameObject);
+
+            if (_player != null)
+            {
+                _player.AddScore(10); // calls the AddScore() method in the PlayerScript to add 10 points to the score
+                                      // the value of 10 is set to this type of enemy, but we could expand later with a
+                                      // Switch statement to attribute different values to "points"
+            }
             Destroy(this.gameObject);
         }
     }

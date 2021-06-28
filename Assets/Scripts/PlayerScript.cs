@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -10,6 +10,12 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private int _lives = 3;
+
+    [SerializeField]
+    private int _score;
+
+    [SerializeField]
+    private UIManager _uiManager;
 
     [SerializeField]
     private GameObject _playerLaserPrefab;
@@ -43,10 +49,16 @@ public class PlayerScript : MonoBehaviour
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
         if (_spawnManager == null)
         {
             Debug.LogError("The Spawn Manager is null.");
+        }
+
+        if (_uiManager == null)
+        {
+            Debug.Log("The UI Manager on the Canvas is null.");
         }
     }
 
@@ -101,6 +113,12 @@ public class PlayerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(_playerRateOfFire);
         _hasPlayerLaserCooledDown = true;
+    }
+
+    public void AddScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score); // communicate with the UI to update the score
     }
 
     public void Damage()
