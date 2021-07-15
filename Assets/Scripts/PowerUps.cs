@@ -8,7 +8,7 @@ public class PowerUps : MonoBehaviour
     private float _speedOfPowerUps = .5f;
 
     [SerializeField]
-    private int _powerUpID;  // ID for PwrUp: 0 = Triple Shot, 1 = Speed Boost, 2 = Shields.
+    private int _powerUpID;  // ID for PwrUp: 0 = Triple Shot, 1 = Speed Boost, 2 = Shields, 3 = Health.
 
     void Update()
     {
@@ -38,6 +38,9 @@ public class PowerUps : MonoBehaviour
                         break;
                     case 2:
                         player.ShieldActivate();
+                        break;
+                    case 3:
+                        player.HealthBoostActivate();
                         break;
                 }
             }

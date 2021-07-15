@@ -16,7 +16,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private bool _stopSpawning = false;
 
-    void Start()
+    public void StartSpawning()
     {
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUps());
@@ -40,14 +40,25 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            int randomPowerUp = Random.Range(0, 3);
+            int randomPowerUp = Random.Range(0, 4);
             Instantiate(_playerPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(6f, 10f));
+            yield return new WaitForSeconds(Random.Range(2f, 6f));
         }
     }
 
     public void OnPlayerDeath()
     {
         _stopSpawning = true;
+    }
+
+    public void OnPlayerReset()
+    {
+        _stopSpawning = true;
+    }
+
+    public void OnPlayerReady()
+    {
+        _stopSpawning = false;
+        StartSpawning();
     }
 }

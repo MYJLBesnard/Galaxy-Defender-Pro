@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-//using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
@@ -18,13 +18,28 @@ public class PlayerScript : MonoBehaviour
     private UIManager _uiManager;
 
     [SerializeField]
+    private GameObject _player;
+
+    [SerializeField]
     private GameObject _playerLaserPrefab;
+
+    [SerializeField]
+    private GameObject _playerDoubleShotLaserPrefab;
 
     [SerializeField]
     private GameObject _playerTripleShotLaserPrefab;
 
     [SerializeField]
+    private GameObject _playerHealthPowerUpPrefab;
+
+    [SerializeField]
     private GameObject _playerShield;
+
+    [SerializeField]
+    private GameObject _playerThrusterLeft, _playerThrusterRight;
+
+    [SerializeField]
+    private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
 
     [SerializeField]
     private bool _hasPlayerLaserCooledDown = true;
@@ -44,6 +59,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private bool _isPlayerSpeedBoostActive = false;
 
+    public List<GameObject> poolDamageAnimations = new List<GameObject>();
+    public List<GameObject> activatedDamageAnimations = new List<GameObject>();
 
     void Start()
     {
@@ -80,8 +97,6 @@ public class PlayerScript : MonoBehaviour
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
-       // transform.Translate(direction * _speed * Time.deltaTime);
-
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
         if (transform.position.x > 11.3f)
@@ -100,11 +115,11 @@ public class PlayerScript : MonoBehaviour
         {
             Instantiate(_playerTripleShotLaserPrefab, transform.position, Quaternion.identity);
         }
-        else 
+        else
         {
-            Instantiate(_playerLaserPrefab, transform.position + new Vector3(0, 0.7f, 0), Quaternion.identity);
+            Instantiate(_playerDoubleShotLaserPrefab, transform.position, Quaternion.identity);
         }
-        
+
         _hasPlayerLaserCooledDown = false;
         StartCoroutine(PlayerLaserCoolDownTimer());
     }
@@ -129,15 +144,63 @@ public class PlayerScript : MonoBehaviour
             _playerShield.SetActive(false);
             return;
         }
-        
+
+        // randomly selects damaged area and sets it active.  The removes from pool to "Active" list.
+        if (poolDamageAnimations.Count > 0)
+        {
+            var rdmDamage = Random.Range(0, poolDamageAnimations.Count);
+            var temp = poolDamageAnimations[rdmDamage];
+            activatedDamageAnimations.Add(temp);
+            temp.SetActive(true);
+            poolDamageAnimations.Remove(temp);
+            return;
+        }
+
+        if (poolDamageAnimations.Count == 0)
+        {
             _lives--;
-        
+            _uiManager.UpdateLives(_lives);
+
+            ResetDamageAnimationList();
+            StartCoroutine(ResetPlayerPosition());
+        }
 
         if (_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
+    }
+
+    public void ResetDamageAnimationList()
+    {
+        _spawnManager.OnPlayerReset();
+
+        while (activatedDamageAnimations.Count > 0)
+        {
+            var rdmDamage = Random.Range(0, activatedDamageAnimations.Count);
+            var temp = activatedDamageAnimations[rdmDamage];
+            poolDamageAnimations.Add(temp);
+            temp.SetActive(false);
+            activatedDamageAnimations.Remove(temp);
+        }
+    }
+
+    IEnumerator ResetPlayerPosition()
+    {
+        transform.position = new Vector3(0, 0, 0);
+
+        yield return new WaitForSeconds(0.01f);
+
+        GetComponent<BoxCollider2D>().enabled = false;
+        _hasPlayerLaserCooledDown = false;
+        _uiManager.ReadySetGo();
+
+        yield return new WaitForSeconds(6.0f);
+
+        GetComponent<BoxCollider2D>().enabled = true;
+        _hasPlayerLaserCooledDown = true;
+        _spawnManager.OnPlayerReady();
     }
 
     public void TripleShotActivate()
@@ -151,6 +214,20 @@ public class PlayerScript : MonoBehaviour
         _isPlayerSpeedBoostActive = true;
         _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownTimer());
+    }
+
+    public void HealthBoostActivate()
+    {
+        // Reverses damage by removing random (if more than 1 active) damages area and returning it to the pool.  This should also
+        // add a life (?)
+        if (activatedDamageAnimations.Count > 0)
+        {
+            var rdmDamage = Random.Range(0, activatedDamageAnimations.Count);
+            var temp = activatedDamageAnimations[rdmDamage];
+            poolDamageAnimations.Add(temp);
+            temp.SetActive(false);
+            activatedDamageAnimations.Remove(temp);
+        }
     }
 
     public void ShieldActivate()

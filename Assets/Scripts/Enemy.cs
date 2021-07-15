@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     private float _enemyOneSpeed;
 
     private PlayerScript _player;
+    private Animator _animEnemyDestroyed;
 
     [SerializeField]
     private GameObject _enemyOnePrefab;
@@ -17,10 +18,16 @@ public class Enemy : MonoBehaviour
     {
         _enemyOneSpeed = Random.Range(2.5f, 4.5f);
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
+        _animEnemyDestroyed = GetComponent<Animator>();
 
         if (_player == null)
         {
             Debug.Log("The PlayerScript is null.");
+        }
+
+        if (_animEnemyDestroyed == null)
+        {
+            Debug.Log("The Enemy Dstroyed anim is null.");
         }
     }
 
@@ -48,7 +55,7 @@ public class Enemy : MonoBehaviour
                 player.Damage();
             }
 
-            Destroy(this.gameObject);
+            DestroyEnemyShip();
         }
 
         if (other.tag == "LaserPlayer")
@@ -61,8 +68,18 @@ public class Enemy : MonoBehaviour
                                       // the value of 10 is set to this type of enemy, but we could expand later with a
                                       // Switch statement to attribute different values to "points"
             }
-            Destroy(this.gameObject);
+
+            DestroyEnemyShip();
         }
+    }
+
+    private void DestroyEnemyShip()
+    {
+        _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
+        _enemyOneSpeed = 0;
+        Destroy(GetComponent<Rigidbody2D>());
+        Destroy(GetComponent<BoxCollider2D>());
+        Destroy(this.gameObject, 2.8f);
     }
 }
 
