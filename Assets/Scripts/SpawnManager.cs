@@ -59,6 +59,5 @@ public class SpawnManager : MonoBehaviour
     public void OnPlayerReady()
     {
         _stopSpawning = false;
-        StartSpawning();
     }
 }

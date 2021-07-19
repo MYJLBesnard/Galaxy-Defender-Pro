@@ -10,6 +10,7 @@ public class StartGameAsteroid : MonoBehaviour
     [SerializeField]
     private GameObject _explosionPrefab;
     private SpawnManager _spawnManager;
+    private PlayerScript _playerScript;
 
     private void Start()
     {
@@ -17,9 +18,16 @@ public class StartGameAsteroid : MonoBehaviour
 
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
 
+        _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
+
         if (_spawnManager == null)
         {
             Debug.Log("The SpawnManager is null.");
+        }
+
+        if (_playerScript == null)
+        {
+            Debug.Log("The PlayerScript is null.");
         }
     }
 
@@ -35,6 +43,8 @@ public class StartGameAsteroid : MonoBehaviour
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
             Destroy(other.gameObject);
             Destroy(this.gameObject, 0.25f);
+
+            _playerScript.AsteroidDestroyed();
 
             _spawnManager.StartSpawning();
         }

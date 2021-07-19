@@ -42,7 +42,10 @@ public class PlayerScript : MonoBehaviour
     private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
 
     [SerializeField]
-    private bool _hasPlayerLaserCooledDown = true;
+    private GameObject _bigExplosionPrefab;
+
+    [SerializeField]
+    private bool _hasPlayerLaserCooledDown = false;
 
     [SerializeField]
     private float _playerRateOfFire = 0.15f;
@@ -58,6 +61,12 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private bool _isPlayerSpeedBoostActive = false;
+
+    [SerializeField]
+    private bool _gameFirstStart = true;
+
+    [SerializeField]
+    private bool _asteroidDestroyed = false;
 
     public List<GameObject> poolDamageAnimations = new List<GameObject>();
     public List<GameObject> activatedDamageAnimations = new List<GameObject>();
@@ -77,15 +86,20 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.Log("The UI Manager on the Canvas is null.");
         }
+
+        StartCoroutine(ResetPlayerPosition());
     }
 
     void Update()
     {
-        CalculateMovement();
-
-        if (Input.GetKeyDown(KeyCode.Space) && _hasPlayerLaserCooledDown)
+        if (_gameFirstStart == false)
         {
-            PlayerFireLaser();
+            CalculateMovement();
+
+            if (Input.GetKeyDown(KeyCode.Space) && _hasPlayerLaserCooledDown)
+            {
+                PlayerFireLaser();
+            }
         }
     }
 
@@ -161,13 +175,19 @@ public class PlayerScript : MonoBehaviour
             _lives--;
             _uiManager.UpdateLives(_lives);
 
-            ResetDamageAnimationList();
-            StartCoroutine(ResetPlayerPosition());
+            Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
+
+            if (_lives != 0)
+            {
+                ResetDamageAnimationList();
+                StartCoroutine(ResetPlayerPosition());
+            }
         }
 
         if (_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
+            Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
     }
@@ -186,21 +206,36 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    public void AsteroidDestroyed()
+    {
+        _asteroidDestroyed = true;
+    }
+
     IEnumerator ResetPlayerPosition()
     {
-        transform.position = new Vector3(0, 0, 0);
-
-        yield return new WaitForSeconds(0.01f);
-
         GetComponent<BoxCollider2D>().enabled = false;
         _hasPlayerLaserCooledDown = false;
         _uiManager.ReadySetGo();
+        yield return new WaitForSeconds(0.8f);
 
-        yield return new WaitForSeconds(6.0f);
+        transform.position = new Vector3(0, 0, 0);
+
+        yield return new WaitForSeconds(3.2f);
 
         GetComponent<BoxCollider2D>().enabled = true;
         _hasPlayerLaserCooledDown = true;
-        _spawnManager.OnPlayerReady();
+
+        if (_gameFirstStart == true && _asteroidDestroyed == false)
+        {
+            _gameFirstStart = false;
+            _spawnManager.OnPlayerReady();
+        }
+
+        if (_asteroidDestroyed == true)
+        {
+            _spawnManager.OnPlayerReady();
+            _spawnManager.StartSpawning();
+        }
     }
 
     public void TripleShotActivate()
