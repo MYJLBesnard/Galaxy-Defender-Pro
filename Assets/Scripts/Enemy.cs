@@ -13,12 +13,31 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private GameObject _enemyOnePrefab;
 
+    [SerializeField]
+    private bool _dodgingEnemyMovementOn;
+
+    private float x;
+    private float y;
+    private float z;
+
+    [SerializeField]
+    private float _dodgingAmplitude = 1.0f;
+    [SerializeField]
+    private float _dodgingFrequency = 0.5f;
+
+    private float _randomXStartPos = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         _enemyOneSpeed = Random.Range(2.5f, 4.5f);
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _animEnemyDestroyed = GetComponent<Animator>();
+
+        _dodgingEnemyMovementOn = true;
+        _dodgingAmplitude = Random.Range(1f, 5f);
+        _randomXStartPos = Random.Range(-8.0f, 8.0f);
+
 
         if (_player == null)
         {
@@ -33,8 +52,24 @@ public class Enemy : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
-        transform.Translate(Vector3.down * _enemyOneSpeed * Time.deltaTime);
+    {
+        if (_dodgingEnemyMovementOn == true)
+        {
+            {
+                x = Mathf.Cos(_enemyOneSpeed * Time.time * _dodgingFrequency) * _dodgingAmplitude;
+                y = transform.position.y;
+                z = transform.position.z;
+                transform.position = new Vector3(x, y, z);
+            }
+
+            transform.Translate(Vector3.down * _enemyOneSpeed * Time.deltaTime);
+
+        }
+        else
+        {
+            transform.Translate(Vector3.down * _enemyOneSpeed * Time.deltaTime);
+
+        }
 
         if (transform.position.y < -7.0f)
         { 

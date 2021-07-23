@@ -68,6 +68,13 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private bool _asteroidDestroyed = false;
 
+    [SerializeField] private int NumberOfProjectiles = 3;
+    //[SerializeField] private float BulletForce = 20f;
+
+    [Range(0, 360)]
+    [SerializeField] private float SpreadAngle = 20;
+
+
     public List<GameObject> poolDamageAnimations = new List<GameObject>();
     public List<GameObject> activatedDamageAnimations = new List<GameObject>();
 
@@ -127,7 +134,19 @@ public class PlayerScript : MonoBehaviour
     {
         if (_isPlayerTripleShotActive == true)
         {
-            Instantiate(_playerTripleShotLaserPrefab, transform.position, Quaternion.identity);
+            float angleStep = SpreadAngle / NumberOfProjectiles;
+            float centeringOffset = (SpreadAngle / 2) - (angleStep / 2);
+
+            for (int i = 0; i < NumberOfProjectiles; i++)
+            {
+                float currentBulletAngle = angleStep * i;
+
+                Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, currentBulletAngle - centeringOffset));
+                //Instantiate(_playerTripleShotLaserPrefab, transform.position, rotation);
+
+                Instantiate(_playerLaserPrefab, new Vector3(transform.position.x, transform.position.y + 0.404f, transform.position.z), rotation);
+
+            }
         }
         else
         {
