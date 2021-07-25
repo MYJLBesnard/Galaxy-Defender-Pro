@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657934, g: 0.4964136, b: 0.5748189, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -244,12 +244,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 4590086578092343861, guid: 31ce25f592b0746278d3ec5ec49d8999,
     type: 3}
+  _dodgingEnemyPrefab: {fileID: 3852028416767491656, guid: a76291ae6654240b19836b835d98986a,
+    type: 3}
   _enemyContainer: {fileID: 1245580089}
   _playerPowerUps:
   - {fileID: 1964161015771805903, guid: c02ca1f22fc8d4bddba09310c885e5b2, type: 3}
   - {fileID: 5295262556367448058, guid: faf1ce081d5294d21a6a35bd54d8a990, type: 3}
   - {fileID: 4982035787275881898, guid: aaba3794d981741188931a0d2a9120e8, type: 3}
   - {fileID: 2824699279061533061, guid: 3a0deac802eed44a38e989f73cba5168, type: 3}
+  _enemyOnePrefab: {fileID: 4590086578092343861, guid: 31ce25f592b0746278d3ec5ec49d8999,
+    type: 3}
+  _wave: 0
+  _shipsInWave: 0
   _stopSpawning: 0
 --- !u!4 &113864090
 Transform:
@@ -430,20 +436,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b187e11a8a7c141658af30ec995a5946, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uiManager: {fileID: 1955474913}
+  _spawnManager: {fileID: 113864089}
+  SpreadAngle: 30
+  _playerRateOfFire: 0.15
   _speed: 5
   _lives: 3
   _score: 0
-  _uiManager: {fileID: 1955474913}
+  NumberOfProjectiles: 3
   _player: {fileID: 391477476}
   _playerLaserPrefab: {fileID: 4056849775378164010, guid: cef8acee60e8e4dbc99aae82d3799276,
     type: 3}
   _playerDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: d3142b582fdcd4cd6b28e303ad8d2f63,
     type: 3}
-  _playerTripleShotLaserPrefab: {fileID: 21412029935016340, guid: 450709d4196ec4ed6a065f7bffa5f129,
-    type: 3}
-  _playerHealthPowerUpPrefab: {fileID: 2824699279061533061, guid: 3a0deac802eed44a38e989f73cba5168,
+  _playerTripleShotLaserPrefab: {fileID: 7535425148131991207, guid: 450709d4196ec4ed6a065f7bffa5f129,
     type: 3}
   _playerShield: {fileID: 3208205198328899011}
+  _playerHealthPowerUpPrefab: {fileID: 2824699279061533061, guid: 3a0deac802eed44a38e989f73cba5168,
+    type: 3}
   _playerThrusterLeft: {fileID: 1130681154078548945}
   _playerThrusterRight: {fileID: 5764051640384629849}
   _playerDamage01: {fileID: 1358226016}
@@ -453,15 +463,11 @@ MonoBehaviour:
   _bigExplosionPrefab: {fileID: 1266054117162253859, guid: 527a5f1a35e304e14af8851039ab39e5,
     type: 3}
   _hasPlayerLaserCooledDown: 1
-  _playerRateOfFire: 0.15
-  _spawnManager: {fileID: 113864089}
+  _gameFirstStart: 1
+  _asteroidDestroyed: 0
   _isPlayerTripleShotActive: 0
   _isPlayerShieldActive: 0
   _isPlayerSpeedBoostActive: 0
-  _gameFirstStart: 1
-  _asteroidDestroyed: 0
-  NumberOfProjectiles: 3
-  SpreadAngle: 20
   poolDamageAnimations:
   - {fileID: 1358226016}
   - {fileID: 1935401785495550565}
@@ -552,7 +558,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.10813004}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -563,7 +569,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.2992249, y: 4.1874084}
+  m_Size: {x: 2.5062666, y: 3.5386248}
   m_EdgeRadius: 0
 --- !u!1 &529184093
 GameObject:
@@ -1127,8 +1133,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1245580089}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.25983757, y: -1.4881718, z: 1.4058228}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 113864090}
@@ -1587,7 +1593,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1760255852}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 836.00433, y: 677.8384, z: -183.80762}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

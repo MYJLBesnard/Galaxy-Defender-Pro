@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _enemyPrefab, _dodgingEnemyPrefab;
+    [SerializeField] private GameObject _enemyContainer;
+    [SerializeField] private GameObject[] _playerPowerUps;
+    [SerializeField] private GameObject _enemyOnePrefab;
 
-    [SerializeField]
-    private GameObject _enemyContainer;
+    [SerializeField] private int _wave = 0;
+    [SerializeField] private int _shipsInWave = 0;
 
-    [SerializeField]
-    private GameObject[] _playerPowerUps;
+    [SerializeField] private bool _stopSpawning = false;
 
-    [SerializeField]
-    private bool _stopSpawning = false;
+    private float _xPos;
 
     public void StartSpawning()
     {
@@ -26,12 +26,30 @@ public class SpawnManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2.0f); // delays start of enemy spawns
         while (_stopSpawning == false)
-        {
-            //Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            Vector3 pxToSpawn = new Vector3(0, 7, 0);
 
-            GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
-            newEnemy.transform.parent = _enemyContainer.transform;
+        {
+            _xPos = Random.Range(-8.0f, 8.0f);
+            Vector3 pxToSpawn = new Vector3(_xPos, 7, 0);
+
+            if (_wave > 0)
+            {
+                GameObject newEnemy = Instantiate(_dodgingEnemyPrefab, pxToSpawn, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+            }
+
+            else if (_wave == 0)
+            {
+                GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
+                newEnemy.transform.parent = _enemyContainer.transform;
+            }         
+
+            _shipsInWave++;
+                if (_shipsInWave == 3)
+            {
+                _shipsInWave = 0;
+                _wave++;
+            }            
+
             yield return new WaitForSeconds(Random.Range(2f, 6f));
         }
     }

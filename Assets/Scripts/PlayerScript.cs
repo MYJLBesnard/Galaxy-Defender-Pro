@@ -4,76 +4,31 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 5.0f;
-    private float _speedMultiplier = 1.75f;
-
-    [SerializeField]
-    private int _lives = 3;
-
-    [SerializeField]
-    private int _score;
-
-    [SerializeField]
-    private UIManager _uiManager;
-
-    [SerializeField]
-    private GameObject _player;
-
-    [SerializeField]
-    private GameObject _playerLaserPrefab;
-
-    [SerializeField]
-    private GameObject _playerDoubleShotLaserPrefab;
-
-    [SerializeField]
-    private GameObject _playerTripleShotLaserPrefab;
-
-    [SerializeField]
-    private GameObject _playerHealthPowerUpPrefab;
-
-    [SerializeField]
-    private GameObject _playerShield;
-
-    [SerializeField]
-    private GameObject _playerThrusterLeft, _playerThrusterRight;
-
-    [SerializeField]
-    private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
-
-    [SerializeField]
-    private GameObject _bigExplosionPrefab;
-
-    [SerializeField]
-    private bool _hasPlayerLaserCooledDown = false;
-
-    [SerializeField]
-    private float _playerRateOfFire = 0.15f;
-
-    [SerializeField]
-    private SpawnManager _spawnManager;
-
-    [SerializeField]
-    private bool _isPlayerTripleShotActive = false;
-
-    [SerializeField]
-    private bool _isPlayerShieldActive = false;
-
-    [SerializeField]
-    private bool _isPlayerSpeedBoostActive = false;
-
-    [SerializeField]
-    private bool _gameFirstStart = true;
-
-    [SerializeField]
-    private bool _asteroidDestroyed = false;
-
-    [SerializeField] private int NumberOfProjectiles = 3;
-    //[SerializeField] private float BulletForce = 20f;
+    [SerializeField] private UIManager _uiManager;
+    [SerializeField] private SpawnManager _spawnManager;
 
     [Range(0, 360)]
-    [SerializeField] private float SpreadAngle = 20;
+    [SerializeField] private float SpreadAngle = 30;
+    [SerializeField] private float _playerRateOfFire = 0.15f;
+    [SerializeField] private float _speed = 5.0f;
+    private float _speedMultiplier = 1.75f;
 
+    [SerializeField] private int _lives = 3;
+    [SerializeField] private int _score;
+    [SerializeField] private int NumberOfProjectiles = 3;
+
+    [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab;
+    [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
+    [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
+    [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
+    [SerializeField] private GameObject _bigExplosionPrefab;
+
+    [SerializeField] private bool _hasPlayerLaserCooledDown = false;
+    [SerializeField] private bool _gameFirstStart = true;
+    [SerializeField] private bool _asteroidDestroyed = false;
+    [SerializeField] private bool _isPlayerTripleShotActive = false, _isPlayerShieldActive = false;
+    public bool _isPlayerSpeedBoostActive = false;
 
     public List<GameObject> poolDamageAnimations = new List<GameObject>();
     public List<GameObject> activatedDamageAnimations = new List<GameObject>();
@@ -140,12 +95,8 @@ public class PlayerScript : MonoBehaviour
             for (int i = 0; i < NumberOfProjectiles; i++)
             {
                 float currentBulletAngle = angleStep * i;
-
                 Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, currentBulletAngle - centeringOffset));
-                //Instantiate(_playerTripleShotLaserPrefab, transform.position, rotation);
-
                 Instantiate(_playerLaserPrefab, new Vector3(transform.position.x, transform.position.y + 0.404f, transform.position.z), rotation);
-
             }
         }
         else
@@ -233,6 +184,7 @@ public class PlayerScript : MonoBehaviour
     IEnumerator ResetPlayerPosition()
     {
         GetComponent<BoxCollider2D>().enabled = false;
+        _speed = 0;
         _hasPlayerLaserCooledDown = false;
         _uiManager.ReadySetGo();
         yield return new WaitForSeconds(0.8f);
@@ -243,6 +195,7 @@ public class PlayerScript : MonoBehaviour
 
         GetComponent<BoxCollider2D>().enabled = true;
         _hasPlayerLaserCooledDown = true;
+        _speed = 5.0f;
 
         if (_gameFirstStart == true && _asteroidDestroyed == false)
         {
@@ -272,8 +225,7 @@ public class PlayerScript : MonoBehaviour
 
     public void HealthBoostActivate()
     {
-        // Reverses damage by removing random (if more than 1 active) damages area and returning it to the pool.  This should also
-        // add a life (?)
+        // Reverses damage by removing random (if more than 1 active) damages area and returning it to the pool.
         if (activatedDamageAnimations.Count > 0)
         {
             var rdmDamage = Random.Range(0, activatedDamageAnimations.Count);

@@ -2,25 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class DodgingEnemy : MonoBehaviour
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
 
-    [SerializeField] private GameObject _enemyOnePrefab;
-    [SerializeField] private float _enemyOneSpeed;
-    private float y, z;
-    private float _randomXStartPos = 0;
+    [SerializeField] private float _dodgingEnemySpeed;
+    [SerializeField] private float _dodgingAmplitude;
+    [SerializeField] private float _dodgingFrequency = 0.5f;
+    private float x, y, z;
+    public float _randomXStartPos = 0;
 
-    [SerializeField]
-    private bool _stopUpdating = false;
+    [SerializeField] private GameObject _dodgingEnemyPrefab;
+
+    [SerializeField] private bool _stopUpdating = false;
 
     void Start()
     {
-        _enemyOneSpeed = Random.Range(2.5f, 4.5f);
+        _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _animEnemyDestroyed = GetComponent<Animator>();
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
+        _dodgingAmplitude = Random.Range(1.0f, 2.5f);
 
         if (_player == null)
         {
@@ -39,17 +42,19 @@ public class Enemy : MonoBehaviour
         {
             y = transform.position.y;
             z = transform.position.z;
+            x = Mathf.Cos((_dodgingEnemySpeed * Time.time * _dodgingFrequency) * _dodgingAmplitude);
 
-            transform.position = new Vector3((_randomXStartPos), y, z);
-            transform.Translate(Vector3.down * _enemyOneSpeed * Time.deltaTime);
+            transform.position = new Vector3((x + _randomXStartPos), y, z);
+
+            transform.Translate(Vector3.down * _dodgingEnemySpeed * Time.deltaTime);
 
             if (transform.position.y < -7.0f)
             {
                 float randomX = Random.Range(-8f, 8f);
                 transform.position = new Vector3(randomX, 7.0f, 0);
-                _enemyOneSpeed = Random.Range(2.5f, 4.5f);
+                _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
             }
-        }
+        } 
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -72,8 +77,8 @@ public class Enemy : MonoBehaviour
 
             if (_player != null)
             {
-                _player.AddScore(10); // calls the AddScore() method in the PlayerScript to add 10 points to the score
-                                      // the value of 10 is set to this type of enemy, but we could expand later with a
+                _player.AddScore(15); // calls the AddScore() method in the PlayerScript to add 15 points to the score
+                                      // the value of 15 is set to this type of enemy, but we could expand later with a
                                       // Switch statement to attribute different values to "points"
             }
 
