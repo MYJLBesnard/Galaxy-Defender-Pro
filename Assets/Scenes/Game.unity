@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657934, g: 0.4964136, b: 0.5748189, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -441,7 +441,7 @@ MonoBehaviour:
   SpreadAngle: 30
   _playerRateOfFire: 0.15
   _speed: 5
-  _lives: 3
+  _lives: 1
   _score: 0
   NumberOfProjectiles: 3
   _player: {fileID: 391477476}
@@ -994,7 +994,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &840117969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1002,7 +1002,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 840117968}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
@@ -1937,7 +1937,6 @@ MonoBehaviour:
   _readyText: {fileID: 529184095}
   _setText: {fileID: 1882219065}
   _defendText: {fileID: 252547434}
-  _gameOverText: {fileID: 840117969}
   _pressToRestart: {fileID: 1611061407}
   _pressForMainMenu: {fileID: 673710539}
   _livesSprite:
@@ -1949,6 +1948,10 @@ MonoBehaviour:
   _player: {fileID: 391477477}
   _playerBoxCollider2D: {fileID: 391477480}
   _spawnManager: {fileID: 113864089}
+  _gameOverText: {fileID: 840117969}
+  _letterDisplayDelay: 0.5
+  _flashDelay: 0.5
+  _flashCount: 10
 --- !u!1 &2010283365
 GameObject:
   m_ObjectHideFlags: 0
