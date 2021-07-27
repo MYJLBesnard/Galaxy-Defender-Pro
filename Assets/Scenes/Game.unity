@@ -444,7 +444,6 @@ MonoBehaviour:
   _lives: 1
   _score: 0
   NumberOfProjectiles: 3
-  _player: {fileID: 391477476}
   _playerLaserPrefab: {fileID: 4056849775378164010, guid: cef8acee60e8e4dbc99aae82d3799276,
     type: 3}
   _playerDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: d3142b582fdcd4cd6b28e303ad8d2f63,
@@ -1445,8 +1444,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1474,7 +1473,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 1.4290237, w: 0}
+  m_margin: {x: 0, y: 0, z: 46.2369, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1674,8 +1673,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1869904453}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.04, y: 0.265, z: 0}
-  m_LocalScale: {x: 1.0722811, y: 1.0491321, z: 1}
+  m_LocalPosition: {x: 0.78, y: -0.05, z: 0}
+  m_LocalScale: {x: 1.1684638, y: 1.1072657, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -1932,22 +1931,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5432a5500e607493d9927acb980abbc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _scoreText: {fileID: 1389690705}
-  _LivesImg: {fileID: 737814065}
-  _readyText: {fileID: 529184095}
-  _setText: {fileID: 1882219065}
-  _defendText: {fileID: 252547434}
-  _pressToRestart: {fileID: 1611061407}
-  _pressForMainMenu: {fileID: 673710539}
+  _gameManager: {fileID: 1760255853}
+  _player: {fileID: 391477477}
+  _playerBoxCollider2D: {fileID: 391477480}
+  _spawnManager: {fileID: 113864089}
   _livesSprite:
   - {fileID: 21300000, guid: ba53e111f0125654cabfd4eefaf3a657, type: 3}
   - {fileID: 21300000, guid: 80fba5ece7697c44eacc036539c1b552, type: 3}
   - {fileID: 21300000, guid: 482c8e4c0346b704aa5f1760c3c989d5, type: 3}
   - {fileID: 21300000, guid: 9fe6f40efddf0b64fb68a3382b14a4db, type: 3}
-  _gameManager: {fileID: 1760255853}
-  _player: {fileID: 391477477}
-  _playerBoxCollider2D: {fileID: 391477480}
-  _spawnManager: {fileID: 113864089}
+  _LivesImg: {fileID: 737814065}
+  _scoreText: {fileID: 1389690705}
+  _readyText: {fileID: 529184095}
+  _setText: {fileID: 1882219065}
+  _defendText: {fileID: 252547434}
+  _pressToRestart: {fileID: 1611061407}
+  _pressForMainMenu: {fileID: 673710539}
   _gameOverText: {fileID: 840117969}
   _letterDisplayDelay: 0.5
   _flashDelay: 0.5

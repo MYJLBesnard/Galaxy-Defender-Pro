@@ -7,8 +7,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private SpawnManager _spawnManager;
 
-    [Range(0, 360)]
-    [SerializeField] private float SpreadAngle = 30;
+    [Range(0, 360)][SerializeField] private float SpreadAngle = 30;
     [SerializeField] private float _playerRateOfFire = 0.15f;
     [SerializeField] private float _speed = 5.0f;
     private float _speedMultiplier = 1.75f;
@@ -17,7 +16,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private int _score;
     [SerializeField] private int NumberOfProjectiles = 3;
 
-    [SerializeField] private GameObject _player;
+   // [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
     [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
@@ -27,8 +26,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private bool _hasPlayerLaserCooledDown = false;
     [SerializeField] private bool _gameFirstStart = true;
     [SerializeField] private bool _asteroidDestroyed = false;
-    [SerializeField] private bool _isPlayerTripleShotActive = false, _isPlayerShieldActive = false;
-    public bool _isPlayerSpeedBoostActive = false;
+    [SerializeField] private bool _isPlayerTripleShotActive = false, _isPlayerShieldActive = false, _isPlayerSpeedBoostActive = false;
 
     public List<GameObject> poolDamageAnimations = new List<GameObject>();
     public List<GameObject> activatedDamageAnimations = new List<GameObject>();

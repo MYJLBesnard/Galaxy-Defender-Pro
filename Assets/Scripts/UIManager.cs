@@ -7,24 +7,24 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _scoreText;
+    [SerializeField] private GameManager _gameManager;
+    [SerializeField] private PlayerScript _player;
+    [SerializeField] private BoxCollider2D _playerBoxCollider2D;
+    [SerializeField] private SpawnManager _spawnManager;
 
+    [Header("UI Images")]
+    [SerializeField] private Sprite[] _livesSprite;
     [SerializeField] private Image _LivesImg;
 
+    [Header("UI Text Fields")]
+    [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private TMP_Text _readyText;
     [SerializeField] private TMP_Text _setText;
     [SerializeField] private TMP_Text _defendText;
     [SerializeField] private TMP_Text _pressToRestart;
     [SerializeField] private TMP_Text _pressForMainMenu;
 
-    [SerializeField] private Sprite[] _livesSprite;
-
-    [SerializeField] private GameManager _gameManager;
-    [SerializeField] private PlayerScript _player;
-    [SerializeField] private BoxCollider2D _playerBoxCollider2D;
-    [SerializeField] private SpawnManager _spawnManager;
-
-    [Header("Gam Over Display")]
+    [Header("Game Over Display")]
     [SerializeField] private TMP_Text _gameOverText;
     [SerializeField] private float _letterDisplayDelay;
     [SerializeField] private float _flashDelay;
