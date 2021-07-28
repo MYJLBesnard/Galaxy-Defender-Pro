@@ -44,7 +44,7 @@ public class SpawnManager : MonoBehaviour
             }         
 
             _shipsInWave++;
-                if (_shipsInWave == 3)
+                if (_shipsInWave == 10)
             {
                 _shipsInWave = 0;
                 _wave++;
