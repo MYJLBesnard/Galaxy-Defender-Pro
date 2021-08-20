@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class PowerUps : MonoBehaviour
 {
-    [SerializeField]
-    private float _speedOfPowerUps = .5f;
-
-    [SerializeField]
-    private int _powerUpID;  // ID for PwrUp: 0 = Triple Shot, 1 = Speed Boost, 2 = Shields, 3 = Health.
+    [SerializeField] private float _speedOfPowerUps = .5f;
+    [SerializeField] private int _powerUpID;  // ID for PwrUp: 0 = Triple Shot, 1 = Speed Boost, 2 = Shields, 3 = Health.
+    [SerializeField] private AudioClip _powerUpAudioClip = null;
 
     void Update()
     {
@@ -28,6 +26,7 @@ public class PowerUps : MonoBehaviour
 
             if (player != null)
             {
+                player.PlayClip(_powerUpAudioClip);
                 switch (_powerUpID)
                 {
                     case 0:
@@ -45,6 +44,7 @@ public class PowerUps : MonoBehaviour
                 }
             }
 
+            AudioSource.PlayClipAtPoint(_powerUpAudioClip, transform.position);
             Destroy(this.gameObject);
         }
     }

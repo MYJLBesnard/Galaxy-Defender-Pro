@@ -7,21 +7,27 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private SpawnManager _spawnManager;
 
-    [Range(0, 360)][SerializeField] private float SpreadAngle = 30;
+    [SerializeField] private int _numberOfProjectiles = 3;
+    [Range(0, 360)][SerializeField] private float _spreadAngle = 30;
     [SerializeField] private float _playerRateOfFire = 0.15f;
     [SerializeField] private float _speed = 5.0f;
     private float _speedMultiplier = 1.75f;
 
     [SerializeField] private int _lives = 3;
     [SerializeField] private int _score;
-    [SerializeField] private int NumberOfProjectiles = 3;
 
-   // [SerializeField] private GameObject _player;
+    [SerializeField] private AudioClip _powerupAudioClip;
+    [SerializeField] private AudioClip _playerLaserShotAudioClip;
+    private AudioSource _audioSource;
+
+
     [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
     [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
     [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
     [SerializeField] private GameObject _bigExplosionPrefab;
+
+    [SerializeField] private GameObject _leftEngineDamage, _rightEngineDamage;
 
     [SerializeField] private bool _hasPlayerLaserCooledDown = false;
     [SerializeField] private bool _gameFirstStart = true;
@@ -36,6 +42,8 @@ public class PlayerScript : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _audioSource = GetComponent<AudioSource>();
+
 
         if (_spawnManager == null)
         {
@@ -44,7 +52,12 @@ public class PlayerScript : MonoBehaviour
 
         if (_uiManager == null)
         {
-            Debug.Log("The UI Manager on the Canvas is null.");
+            Debug.LogError("The UI Manager on the Canvas is null.");
+        }
+
+        if (_audioSource == null)
+        {
+            Debug.LogError("The audio source is null.");
         }
 
         StartCoroutine(ResetPlayerPosition());
@@ -87,10 +100,10 @@ public class PlayerScript : MonoBehaviour
     {
         if (_isPlayerTripleShotActive == true)
         {
-            float angleStep = SpreadAngle / NumberOfProjectiles;
-            float centeringOffset = (SpreadAngle / 2) - (angleStep / 2);
+            float angleStep = _spreadAngle / _numberOfProjectiles;
+            float centeringOffset = (_spreadAngle / 2) - (angleStep / 2);
 
-            for (int i = 0; i < NumberOfProjectiles; i++)
+            for (int i = 0; i < _numberOfProjectiles; i++)
             {
                 float currentBulletAngle = angleStep * i;
                 Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, currentBulletAngle - centeringOffset));
@@ -104,7 +117,16 @@ public class PlayerScript : MonoBehaviour
 
         _hasPlayerLaserCooledDown = false;
         StartCoroutine(PlayerLaserCoolDownTimer());
+
+        PlayClip(_playerLaserShotAudioClip);
+        
     }
+
+    public void PlayClip(AudioClip soundEffectClip)
+    {
+        _audioSource.PlayOneShot(soundEffectClip);
+    }
+
 
     IEnumerator PlayerLaserCoolDownTimer()
     {
@@ -118,6 +140,8 @@ public class PlayerScript : MonoBehaviour
         _uiManager.UpdateScore(_score); // communicate with the UI to update the score
     }
 
+    
+    // Damage() using the Lists and random damage locations
     public void Damage()
     {
         if (_isPlayerShieldActive == true)
@@ -159,6 +183,42 @@ public class PlayerScript : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+   
+
+    /*
+    // Damage() using the left/right engine damage sprites
+    public void Damage()
+    {
+        if (_isPlayerShieldActive == true)
+        {
+            _isPlayerShieldActive = false;
+            _playerShield.SetActive(false);
+            return;
+        }
+
+            _lives--;
+
+        if (_lives == 2)
+        {
+            _leftEngineDamage.SetActive(true);
+        }
+
+        else if (_lives == 1)
+        {
+            _rightEngineDamage.SetActive(true);
+        }
+
+        _uiManager.UpdateLives(_lives);
+
+
+        if (_lives < 1)
+        {
+            _spawnManager.OnPlayerDeath();
+            Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
+    }
+    */
 
     public void ResetDamageAnimationList()
     {

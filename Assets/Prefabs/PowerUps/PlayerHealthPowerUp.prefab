@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7276322277140683307}
   - component: {fileID: 395691466659852681}
-  - component: {fileID: 8009190226367789534}
   - component: {fileID: 7350570198194632790}
   - component: {fileID: 3057298183139170469}
+  - component: {fileID: 8009190226367789534}
   - component: {fileID: 2830385947293627827}
   m_Layer: 0
   m_Name: PlayerHealthPowerUp
@@ -85,20 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8009190226367789534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2824699279061533061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c172bdfe46ee64d488fe41aec15c4bdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speedOfPowerUps: 2.5
-  _powerUpID: 3
 --- !u!50 &7350570198194632790
 Rigidbody2D:
   serializedVersion: 4
@@ -136,6 +122,21 @@ CircleCollider2D:
   m_Offset: {x: -0.01, y: -0.01}
   serializedVersion: 2
   m_Radius: 0.997564
+--- !u!114 &8009190226367789534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2824699279061533061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c172bdfe46ee64d488fe41aec15c4bdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speedOfPowerUps: 2.5
+  _powerUpID: 3
+  _powerUpAudioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!95 &2830385947293627827
 Animator:
   serializedVersion: 3

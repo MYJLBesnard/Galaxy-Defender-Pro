@@ -9,8 +9,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject[] _playerPowerUps;
     [SerializeField] private GameObject _enemyOnePrefab;
 
-    [SerializeField] private int _wave = 0;
-    [SerializeField] private int _shipsInWave = 0;
+    [SerializeField] private int _shipsInWave = 10;
+    [SerializeField] private int _waveCurrent = 0;
 
     [SerializeField] private bool _stopSpawning = false;
 
@@ -31,13 +31,13 @@ public class SpawnManager : MonoBehaviour
             _xPos = Random.Range(-8.0f, 8.0f);
             Vector3 pxToSpawn = new Vector3(_xPos, 7, 0);
 
-            if (_wave > 0)
+            if (_waveCurrent > 0)
             {
                 GameObject newEnemy = Instantiate(_dodgingEnemyPrefab, pxToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
             }
 
-            else if (_wave == 0)
+            else if (_waveCurrent == 0)
             {
                 GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
@@ -47,7 +47,7 @@ public class SpawnManager : MonoBehaviour
                 if (_shipsInWave == 10)
             {
                 _shipsInWave = 0;
-                _wave++;
+                _waveCurrent++;
             }            
 
             yield return new WaitForSeconds(Random.Range(2f, 6f));

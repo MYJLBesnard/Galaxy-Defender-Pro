@@ -20,6 +20,8 @@ public class StartGameAsteroid : MonoBehaviour
 
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
 
+
+
         if (_spawnManager == null)
         {
             Debug.Log("The SpawnManager is null.");

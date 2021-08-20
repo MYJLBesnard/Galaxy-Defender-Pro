@@ -16,11 +16,11 @@ public class SimpleShootTest : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) == true)
         {
-            CreateBullet(-30f);
+            //CreateBullet(-30f);
             CreateBullet(-15f);
             CreateBullet(0f);
             CreateBullet(15f);
-            CreateBullet(30f);
+            //CreateBullet(30f);
         }
     }
 
@@ -30,6 +30,6 @@ public class SimpleShootTest : MonoBehaviour
         bullet.transform.position = transform.position;
 
         Rigidbody2D rigidbody = bullet.GetComponent<Rigidbody2D>();
-        rigidbody.AddForce(Quaternion.AngleAxis(angleOffset, Vector3.forward) * transform.right * 100.0f);
+        rigidbody.AddForce(Quaternion.AngleAxis(angleOffset, Vector3.forward) * transform.right * 80f);
     }
 }

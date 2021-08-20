@@ -12,8 +12,11 @@ public class Enemy : MonoBehaviour
     private float y, z;
     private float _randomXStartPos = 0;
 
-    [SerializeField]
-    private bool _stopUpdating = false;
+    [SerializeField] private bool _stopUpdating = false;
+
+    [SerializeField] private AudioClip _explosionSoundEffect;
+    private AudioSource _audioSource;
+
 
     void Start()
     {
@@ -21,15 +24,25 @@ public class Enemy : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _animEnemyDestroyed = GetComponent<Animator>();
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
+        _audioSource = GetComponent<AudioSource>();
 
         if (_player == null)
         {
-            Debug.Log("The PlayerScript is null.");
+            Debug.LogError("The PlayerScript is null.");
         }
 
         if (_animEnemyDestroyed == null)
         {
-            Debug.Log("The Enemy Dstroyed anim is null.");
+            Debug.LogError("The Enemy Dstroyed anim is null.");
+        }
+
+        if (_audioSource == null)
+        {
+            Debug.LogError("The Enemy Audio Source is null.");
+        }
+        else
+        {
+            _audioSource.clip = _explosionSoundEffect;
         }
     }
 
@@ -63,6 +76,7 @@ public class Enemy : MonoBehaviour
                 player.Damage();
             }
 
+            _audioSource.Play();
             DestroyEnemyShip();
         }
 
@@ -77,6 +91,7 @@ public class Enemy : MonoBehaviour
                                       // Switch statement to attribute different values to "points"
             }
 
+            _audioSource.Play();
             DestroyEnemyShip();
         }
     }
@@ -86,7 +101,7 @@ public class Enemy : MonoBehaviour
         _stopUpdating = true;
         _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
         Destroy(GetComponent<Rigidbody2D>());
-        Destroy(GetComponent<BoxCollider2D>());
+        Destroy(GetComponent<Collider2D>());
         Destroy(this.gameObject, 2.8f);
     }
 }

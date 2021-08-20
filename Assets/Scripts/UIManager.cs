@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _defendText;
     [SerializeField] private TMP_Text _pressToRestart;
     [SerializeField] private TMP_Text _pressForMainMenu;
+    [SerializeField] private TMP_Text _pressEscapeToQuit;
 
     [Header("Game Over Display")]
     [SerializeField] private TMP_Text _gameOverText;
@@ -37,6 +38,7 @@ public class UIManager : MonoBehaviour
         _gameOverText.enabled = false;
         _pressToRestart.gameObject.SetActive(false);
         _pressForMainMenu.gameObject.SetActive(false);
+        _pressEscapeToQuit.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _playerBoxCollider2D = GameObject.Find("Player").GetComponent<BoxCollider2D>();
@@ -86,16 +88,10 @@ public class UIManager : MonoBehaviour
     private void GameOverSequence()
     {
         _gameManager.GameOver();
-        //_gameOverText.gameObject.SetActive(true);
-
         _gameOverText.enabled = true;
         string msg = _gameOverText.text;
         _gameOverText.text = null;
         StartCoroutine(GameOverRoutine(msg));
-
-        _pressToRestart.gameObject.SetActive(true);
-        _pressForMainMenu.gameObject.SetActive(true);
-        //StartCoroutine(GameOverTextFlicker());
     }
 
     IEnumerator GameOverRoutine(string msg)
@@ -112,6 +108,11 @@ public class UIManager : MonoBehaviour
 
         bool flashGameOver = true;
         int flashCount = 0;
+
+        //yield return new WaitForSeconds(5.0f);
+        _pressToRestart.gameObject.SetActive(true);
+        _pressForMainMenu.gameObject.SetActive(true);
+        _pressEscapeToQuit.gameObject.SetActive(true);
 
         while (flashGameOver)
         {

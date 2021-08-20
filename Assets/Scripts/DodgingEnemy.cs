@@ -17,6 +17,9 @@ public class DodgingEnemy : MonoBehaviour
 
     [SerializeField] private bool _stopUpdating = false;
 
+    [SerializeField] private AudioClip _explosionSoundEffect;
+    private AudioSource _audioSource;
+
     void Start()
     {
         _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
@@ -24,6 +27,7 @@ public class DodgingEnemy : MonoBehaviour
         _animEnemyDestroyed = GetComponent<Animator>();
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
         _dodgingAmplitude = Random.Range(1.0f, 2.5f);
+        _audioSource = GetComponent<AudioSource>();
 
         if (_player == null)
         {
@@ -33,6 +37,15 @@ public class DodgingEnemy : MonoBehaviour
         if (_animEnemyDestroyed == null)
         {
             Debug.Log("The Enemy Dstroyed anim is null.");
+        }
+
+        if (_audioSource == null)
+        {
+            Debug.LogError("The Enemy Audio Source is null.");
+        }
+        else
+        {
+            _audioSource.clip = _explosionSoundEffect;
         }
     }
 
@@ -68,6 +81,7 @@ public class DodgingEnemy : MonoBehaviour
                 player.Damage();
             }
 
+            _audioSource.Play();
             DestroyEnemyShip();
         }
 
@@ -82,6 +96,7 @@ public class DodgingEnemy : MonoBehaviour
                                       // Switch statement to attribute different values to "points"
             }
 
+            _audioSource.Play();
             DestroyEnemyShip();
         }
     }
