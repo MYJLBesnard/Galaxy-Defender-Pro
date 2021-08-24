@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - LaserPlayer
+  - LaserDoubleShotEnemy
   layers:
   - Default
   - TransparentFX

@@ -5,7 +5,7 @@ using UnityEngine;
 public class BackgroundScroller : MonoBehaviour
 {
 
-    public float speed = .2f;
+    public float speed = .5f;
     private MeshRenderer _renderer;
 
     // Start is called before the first frame update

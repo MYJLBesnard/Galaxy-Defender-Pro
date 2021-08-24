@@ -20,6 +20,9 @@ public class DodgingEnemy : MonoBehaviour
     [SerializeField] private AudioClip _explosionSoundEffect;
     private AudioSource _audioSource;
 
+    [SerializeField] private AudioClip _enemyLaserShotAudioClip;
+    [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
+
     void Start()
     {
         _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
@@ -67,7 +70,30 @@ public class DodgingEnemy : MonoBehaviour
                 transform.position = new Vector3(randomX, 7.0f, 0);
                 _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
             }
-        } 
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            EnemyFireLaser();
+        }
+    }
+
+    void EnemyFireLaser()
+    {
+
+        Instantiate(_enemyDoubleShotLaserPrefab, transform.position, Quaternion.identity);
+
+
+        //_hasPlayerLaserCooledDown = false;
+        //StartCoroutine(PlayerLaserCoolDownTimer());
+
+        PlayClip(_enemyLaserShotAudioClip);
+
+    }
+
+    public void PlayClip(AudioClip soundEffectClip)
+    {
+        _audioSource.PlayOneShot(soundEffectClip);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
