@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 1915264988816647573}
   - component: {fileID: 5208187849118067703}
   - component: {fileID: 3042660757802663069}
-  - component: {fileID: 6446287124881025206}
+  - component: {fileID: 2769002012241332286}
   m_Layer: 0
-  m_Name: Double_Shot
-  m_TagString: LaserPlayer
+  m_Name: Enemy Double Shot
+  m_TagString: LaserDoubleShotEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 21412029935016340}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 3527092794224544035}
   - {fileID: 4783283657911905528}
@@ -82,7 +82,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &6446287124881025206
+--- !u!114 &2769002012241332286
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,12 +120,12 @@ PrefabInstance:
     - target: {fileID: 1287543011555502733, guid: cef8acee60e8e4dbc99aae82d3799276,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.153
+      value: -0.221
       objectReference: {fileID: 0}
     - target: {fileID: 1287543011555502733, guid: cef8acee60e8e4dbc99aae82d3799276,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.91
+      value: -1.603
       objectReference: {fileID: 0}
     - target: {fileID: 1287543011555502733, guid: cef8acee60e8e4dbc99aae82d3799276,
         type: 3}
@@ -172,6 +172,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: LaserLeft
       objectReference: {fileID: 0}
+    - target: {fileID: 4056849775378164010, guid: cef8acee60e8e4dbc99aae82d3799276,
+        type: 3}
+      propertyPath: m_TagString
+      value: LaserDoubleShotEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775062070651722876, guid: cef8acee60e8e4dbc99aae82d3799276,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1ba338eaab0014e9bad09b21f3cb6683,
+        type: 3}
     m_RemovedComponents:
     - {fileID: 446638534399122472, guid: cef8acee60e8e4dbc99aae82d3799276, type: 3}
     - {fileID: 1194631346902372467, guid: cef8acee60e8e4dbc99aae82d3799276, type: 3}
@@ -208,12 +219,12 @@ PrefabInstance:
     - target: {fileID: 1287543011555502733, guid: cef8acee60e8e4dbc99aae82d3799276,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.153
+      value: 0.225
       objectReference: {fileID: 0}
     - target: {fileID: 1287543011555502733, guid: cef8acee60e8e4dbc99aae82d3799276,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.91
+      value: -1.604
       objectReference: {fileID: 0}
     - target: {fileID: 1287543011555502733, guid: cef8acee60e8e4dbc99aae82d3799276,
         type: 3}
@@ -260,6 +271,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: LaserRight
       objectReference: {fileID: 0}
+    - target: {fileID: 4056849775378164010, guid: cef8acee60e8e4dbc99aae82d3799276,
+        type: 3}
+      propertyPath: m_TagString
+      value: LaserDoubleShotEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4775062070651722876, guid: cef8acee60e8e4dbc99aae82d3799276,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1ba338eaab0014e9bad09b21f3cb6683,
+        type: 3}
     m_RemovedComponents:
     - {fileID: 446638534399122472, guid: cef8acee60e8e4dbc99aae82d3799276, type: 3}
     - {fileID: 1194631346902372467, guid: cef8acee60e8e4dbc99aae82d3799276, type: 3}

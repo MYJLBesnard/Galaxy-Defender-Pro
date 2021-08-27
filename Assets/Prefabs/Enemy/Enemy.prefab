@@ -53,6 +53,10 @@ MonoBehaviour:
   _stopUpdating: 0
   _explosionSoundEffect: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc,
     type: 3}
+  _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,
+    type: 3}
+  _enemyDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: 96b51ad5e8dc0492baf64f9be40d2bb0,
+    type: 3}
 --- !u!212 &1222864360995669643
 SpriteRenderer:
   m_ObjectHideFlags: 0
