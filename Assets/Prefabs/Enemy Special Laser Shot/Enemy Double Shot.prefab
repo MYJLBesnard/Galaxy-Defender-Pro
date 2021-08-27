@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1915264988816647573}
   - component: {fileID: 5208187849118067703}
   - component: {fileID: 3042660757802663069}
-  - component: {fileID: 7476517323785034896}
+  - component: {fileID: 2769002012241332286}
   m_Layer: 0
   m_Name: Enemy Double Shot
   m_TagString: LaserDoubleShotEnemy
@@ -82,7 +82,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &7476517323785034896
+--- !u!114 &2769002012241332286
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,10 +91,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 21412029935016340}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35394ce3577b64766ba1af925db01a59, type: 3}
+  m_Script: {fileID: 11500000, guid: d450d484f23c6468784ae940fb249b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _laserSpeed: 10
+  _laserSpeed: 8
 --- !u!1001 &2390432534481953710
 PrefabInstance:
   m_ObjectHideFlags: 0

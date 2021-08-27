@@ -22,6 +22,8 @@ public class DodgingEnemy : MonoBehaviour
 
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
+    private float _enemyRateOfFire = 3.0f;
+    private float _enemyCanFire = -1.0f;
 
     void Start()
     {
@@ -54,6 +56,26 @@ public class DodgingEnemy : MonoBehaviour
 
     void Update()
     {
+        CalculateMovement();
+
+        if (Time.time > _enemyCanFire && _stopUpdating == false)
+        {
+            _enemyRateOfFire = Random.Range(3f, 7f);
+            _enemyCanFire = Time.time + _enemyRateOfFire;
+            GameObject enemyLaser = Instantiate(_enemyDoubleShotLaserPrefab, transform.position, Quaternion.identity);
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+            for (int i = 0; i < lasers.Length; i++)
+            {
+                lasers[i].AssignEnemyLaser();
+            }
+
+            //PlayClip(_enemyLaserShotAudioClip);
+        }
+    }
+
+    void CalculateMovement()
+    {
         if (_stopUpdating == false)
         {
             y = transform.position.y;
@@ -71,24 +93,6 @@ public class DodgingEnemy : MonoBehaviour
                 _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            EnemyFireLaser();
-        }
-    }
-
-    void EnemyFireLaser()
-    {
-
-        Instantiate(_enemyDoubleShotLaserPrefab, transform.position, Quaternion.identity);
-
-
-        //_hasPlayerLaserCooledDown = false;
-        //StartCoroutine(PlayerLaserCoolDownTimer());
-
-        PlayClip(_enemyLaserShotAudioClip);
-
     }
 
     public void PlayClip(AudioClip soundEffectClip)
