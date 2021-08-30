@@ -37,12 +37,15 @@ public class PlayerScript : MonoBehaviour
     public List<GameObject> poolDamageAnimations = new List<GameObject>();
     public List<GameObject> activatedDamageAnimations = new List<GameObject>();
 
+    private CameraShaker _camera;
+
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
+        _camera = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
 
 
         if (_spawnManager == null)
@@ -58,6 +61,11 @@ public class PlayerScript : MonoBehaviour
         if (_audioSource == null)
         {
             Debug.LogError("The audio source is null.");
+        }
+
+        if (_camera == null)
+        {
+            Debug.LogError("The CameraShaker on the Main Camera is null.");
         }
 
         StartCoroutine(ResetPlayerPosition());
@@ -159,6 +167,7 @@ public class PlayerScript : MonoBehaviour
             activatedDamageAnimations.Add(temp);
             temp.SetActive(true);
             poolDamageAnimations.Remove(temp);
+            _camera.StartDamageCameraShake(0.2f, 0.15f);
             return;
         }
 
@@ -166,7 +175,7 @@ public class PlayerScript : MonoBehaviour
         {
             _lives--;
             _uiManager.UpdateLives(_lives);
-
+            _camera.StartDamageCameraShake(0.2f, 0.35f);
             Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
 
             if (_lives != 0)
@@ -183,7 +192,6 @@ public class PlayerScript : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-   
 
     /*
     // Damage() using the left/right engine damage sprites
