@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
 
     [Header("UI Text Fields")]
     [SerializeField] private TMP_Text _scoreText;
+    [SerializeField] private TMP_Text _ammoCountText;
     [SerializeField] private TMP_Text _readyText;
     [SerializeField] private TMP_Text _setText;
     [SerializeField] private TMP_Text _defendText;
@@ -73,6 +74,20 @@ public class UIManager : MonoBehaviour
     public void UpdateScore(int playerScore)
     {
         _scoreText.text = "SCORE: " + playerScore.ToString();
+    }
+
+    public void UpdateAmmoCount(int ammoCount)
+    {
+        _ammoCountText.text = "AMMO: " + ammoCount.ToString();
+
+        if (ammoCount <= 15 && ammoCount > 5)
+        {
+            _ammoCountText.color = Color.yellow;
+        }
+        else if (ammoCount <= 5)
+        {
+            _ammoCountText.color = Color.red;
+        }
     }
 
     public void UpdateLives(int currentLives)
