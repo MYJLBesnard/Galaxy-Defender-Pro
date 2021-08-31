@@ -15,6 +15,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField] private int _lives = 3;
     [SerializeField] private int _score;
+    [SerializeField] private int _ammoCount =15;
 
     [SerializeField] private AudioClip _powerupAudioClip;
     [SerializeField] private AudioClip _playerLaserShotAudioClip;
@@ -106,6 +107,17 @@ public class PlayerScript : MonoBehaviour
 
     void PlayerFireLaser()
     {
+        if (_ammoCount <= 0)
+        {
+            _ammoCount = 0;
+            return;
+        }
+        else
+        {
+            _ammoCount--;
+            _uiManager.UpdateAmmoCount(_ammoCount);
+        }
+
         if (_isPlayerTripleShotActive == true)
         {
             float angleStep = _spreadAngle / _numberOfProjectiles;
@@ -127,7 +139,6 @@ public class PlayerScript : MonoBehaviour
         StartCoroutine(PlayerLaserCoolDownTimer());
 
         PlayClip(_playerLaserShotAudioClip);
-        
     }
 
     public void PlayClip(AudioClip soundEffectClip)
