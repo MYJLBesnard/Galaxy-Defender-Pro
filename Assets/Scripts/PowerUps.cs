@@ -5,7 +5,7 @@ using UnityEngine;
 public class PowerUps : MonoBehaviour
 {
     [SerializeField] private float _speedOfPowerUps = .5f;
-    [SerializeField] private int _powerUpID;  // ID for PwrUp: 0 = Triple Shot, 1 = Speed Boost, 2 = Shields, 3 = Health.
+    [SerializeField] private int _powerUpID;  // ID for PwrUp: 0 = Triple Shot, 1 = Speed Boost, 2 = Shields, 3 = Health, 4 = Ammo.
     [SerializeField] private AudioClip _powerUpAudioClip = null;
 
     void Update()
@@ -40,6 +40,9 @@ public class PowerUps : MonoBehaviour
                         break;
                     case 3:
                         player.HealthBoostActivate();
+                        break;
+                    case 4:
+                        player.PlayerRegularAmmo();
                         break;
                 }
             }

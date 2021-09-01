@@ -15,7 +15,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField] private int _lives = 3;
     [SerializeField] private int _score;
-    [SerializeField] private int _ammoCount =15;
+    [SerializeField] private int _ammoCount =25;
 
     [SerializeField] private AudioClip _powerupAudioClip;
     [SerializeField] private AudioClip _playerLaserShotAudioClip;
@@ -112,11 +112,9 @@ public class PlayerScript : MonoBehaviour
             _ammoCount = 0;
             return;
         }
-        else
-        {
-            _ammoCount--;
-            _uiManager.UpdateAmmoCount(_ammoCount);
-        }
+   
+        _ammoCount--;
+        _uiManager.UpdateAmmoCount(_ammoCount);
 
         if (_isPlayerTripleShotActive == true)
         {
@@ -139,6 +137,17 @@ public class PlayerScript : MonoBehaviour
         StartCoroutine(PlayerLaserCoolDownTimer());
 
         PlayClip(_playerLaserShotAudioClip);
+    }
+
+    public void PlayerRegularAmmo()
+    {
+        _ammoCount += (Random.Range(3, 6));
+
+        if (_ammoCount > 25)
+        {
+            _ammoCount = 25;
+        }
+        _uiManager.UpdateAmmoCount(_ammoCount);
     }
 
     public void PlayClip(AudioClip soundEffectClip)
