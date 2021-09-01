@@ -80,7 +80,12 @@ public class UIManager : MonoBehaviour
     {
         _ammoCountText.text = "AMMO: " + ammoCount.ToString();
 
-        if (ammoCount <= 15 && ammoCount > 5)
+        if (ammoCount > 15)
+        {
+            _ammoCountText.color = Color.green;
+        }
+
+        else if (ammoCount <= 15 && ammoCount > 5)
         {
             _ammoCountText.color = Color.yellow;
         }
