@@ -40,6 +40,8 @@ public class PlayerScript : MonoBehaviour
 
     private CameraShaker _camera;
 
+  //  private GameObject _thrusters;
+
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -47,6 +49,7 @@ public class PlayerScript : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         _camera = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
+       // _thrusters = GameObject.Find("PlayerThrusterLeft").GetComponentInChildren<Transform>();
 
 
         if (_spawnManager == null)
@@ -81,6 +84,17 @@ public class PlayerScript : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && _hasPlayerLaserCooledDown)
             {
                 PlayerFireLaser();
+            }
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                //originalScale = transform.localScale;
+                transform.localScale = new Vector3(0.3f, 0.63f, 0.5f);
+            }
+            else
+            {
+                transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+
             }
         }
     }
