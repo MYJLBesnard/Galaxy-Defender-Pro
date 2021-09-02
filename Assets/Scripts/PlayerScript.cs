@@ -31,6 +31,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private GameObject _leftEngineDamage, _rightEngineDamage;
 
     [SerializeField] private bool _hasPlayerLaserCooledDown = false;
+    [SerializeField] private bool _hasPlayerThrustersCooledDown = true; //************** To be implemented at a later date
+
     [SerializeField] private bool _gameFirstStart = true;
     [SerializeField] private bool _asteroidDestroyed = false;
     [SerializeField] private bool _isPlayerTripleShotActive = false, _isPlayerShieldActive = false, _isPlayerSpeedBoostActive = false;
@@ -40,8 +42,6 @@ public class PlayerScript : MonoBehaviour
 
     private CameraShaker _camera;
 
-  //  private GameObject _thrusters;
-
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -49,8 +49,6 @@ public class PlayerScript : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         _camera = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
-       // _thrusters = GameObject.Find("PlayerThrusterLeft").GetComponentInChildren<Transform>();
-
 
         if (_spawnManager == null)
         {
@@ -86,16 +84,30 @@ public class PlayerScript : MonoBehaviour
                 PlayerFireLaser();
             }
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) && _hasPlayerThrustersCooledDown)
             {
-                //originalScale = transform.localScale;
-                transform.localScale = new Vector3(0.3f, 0.63f, 0.5f);
+                PlayerThrustersActivate();
             }
-            else
-            {
-                transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
 
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                PlayerThrustersDeactivate();
             }
+        }
+    }
+
+    void PlayerThrustersActivate()
+    {
+        _speed = 10.0f;
+    }
+
+    void PlayerThrustersDeactivate()
+    {
+        _speed = 5.0f;
+
+        if (_isPlayerSpeedBoostActive == true)
+        {
+            _speed *= _speedMultiplier;
         }
     }
 
@@ -318,9 +330,17 @@ public class PlayerScript : MonoBehaviour
 
     public void SpeedBoostActivate()
     {
-        _isPlayerSpeedBoostActive = true;
-        _speed *= _speedMultiplier;
-        StartCoroutine(SpeedBoostPowerDownTimer());
+        if (_isPlayerSpeedBoostActive == false) // only give the Player a temp speed boost if the PowerUp is not already collected
+        {
+            _isPlayerSpeedBoostActive = true;
+            _speed *= _speedMultiplier;
+            StartCoroutine(SpeedBoostPowerDownTimer());
+        }
+        else
+        {
+            return;
+        }
+      
     }
 
     public void HealthBoostActivate()
