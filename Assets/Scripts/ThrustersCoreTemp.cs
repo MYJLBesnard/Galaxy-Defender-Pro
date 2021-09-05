@@ -1,18 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ThrustersCoreTemp : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Slider slider;
+    public Image sliderFill;
+
+    public void Update()
     {
-        
+        sliderFill.color = Color.Lerp(Color.green, Color.red, (slider.value / slider.maxValue));
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetMaxCoreTemp(int temp)
     {
-        
+        slider.maxValue = temp;
+        slider.value = temp;
+    }
+
+    public void SetCoreTemp(int temp)
+    {
+        slider.value = temp;
     }
 }
