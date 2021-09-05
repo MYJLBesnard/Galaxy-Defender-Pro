@@ -42,6 +42,13 @@ public class PlayerScript : MonoBehaviour
 
     private CameraShaker _camera;
 
+    public int maxCoreTemp = 1000;
+    public int currentCoreTemp = 0;
+    [SerializeField] private int coreTempDecrease;
+    public ThrustersCoreTemp thrustersCoreTemp;
+
+    [SerializeField] private bool _coreTempCooledDown = true;
+
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -49,6 +56,10 @@ public class PlayerScript : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         _camera = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
+
+        currentCoreTemp = 0;
+        //thrustersCoreTemp.SetMaxCoreTemp(maxCoreTemp);
+        thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
 
         if (_spawnManager == null)
         {
@@ -86,18 +97,103 @@ public class PlayerScript : MonoBehaviour
 
             if (Input.GetKey(KeyCode.LeftShift) && _hasPlayerThrustersCooledDown)
             {
-                PlayerThrustersActivate();
+                PlayerThrustersActivate(5);
             }
 
             if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 PlayerThrustersDeactivate();
             }
+
+            if (currentCoreTemp > 0 && _coreTempCooledDown == true)
+            {
+                currentCoreTemp -= coreTempDecrease;
+                thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+            }
+
+            if (currentCoreTemp >= 999 && _coreTempCooledDown == true)
+            {
+                Debug.Log("Max Core temp reached");
+                _coreTempCooledDown = false;
+
+                _playerThrusterLeft.gameObject.SetActive(false);
+                _playerThrusterRight.gameObject.SetActive(false);
+                _hasPlayerLaserCooledDown = false;
+                GetComponent<BoxCollider2D>().enabled = false;
+                _speed = 0f;
+                transform.Rotate(Vector3.forward * -50f * Time.deltaTime);
+            }
+
+            if (currentCoreTemp > 250 && _coreTempCooledDown == false)
+            {
+                currentCoreTemp -= coreTempDecrease;
+                thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+
+                Debug.Log("Max core temp is coming down");
+
+                _playerThrusterLeft.gameObject.SetActive(false);
+                _playerThrusterRight.gameObject.SetActive(false);
+                _hasPlayerLaserCooledDown = false;
+                GetComponent<BoxCollider2D>().enabled = false;
+                _speed = 0f;
+                transform.Rotate(Vector3.forward * -50f * Time.deltaTime);
+            }
+        
+
+            if (currentCoreTemp == 250 && _coreTempCooledDown == false)
+            {
+                _coreTempCooledDown = true;
+                currentCoreTemp -= coreTempDecrease;
+                thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+
+                _playerThrusterLeft.gameObject.SetActive(true);
+                _playerThrusterRight.gameObject.SetActive(true);
+                GetComponent<BoxCollider2D>().enabled = true;
+                _speed = 5.0f;
+
+                Debug.Log("Max core temp stabilized");
+
+                if (transform.rotation.z != 0)
+                {
+                    StartCoroutine(AnimateRotationTowards(this.transform, Quaternion.identity, 1f));
+                    //_hasPlayerLaserCooledDown = true;
+                }
+            }
+        }
+
+        /*
+        //start it wherever you decide to start the animation. On key press, on trigger enter, on whatever.
+        //in this example I'm rotating 'this', towards (0,0,0), for 1 second
+        StartCoroutine(AnimateRotationTowards(this.transform, Quaternion.identity, 1f));
+        */
+
+            IEnumerator AnimateRotationTowards(Transform target, Quaternion rot, float dur)
+        {
+            float t = 0f;
+            Quaternion start = target.rotation;
+            while (t < dur)
+            {
+                target.rotation = Quaternion.Slerp(start, rot, t / dur);
+                yield return null;
+                t += Time.deltaTime;
+            }
+            target.rotation = rot;
+
+            _hasPlayerLaserCooledDown = true;
+
         }
     }
 
-    void PlayerThrustersActivate()
+
+    void PlayerThrustersActivate(int coreTempIncrease)
     {
+        currentCoreTemp += coreTempIncrease;
+        thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+        if (currentCoreTemp > maxCoreTemp)
+        {
+            currentCoreTemp = maxCoreTemp;
+        }
+
         _speed = 10.0f;
     }
 
