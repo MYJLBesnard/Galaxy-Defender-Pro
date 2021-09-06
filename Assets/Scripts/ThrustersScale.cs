@@ -4,20 +4,39 @@ using UnityEngine;
 
 public class ThrustersScale : MonoBehaviour
 {
+    [SerializeField] private PlayerScript _playerScript;
+    [SerializeField] private bool _canThrustersScale = false;
+
     void Start()
     {
         transform.localScale = new Vector3(0.1f, 0.63f, 0.5f);
+
+        _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
+
+        if (_playerScript == null)
+        {
+            Debug.LogError("The PlayerScript is null.");
+        }
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if(_playerScript.canPlayerUseThrusters == true)
         {
-            transform.localScale = new Vector3(0.3f, 0.63f, 0.5f);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                transform.localScale = new Vector3(0.3f, 0.63f, 0.5f);
+            }
+            else
+            {
+                transform.localScale = new Vector3(0.1f, 0.63f, 0.5f);
+            }
         }
-        else
+
+        if (_playerScript.canPlayerUseThrusters == false)
         {
             transform.localScale = new Vector3(0.1f, 0.63f, 0.5f);
         }
+
     }
 }
