@@ -768,6 +768,7 @@ MonoBehaviour:
   coreTempDecrease: 1
   thrustersCoreTemp: {fileID: 372956291}
   _coreTempCooledDown: 1
+  canPlayerUseThrusters: 0
   firstTimePlaying: 0
 --- !u!212 &391477478
 SpriteRenderer:
@@ -4828,6 +4829,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55618495067fd4de5bb3f24cb4053128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerScript: {fileID: 391477477}
+  _canThrustersScale: 0
 --- !u!95 &1935401785495550488
 Animator:
   serializedVersion: 3
@@ -5144,3 +5147,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55618495067fd4de5bb3f24cb4053128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerScript: {fileID: 391477477}
+  _canThrustersScale: 0

@@ -45,14 +45,18 @@ public class PlayerScript : MonoBehaviour
 
     private CameraShaker _camera;
 
+    [Header("Thruster Core Variables")]
     public int maxCoreTemp = 1000;
     public int currentCoreTemp = 0;
     [SerializeField] private int coreTempDecrease;
     public ThrustersCoreTemp thrustersCoreTemp;
+    [SerializeField] private bool _coreTempCooledDown = true;
+    public bool canPlayerUseThrusters = false;
 
-    public bool _coreTempCooledDown = true;
 
     public bool firstTimePlaying = false;
+
+    
 
     void Start()
     {
@@ -64,6 +68,7 @@ public class PlayerScript : MonoBehaviour
 
         currentCoreTemp = 0;
         thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+        canPlayerUseThrusters = false;
 
         if (_spawnManager == null)
         {
@@ -93,126 +98,135 @@ public class PlayerScript : MonoBehaviour
         if (_gameFirstStart == false)
         {
             CalculateMovement();
+            CalculateThrustersScale();
+            ThrusterCoreLogic();
 
             if (Input.GetKeyDown(KeyCode.Space) && _hasPlayerLaserCooledDown)
             {
                 PlayerFireLaser();
             }
-
-            if (Input.GetKey(KeyCode.LeftShift) && _hasPlayerThrustersCooledDown)
-            {
-                PlayerThrustersActivate(5);
-            }
-
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                PlayerThrustersDeactivate();
-            }
-
-            if (currentCoreTemp > 0 && _coreTempCooledDown == true)
-            {
-                currentCoreTemp -= coreTempDecrease;
-                thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
-            }
-
-            if (currentCoreTemp > 750 && _coreTempCooledDown == true)
-            {
-                _uiManager.CoreTempWarning(true);
-                Debug.Log("Core Temp Warning TRUE");
-                if (firstTimePlaying == false)
-                {
-                    firstTimePlaying = true;
-                    StartCoroutine(PlayWarningCoreTempCritical()); //***********
-                }
-            }
-            else
-            {
-                _uiManager.CoreTempWarning(false);
-                Debug.Log("Core Temp Warning FALSE");
-
-            }
-
-            if (currentCoreTemp >= 999 && _coreTempCooledDown == true)
-            {
-                Debug.Log("Max Core temp reached");
-                StartCoroutine(PlayWarningCoreTempExceeded());  //***************
-                _coreTempCooledDown = false;
-
-                PlayerCoreTempExceededDrifting();
-
-                _uiManager.CoreShutdown(true);
-            }
-
-            if (currentCoreTemp > 250 && _coreTempCooledDown == false)
-            {
-                currentCoreTemp -= coreTempDecrease;
-                thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
-
-                Debug.Log("Max core temp is coming down");
-
-                PlayerCoreTempExceededDrifting();
-            }
-        
-
-            if (currentCoreTemp == 250 && _coreTempCooledDown == false)
-            {
-                _coreTempCooledDown = true;
-                _uiManager.CoreShutdown(false);
-                currentCoreTemp -= coreTempDecrease;
-                thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
-
-                _playerThrusterLeft.gameObject.SetActive(true);
-                _playerThrusterRight.gameObject.SetActive(true);
-                _speed = 5.0f;
-
-                _uiManager.CoreTempStable(true);
-
-                Debug.Log("Max core temp stabilized");
-
-                if (transform.rotation.z != 0)
-                {
-                    StartCoroutine(AnimateRotationTowards(this.transform, Quaternion.identity, 1f));
-                }
-            }
         }
+    }
 
-        IEnumerator PlayWarningCoreTempCritical()
+    void CalculateThrustersScale()
+    {
+        if (Input.GetKey(KeyCode.LeftShift) && _hasPlayerThrustersCooledDown && canPlayerUseThrusters)
         {
-            _audioSource.PlayOneShot(_warningCoreTempCritical);
-            yield return new WaitForSeconds(3.0f);
-            firstTimePlaying = false;
-
+            PlayerThrustersActivate(5);
         }
 
-        IEnumerator PlayWarningCoreTempExceeded()
+        if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            _audioSource.PlayOneShot(_WarningcoretempExceeded);
-            yield return new WaitForSeconds(5.0f);
+            PlayerThrustersDeactivate();
+        }
+    }
+
+    void ThrusterCoreLogic()
+    {
+        if (currentCoreTemp > 0 && _coreTempCooledDown == true && canPlayerUseThrusters == true)
+        {
+            currentCoreTemp -= coreTempDecrease;
+            thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
         }
 
-        /*
-        //start it wherever you decide to start the animation. On key press, on trigger enter, on whatever.
-        //in this example I'm rotating 'this', towards (0,0,0), for 1 second
-        StartCoroutine(AnimateRotationTowards(this.transform, Quaternion.identity, 1f));
-        */
-
-        IEnumerator AnimateRotationTowards(Transform target, Quaternion rot, float dur)
+        if (currentCoreTemp > 750 && _coreTempCooledDown == true && canPlayerUseThrusters == true)
         {
-            PlayClip(_coretempNominal); //************
-
-            float t = 0f;
-            Quaternion start = target.rotation;
-            while (t < dur)
+            _uiManager.CoreTempWarning(true);
+            Debug.Log("Core Temp Warning TRUE");
+            if (firstTimePlaying == false)
             {
-                target.rotation = Quaternion.Slerp(start, rot, t / dur);
-                yield return null;
-                t += Time.deltaTime;
+                firstTimePlaying = true;
+                StartCoroutine(PlayWarningCoreTempCritical()); //***********
             }
-            target.rotation = rot;
-
-            _hasPlayerLaserCooledDown = true;
-            _uiManager.CoreTempStable(false);
         }
+        else
+        {
+            _uiManager.CoreTempWarning(false);
+            Debug.Log("Core Temp Warning FALSE");
+
+        }
+
+        if (currentCoreTemp >= 999 && _coreTempCooledDown == true && canPlayerUseThrusters == true)
+        {
+            Debug.Log("Max Core temp reached");
+            StartCoroutine(PlayWarningCoreTempExceeded());  //***************
+            _coreTempCooledDown = false;
+            canPlayerUseThrusters = false;
+
+            PlayerCoreTempExceededDrifting();
+
+            _uiManager.CoreShutdown(true);
+        }
+
+        if (currentCoreTemp > 250 && _coreTempCooledDown == false)
+        {
+            currentCoreTemp -= coreTempDecrease;
+            thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+
+            Debug.Log("Max core temp is coming down");
+
+            PlayerCoreTempExceededDrifting();
+        }
+
+        if (currentCoreTemp == 250 && _coreTempCooledDown == false && canPlayerUseThrusters == false)
+        {
+            _coreTempCooledDown = true;
+            canPlayerUseThrusters = true;
+            _uiManager.CoreShutdown(false);
+            currentCoreTemp -= coreTempDecrease;
+            thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+
+            _playerThrusterLeft.gameObject.SetActive(true);
+            _playerThrusterRight.gameObject.SetActive(true);
+            _speed = 5.0f;
+
+            _uiManager.CoreTempStable(true);
+
+            Debug.Log("Max core temp stabilized");
+
+            if (transform.rotation.z != 0)
+            {
+                StartCoroutine(AnimateRotationTowards(this.transform, Quaternion.identity, 1f));
+            }
+        }
+    }
+
+    IEnumerator PlayWarningCoreTempCritical()
+    {
+        _audioSource.PlayOneShot(_warningCoreTempCritical);
+        yield return new WaitForSeconds(3.0f);
+        firstTimePlaying = false;
+
+    }
+
+    IEnumerator PlayWarningCoreTempExceeded()
+    {
+        _audioSource.PlayOneShot(_WarningcoretempExceeded);
+        yield return new WaitForSeconds(5.0f);
+    }
+
+    /*
+    //start it wherever you decide to start the animation. On key press, on trigger enter, on whatever.
+    //in this example I'm rotating 'this', towards (0,0,0), for 1 second
+    StartCoroutine(AnimateRotationTowards(this.transform, Quaternion.identity, 1f));
+    */
+
+    IEnumerator AnimateRotationTowards(Transform target, Quaternion rot, float dur)
+    {
+        PlayClip(_coretempNominal); //************
+
+        float t = 0f;
+        Quaternion start = target.rotation;
+        while (t < dur)
+        {
+            target.rotation = Quaternion.Slerp(start, rot, t / dur);
+            yield return null;
+            t += Time.deltaTime;
+        }
+        target.rotation = rot;
+
+        _hasPlayerLaserCooledDown = true;
+        _uiManager.CoreTempStable(false);
     }
 
     void PlayerCoreTempExceededDrifting()
@@ -362,26 +376,14 @@ public class PlayerScript : MonoBehaviour
             if (_lives != 0)
             {
                 ResetDamageAnimationList();
-                _audioSource.Stop();
-                transform.rotation = Quaternion.identity;
-                _uiManager.CoreTempStable(false);
-                _uiManager.CoreTempWarning(false);
-                _uiManager.CoreShutdown(false);
-                currentCoreTemp = 0;
-                thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
-                _coreTempCooledDown = true;
+                ResetStateOfCore();
                 StartCoroutine(ResetPlayerPosition());
             }
         }
 
         if (_lives < 1)
         {
-            _uiManager.CoreTempStable(false);
-            _uiManager.CoreTempWarning(false);
-            _uiManager.CoreShutdown(false);
-            _coreTempCooledDown = true;
-
-
+            ResetStateOfCore();
             _spawnManager.OnPlayerDeath();
             Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
@@ -437,6 +439,20 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    public void ResetStateOfCore()
+    {
+        _audioSource.Stop();
+        transform.rotation = Quaternion.identity;
+        _uiManager.CoreTempStable(false);
+        _uiManager.CoreTempWarning(false);
+        _uiManager.CoreShutdown(false);
+        _coreTempCooledDown = true;
+        currentCoreTemp = 0;
+        thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
+        _playerThrusterLeft.gameObject.SetActive(true);
+        _playerThrusterRight.gameObject.SetActive(true);
+    }
+
     public void AsteroidDestroyed()
     {
         _asteroidDestroyed = true;
@@ -444,21 +460,20 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator ResetPlayerPosition()
     {
-        //StopAllCoroutines();
-
         GetComponent<BoxCollider2D>().enabled = false;
         _speed = 0;
         _hasPlayerLaserCooledDown = false;
+        canPlayerUseThrusters = false;
+
         _uiManager.ReadySetGo();
         yield return new WaitForSeconds(0.8f);
-
         transform.position = new Vector3(0, 0, 0);
-
         yield return new WaitForSeconds(3.2f);
 
         GetComponent<BoxCollider2D>().enabled = true;
-        _hasPlayerLaserCooledDown = true;
         _speed = 5.0f;
+        _hasPlayerLaserCooledDown = true;
+        canPlayerUseThrusters = true;
 
         if (_gameFirstStart == true && _asteroidDestroyed == false)
         {
