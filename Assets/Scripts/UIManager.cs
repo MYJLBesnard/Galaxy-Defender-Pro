@@ -25,6 +25,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _pressToRestart;
     [SerializeField] private TMP_Text _pressForMainMenu;
     [SerializeField] private TMP_Text _pressEscapeToQuit;
+    [SerializeField] private TMP_Text _coreTempWarning;
+    [SerializeField] private TMP_Text _coreShutdownText;
+    [SerializeField] private TMP_Text _coreTempStableText;
 
     [Header("Game Over Display")]
     [SerializeField] private TMP_Text _gameOverText;
@@ -102,6 +105,47 @@ public class UIManager : MonoBehaviour
         if (currentLives == 0)
         {
             GameOverSequence();
+        }
+    }
+
+    public void CoreTempWarning(bool state)
+    {
+        if (state == true)
+        {
+            _coreTempWarning.enabled = true;
+
+        }
+        else
+        {
+            _coreTempWarning.enabled = false;
+
+        }
+
+    }
+
+    public void CoreShutdown(bool state)
+    {
+        if (state == true)
+        {
+            _coreShutdownText.enabled = true;
+            _coreTempWarning.enabled = false;
+
+        }
+        else
+        {
+            _coreShutdownText.enabled = false;
+        }
+    }
+
+    public void CoreTempStable(bool state)
+    {
+        if (state == true)
+        {
+            _coreTempStableText.enabled = true;
+        }
+        else
+        {
+            _coreTempStableText.enabled = false;
         }
     }
 
