@@ -341,41 +341,28 @@ public class PlayerScript : MonoBehaviour
     // Damage() using the Lists and random damage locations
     public void Damage()
     {
-
-
         if (_isPlayerShieldActive == true)
         {
             _shieldHits++;
 
-            if (_shieldHits == 1)
+            switch (_shieldHits)
             {
-                _playerShieldAlpha = 0.75f;
-                _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
-                return;
-
+                case 1:
+                    _playerShieldAlpha = 0.75f;
+                    _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
+                    break;
+                case 2:
+                    _playerShieldAlpha = 0.40f;
+                    _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
+                    break;
+                case 3:
+                    _isPlayerShieldActive = false;
+                    _playerShield.SetActive(false);
+                    break;
             }
-            else if (_shieldHits == 2)
-            {
-                _playerShieldAlpha = 0.40f;
-                _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
-                return;
-
-            }
-            else if (_shieldHits == 3)
-            {
-                _isPlayerShieldActive = false;
-                _playerShield.SetActive(false);
-                return;
-            }
-
             return;
         }
-
-        //_playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
-
-
     
-
         // randomly selects damaged area and sets it active.  The removes from pool to "Active" list.
         if (poolDamageAnimations.Count > 0)
         {
@@ -553,6 +540,7 @@ public class PlayerScript : MonoBehaviour
         _shieldHits = 0;
         _playerShieldAlpha = 1.0f;
         _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
+
 
     }
 
