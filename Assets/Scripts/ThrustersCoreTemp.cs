@@ -17,7 +17,7 @@ public class ThrustersCoreTemp : MonoBehaviour
     public void SetMaxCoreTemp(int temp)
     {
         slider.maxValue = temp;
-        slider.value = temp;
+        //slider.value = temp;
     }
 
     public void SetCoreTemp(int temp)

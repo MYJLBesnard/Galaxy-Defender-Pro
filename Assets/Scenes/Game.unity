@@ -602,7 +602,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372956288}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children:
@@ -611,11 +611,11 @@ RectTransform:
   - {fileID: 1963273704}
   m_Father: {fileID: 1955474912}
   m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -386.3, y: 176.5}
-  m_SizeDelta: {x: 325, y: 52.65}
+  m_AnchoredPosition: {x: -384.3, y: 181.4}
+  m_SizeDelta: {x: 52.65, y: 325}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &372956290
 MonoBehaviour:
@@ -659,7 +659,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 1291537404}
   m_HandleRect: {fileID: 0}
-  m_Direction: 0
+  m_Direction: 2
   m_MinValue: 0
   m_MaxValue: 1000
   m_WholeNumbers: 0
@@ -728,9 +728,9 @@ MonoBehaviour:
     type: 3}
   _warningCoreTempCritical: {fileID: 8300000, guid: d472de9eefbcf46b0a0694db30aa3060,
     type: 3}
-  _WarningcoretempExceeded: {fileID: 8300000, guid: cc7d1aefbe31d43d1826a077113862d7,
+  _warningCoreTempExceeded: {fileID: 8300000, guid: cc7d1aefbe31d43d1826a077113862d7,
     type: 3}
-  _coretempNominal: {fileID: 8300000, guid: 263bb5072596347df86fafe81122677e, type: 3}
+  _coreTempNominal: {fileID: 8300000, guid: 263bb5072596347df86fafe81122677e, type: 3}
   _playerLaserPrefab: {fileID: 4056849775378164010, guid: cef8acee60e8e4dbc99aae82d3799276,
     type: 3}
   _playerDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: d3142b582fdcd4cd6b28e303ad8d2f63,
@@ -751,7 +751,6 @@ MonoBehaviour:
   _leftEngineDamage: {fileID: 628999759}
   _rightEngineDamage: {fileID: 1873296388}
   _hasPlayerLaserCooledDown: 1
-  _hasPlayerThrustersCooledDown: 1
   _gameFirstStart: 1
   _asteroidDestroyed: 0
   _isPlayerTripleShotActive: 0
@@ -763,13 +762,15 @@ MonoBehaviour:
   - {fileID: 853987880017284913}
   - {fileID: 998269970483307881}
   activatedDamageAnimations: []
+  coreTempDecrease: 1
+  _coreTempCooledDown: 1
+  _hasPlayerThrustersCooledDown: 1
+  thrustersCoreTemp: {fileID: 372956291}
   maxCoreTemp: 1000
   currentCoreTemp: 0
-  coreTempDecrease: 1
-  thrustersCoreTemp: {fileID: 372956291}
-  _coreTempCooledDown: 1
   canPlayerUseThrusters: 0
-  firstTimePlaying: 0
+  resetExceededCoreTempWarning: 0
+  _shieldHits: 0
 --- !u!212 &391477478
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2714,17 +2715,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364929495}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 372956289}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.25, y: 0.16235924}
-  m_SizeDelta: {x: 0.5, y: 0.3247223}
+  m_AnchoredPosition: {x: 4.1, y: 0.30000305}
+  m_SizeDelta: {x: 274.61386, y: -256.8903}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1364929497
 MonoBehaviour:
@@ -3080,7 +3081,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 1644167423
-  m_fontColor: {r: 1, g: 0, b: 0, a: 0.38431373}
+  m_fontColor: {r: 1, g: 0, b: 0, a: 0.3764706}
   m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
@@ -3713,7 +3714,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1873296388
 GameObject:
@@ -4124,16 +4125,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1963273703}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.67, y: 1.51, z: 1}
+  m_LocalScale: {x: 1.1187139, y: 1.8174359, z: 1.2035999}
   m_Children: []
   m_Father: {fileID: 372956289}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -26.5, y: 0.9}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -1, y: -38}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1963273705
@@ -4459,7 +4460,7 @@ PrefabInstance:
     - target: {fileID: 191767234627025651, guid: 9c02bd9a728844199a79633f3c3c4c1b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 191767234627025651, guid: 9c02bd9a728844199a79633f3c3c4c1b,
         type: 3}
@@ -4986,7 +4987,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 333b0196b7a764df5a7768ead9b69dbc, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.0047169924, g: 0.7420093, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5007,6 +5008,7 @@ GameObject:
   - component: {fileID: 3208205198328899008}
   - component: {fileID: 3208205198328899014}
   - component: {fileID: 3208205198328899009}
+  - component: {fileID: 3208205198328899012}
   m_Layer: 0
   m_Name: PlayerShield
   m_TagString: Untagged
@@ -5014,6 +5016,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &3208205198328899012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3208205198328899011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 417eaf27dd6804fa5bb762d9586afb49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerShieldColor: {r: 0.004, g: 0.74, b: 1, a: 1}
 --- !u!95 &3208205198328899014
 Animator:
   serializedVersion: 3
