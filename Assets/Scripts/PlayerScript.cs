@@ -55,7 +55,7 @@ public class PlayerScript : MonoBehaviour
     public bool resetExceededCoreTempWarning = false;
 
     [SerializeField] private int _shieldHits = 0;
-
+    [SerializeField] private float _playerShieldAlpha = 1.0f;
 
     void Start()
     {
@@ -336,7 +336,8 @@ public class PlayerScript : MonoBehaviour
         _uiManager.UpdateScore(_score); // communicate with the UI to update the score
     }
 
-    
+   
+
     // Damage() using the Lists and random damage locations
     public void Damage()
     {
@@ -344,10 +345,36 @@ public class PlayerScript : MonoBehaviour
 
         if (_isPlayerShieldActive == true)
         {
+            _shieldHits++;
+
+            if (_shieldHits == 1)
+            {
+                _playerShieldAlpha = 0.75f;
+                _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
+                return;
+
+            }
+            else if (_shieldHits == 2)
+            {
+                _playerShieldAlpha = 0.40f;
+                _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
+                return;
+
+            }
+            else if (_shieldHits == 3)
+            {
                 _isPlayerShieldActive = false;
                 _playerShield.SetActive(false);
                 return;
+            }
+
+            return;
         }
+
+        //_playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
+
+
+    
 
         // randomly selects damaged area and sets it active.  The removes from pool to "Active" list.
         if (poolDamageAnimations.Count > 0)
@@ -523,6 +550,10 @@ public class PlayerScript : MonoBehaviour
     {
         _isPlayerShieldActive = true;
         _playerShield.SetActive(true);
+        _shieldHits = 0;
+        _playerShieldAlpha = 1.0f;
+        _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
+
     }
 
     IEnumerator TripleShotPowerDownTimer()
