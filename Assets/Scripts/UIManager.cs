@@ -38,7 +38,6 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         _scoreText.text = "SCORE: " + 0;
-        //_gameOverText.gameObject.SetActive(false);
         _gameOverText.enabled = false;
         _pressToRestart.gameObject.SetActive(false);
         _pressForMainMenu.gameObject.SetActive(false);
@@ -120,7 +119,6 @@ public class UIManager : MonoBehaviour
             _coreTempWarning.enabled = false;
 
         }
-
     }
 
     public void CoreShutdown(bool state)
@@ -173,7 +171,6 @@ public class UIManager : MonoBehaviour
         bool flashGameOver = true;
         int flashCount = 0;
 
-        //yield return new WaitForSeconds(5.0f);
         _pressToRestart.gameObject.SetActive(true);
         _pressForMainMenu.gameObject.SetActive(true);
         _pressEscapeToQuit.gameObject.SetActive(true);

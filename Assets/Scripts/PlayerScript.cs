@@ -20,8 +20,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioClip _powerupAudioClip;
     [SerializeField] private AudioClip _playerLaserShotAudioClip;
     [SerializeField] private AudioClip _warningCoreTempCritical;
-    [SerializeField] private AudioClip _WarningcoretempExceeded;
-    [SerializeField] private AudioClip _coretempNominal;
+    [SerializeField] private AudioClip _warningCoreTempExceeded;
+    [SerializeField] private AudioClip _coreTempNominal;
     private AudioSource _audioSource;
 
 
@@ -34,8 +34,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private GameObject _leftEngineDamage, _rightEngineDamage;
 
     [SerializeField] private bool _hasPlayerLaserCooledDown = false;
-    [SerializeField] private bool _hasPlayerThrustersCooledDown = true; //************** To be implemented at a later date
-
+    
     [SerializeField] private bool _gameFirstStart = true;
     [SerializeField] private bool _asteroidDestroyed = false;
     [SerializeField] private bool _isPlayerTripleShotActive = false, _isPlayerShieldActive = false, _isPlayerSpeedBoostActive = false;
@@ -46,17 +45,17 @@ public class PlayerScript : MonoBehaviour
     private CameraShaker _camera;
 
     [Header("Thruster Core Variables")]
+    [SerializeField] private int coreTempDecrease;
+    [SerializeField] private bool _coreTempCooledDown = true;
+    [SerializeField] private bool _hasPlayerThrustersCooledDown = true;
+    public ThrustersCoreTemp thrustersCoreTemp;
     public int maxCoreTemp = 1000;
     public int currentCoreTemp = 0;
-    [SerializeField] private int coreTempDecrease;
-    public ThrustersCoreTemp thrustersCoreTemp;
-    [SerializeField] private bool _coreTempCooledDown = true;
     public bool canPlayerUseThrusters = false;
+    public bool resetExceededCoreTempWarning = false;
 
+    [SerializeField] private int _shieldHits = 0;
 
-    public bool firstTimePlaying = false;
-
-    
 
     void Start()
     {
@@ -132,24 +131,21 @@ public class PlayerScript : MonoBehaviour
         if (currentCoreTemp > 750 && _coreTempCooledDown == true && canPlayerUseThrusters == true)
         {
             _uiManager.CoreTempWarning(true);
-            Debug.Log("Core Temp Warning TRUE");
-            if (firstTimePlaying == false)
+
+            if (resetExceededCoreTempWarning == false)
             {
-                firstTimePlaying = true;
-                StartCoroutine(PlayWarningCoreTempCritical()); //***********
+                resetExceededCoreTempWarning = true;
+                StartCoroutine(PlayWarningCoreTempCritical()); 
             }
         }
         else
         {
             _uiManager.CoreTempWarning(false);
-            Debug.Log("Core Temp Warning FALSE");
-
         }
 
         if (currentCoreTemp >= 999 && _coreTempCooledDown == true && canPlayerUseThrusters == true)
         {
-            Debug.Log("Max Core temp reached");
-            StartCoroutine(PlayWarningCoreTempExceeded());  //***************
+            StartCoroutine(PlayWarningCoreTempExceeded());  
             _coreTempCooledDown = false;
             canPlayerUseThrusters = false;
 
@@ -162,8 +158,6 @@ public class PlayerScript : MonoBehaviour
         {
             currentCoreTemp -= coreTempDecrease;
             thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
-
-            Debug.Log("Max core temp is coming down");
 
             PlayerCoreTempExceededDrifting();
         }
@@ -182,8 +176,6 @@ public class PlayerScript : MonoBehaviour
 
             _uiManager.CoreTempStable(true);
 
-            Debug.Log("Max core temp stabilized");
-
             if (transform.rotation.z != 0)
             {
                 StartCoroutine(AnimateRotationTowards(this.transform, Quaternion.identity, 1f));
@@ -195,13 +187,14 @@ public class PlayerScript : MonoBehaviour
     {
         _audioSource.PlayOneShot(_warningCoreTempCritical);
         yield return new WaitForSeconds(3.0f);
-        firstTimePlaying = false;
+        resetExceededCoreTempWarning = false;
 
     }
 
     IEnumerator PlayWarningCoreTempExceeded()
     {
-        _audioSource.PlayOneShot(_WarningcoretempExceeded);
+        _audioSource.Stop();
+        _audioSource.PlayOneShot(_warningCoreTempExceeded);
         yield return new WaitForSeconds(5.0f);
     }
 
@@ -213,7 +206,7 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator AnimateRotationTowards(Transform target, Quaternion rot, float dur)
     {
-        PlayClip(_coretempNominal); //************
+        PlayClip(_coreTempNominal); //************
 
         float t = 0f;
         Quaternion start = target.rotation;
@@ -234,7 +227,7 @@ public class PlayerScript : MonoBehaviour
         _playerThrusterLeft.gameObject.SetActive(false);
         _playerThrusterRight.gameObject.SetActive(false);
         _hasPlayerLaserCooledDown = false;
-        _speed = 0f;
+        _speed = 0.25f;
         transform.Rotate(Vector3.forward * -50f * Time.deltaTime);
     }
 
@@ -347,11 +340,13 @@ public class PlayerScript : MonoBehaviour
     // Damage() using the Lists and random damage locations
     public void Damage()
     {
+
+
         if (_isPlayerShieldActive == true)
         {
-            _isPlayerShieldActive = false;
-            _playerShield.SetActive(false);
-            return;
+                _isPlayerShieldActive = false;
+                _playerShield.SetActive(false);
+                return;
         }
 
         // randomly selects damaged area and sets it active.  The removes from pool to "Active" list.
@@ -425,6 +420,37 @@ public class PlayerScript : MonoBehaviour
     }
     */
 
+
+    IEnumerator ResetPlayerPosition()
+    {
+        GetComponent<BoxCollider2D>().enabled = false;
+        _speed = 0;
+        _hasPlayerLaserCooledDown = false;
+        canPlayerUseThrusters = false;
+
+        _uiManager.ReadySetGo();
+        yield return new WaitForSeconds(0.8f);
+        transform.position = new Vector3(0, 0, 0);
+        yield return new WaitForSeconds(3.2f);
+
+        GetComponent<BoxCollider2D>().enabled = true;
+        _speed = 5.0f;
+        _hasPlayerLaserCooledDown = true;
+        canPlayerUseThrusters = true;
+
+        if (_gameFirstStart == true && _asteroidDestroyed == false)
+        {
+            _gameFirstStart = false;
+            _spawnManager.OnPlayerReady();
+        }
+
+        if (_asteroidDestroyed == true)
+        {
+            _spawnManager.OnPlayerReady();
+            _spawnManager.StartSpawning();
+        }
+    }
+
     public void ResetDamageAnimationList()
     {
         _spawnManager.OnPlayerReset();
@@ -458,35 +484,6 @@ public class PlayerScript : MonoBehaviour
         _asteroidDestroyed = true;
     }
 
-    IEnumerator ResetPlayerPosition()
-    {
-        GetComponent<BoxCollider2D>().enabled = false;
-        _speed = 0;
-        _hasPlayerLaserCooledDown = false;
-        canPlayerUseThrusters = false;
-
-        _uiManager.ReadySetGo();
-        yield return new WaitForSeconds(0.8f);
-        transform.position = new Vector3(0, 0, 0);
-        yield return new WaitForSeconds(3.2f);
-
-        GetComponent<BoxCollider2D>().enabled = true;
-        _speed = 5.0f;
-        _hasPlayerLaserCooledDown = true;
-        canPlayerUseThrusters = true;
-
-        if (_gameFirstStart == true && _asteroidDestroyed == false)
-        {
-            _gameFirstStart = false;
-            _spawnManager.OnPlayerReady();
-        }
-
-        if (_asteroidDestroyed == true)
-        {
-            _spawnManager.OnPlayerReady();
-            _spawnManager.StartSpawning();
-        }
-    }
 
     public void TripleShotActivate()
     {

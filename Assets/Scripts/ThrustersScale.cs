@@ -35,7 +35,7 @@ public class ThrustersScale : MonoBehaviour
 
         if (_playerScript.canPlayerUseThrusters == false)
         {
-            transform.localScale = new Vector3(0.1f, 0.63f, 0.5f);
+            transform.localScale = new Vector3(0.1f, 0.63f, 0.5f); 
         }
 
     }
