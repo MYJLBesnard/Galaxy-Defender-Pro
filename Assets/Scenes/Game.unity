@@ -518,6 +518,19 @@ MonoBehaviour:
   - {fileID: 853987880017284913}
   - {fileID: 998269970483307881}
   activatedDamageAnimations: []
+<<<<<<< Updated upstream
+=======
+  coreTempDecrease: 1
+  _coreTempCooledDown: 1
+  _hasPlayerThrustersCooledDown: 1
+  thrustersCoreTemp: {fileID: 372956291}
+  maxCoreTemp: 1000
+  currentCoreTemp: 0
+  canPlayerUseThrusters: 0
+  resetExceededCoreTempWarning: 0
+  _shieldHits: 0
+  _playerShieldAlpha: 1
+>>>>>>> Stashed changes
 --- !u!212 &391477478
 SpriteRenderer:
   m_ObjectHideFlags: 0
