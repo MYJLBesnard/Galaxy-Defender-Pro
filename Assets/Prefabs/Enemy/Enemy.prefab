@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4198945380649847407}
   - component: {fileID: 1975510476456514935}
   - component: {fileID: -7696838321736768663}
+  - component: {fileID: -8891832379322240045}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -43,7 +44,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4590086578092343861}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a322ee0114f454556805ba3a54f2e799, type: 3}
   m_Name: 
@@ -269,3 +270,31 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-8891832379322240045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4590086578092343861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306b285d513004d08899af85842e4253, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyOnePrefab: {fileID: 4590086578092343861}
+  _dodgingEnemyPrefab: {fileID: 3852028416767491656, guid: a76291ae6654240b19836b835d98986a,
+    type: 3}
+  _enemyType: 1
+  _enemyOneSpeed: 4
+  _dodgingEnemySpeed: 0
+  _dodgingAmplitude: 0
+  _dodgingFrequency: 0.5
+  _randomXStartPos: -10.35
+  _stopUpdating: 0
+  _explosionSoundEffect: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc,
+    type: 3}
+  _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,
+    type: 3}
+  _enemyDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: 96b51ad5e8dc0492baf64f9be40d2bb0,
+    type: 3}

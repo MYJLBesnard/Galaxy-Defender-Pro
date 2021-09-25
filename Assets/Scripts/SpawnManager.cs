@@ -10,11 +10,19 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameObject _enemyOnePrefab;
 
     [SerializeField] private int _shipsInWave = 10;
-    [SerializeField] private int _waveCurrent = 0;
+    public int totalEnemyShipsDestroyed = 0;
+    public int waveCurrent = 0;
+    public int enemyType = 1;
+
 
     [SerializeField] private bool _stopSpawning = false;
 
     private float _xPos;
+
+    public void EnemyShipsDestroyedCounter()
+    {
+        totalEnemyShipsDestroyed++;
+    }
 
     public void StartSpawning()
     {
@@ -31,23 +39,27 @@ public class SpawnManager : MonoBehaviour
             _xPos = Random.Range(-8.0f, 8.0f);
             Vector3 pxToSpawn = new Vector3(_xPos, 7, 0);
 
-            if (_waveCurrent > 0)
+            if (waveCurrent > 0)
             {
+                enemyType = 2;
                 GameObject newEnemy = Instantiate(_dodgingEnemyPrefab, pxToSpawn, Quaternion.identity);
+                //GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
             }
 
-            else if (_waveCurrent == 0)
+            else if (waveCurrent == 0)
             {
+                enemyType = 1;
                 GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
             }         
 
             _shipsInWave++;
-                if (_shipsInWave == 10)
+
+                if (_shipsInWave == 3)
             {
                 _shipsInWave = 0;
-                _waveCurrent++;
+                waveCurrent++;
             }            
 
             yield return new WaitForSeconds(Random.Range(2f, 6f));
