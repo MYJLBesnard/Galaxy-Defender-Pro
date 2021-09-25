@@ -57,6 +57,11 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private int _shieldHits = 0;
     [SerializeField] private float _playerShieldAlpha = 1.0f;
 
+    [SerializeField] private GameObject _playerHomingMissilePrefab;
+    [SerializeField] private bool _isPlayerHomingMissilesActivate = true; // set to true temporarily for testing.  Should start false by
+                                                                          // default until missiles powerup is collected.
+    [SerializeField] private int _playerHomingMissileLoadout = 10;
+
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -105,6 +110,25 @@ public class PlayerScript : MonoBehaviour
                 PlayerFireLaser();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            if (_isPlayerHomingMissilesActivate == true && _playerHomingMissileLoadout > 0)
+            {
+                FireHomingMissile();
+            }
+        }
+
+        if (_playerHomingMissileLoadout == 0)
+        {
+            _isPlayerHomingMissilesActivate = false;
+        }
+    }
+
+    private void FireHomingMissile()
+    {
+        Instantiate(_playerHomingMissilePrefab, transform.position + new Vector3(0, 1.4f, 0), Quaternion.identity);
+        _playerHomingMissileLoadout--;
     }
 
     void CalculateThrustersScale()
@@ -542,6 +566,12 @@ public class PlayerScript : MonoBehaviour
         _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
 
 
+    }
+
+    public void HomingMissilesActivate()
+    {
+        _isPlayerHomingMissilesActivate = true;
+        _playerHomingMissileLoadout = 10;
     }
 
     IEnumerator TripleShotPowerDownTimer()

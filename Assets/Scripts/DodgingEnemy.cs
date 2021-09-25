@@ -129,6 +129,19 @@ public class DodgingEnemy : MonoBehaviour
             _audioSource.Play();
             DestroyEnemyShip();
         }
+
+        if (other.tag == "PlayerHomingMissile")
+        {
+            if (_player != null)
+            {
+                _player.AddScore(10);
+            }
+
+            Destroy(other.gameObject);
+
+            _audioSource.Play();
+            DestroyEnemyShip();
+        }
     }
 
     private void DestroyEnemyShip()

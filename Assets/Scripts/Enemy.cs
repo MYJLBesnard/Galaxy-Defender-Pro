@@ -22,9 +22,6 @@ public class Enemy : MonoBehaviour
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
 
-
-
-
     void Start()
     {
         _enemyOneSpeed = Random.Range(2.5f, 4.5f);
@@ -122,6 +119,19 @@ public class Enemy : MonoBehaviour
                                       // the value of 10 is set to this type of enemy, but we could expand later with a
                                       // Switch statement to attribute different values to "points"
             }
+
+            _audioSource.Play();
+            DestroyEnemyShip();
+        }
+
+        if (other.tag == "PlayerHomingMissile")
+        {
+            if (_player != null)
+            {
+                _player.AddScore(10);
+            }
+
+            Destroy(other.gameObject);
 
             _audioSource.Play();
             DestroyEnemyShip();
