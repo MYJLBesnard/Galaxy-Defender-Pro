@@ -18,6 +18,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private int _ammoCount =20;
 
     [SerializeField] private AudioClip _powerupAudioClip;
+    [SerializeField] private AudioClip _asteroidBlockingSensors;
+    [SerializeField] private AudioClip _warningIncomingWave;
     [SerializeField] private AudioClip _playerLaserShotAudioClip;
     [SerializeField] private AudioClip _warningCoreTempCritical;
     [SerializeField] private AudioClip _warningCoreTempExceeded;
@@ -27,6 +29,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioClip _playerShields35AudioClip;
     [SerializeField] private AudioClip _playerShieldsDepletedAudioClip;
     [SerializeField] private AudioClip _shipRepairsUnderwayAudioClip;
+    [SerializeField] private AudioClip _explosionSoundEffect;
     private AudioSource _audioSource;
 
 
@@ -491,10 +494,14 @@ public class PlayerScript : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
         yield return new WaitForSeconds(3.2f);
 
+        if (_asteroidDestroyed == true)
+        {
+            _hasPlayerLaserCooledDown = true;
+            canPlayerUseThrusters = true;
+        }
+
         GetComponent<BoxCollider2D>().enabled = true;
         _speed = 5.0f;
-        _hasPlayerLaserCooledDown = true;
-        canPlayerUseThrusters = true;
 
         if (_gameFirstStart == true && _asteroidDestroyed == false)
         {
@@ -540,6 +547,20 @@ public class PlayerScript : MonoBehaviour
     public void AsteroidDestroyed()
     {
         _asteroidDestroyed = true;
+        StartCoroutine(WarningIncomingWave(3.0f));
+    }
+
+    public void AsteroidBlockingSensors()
+    {
+        PlayClip(_asteroidBlockingSensors);
+        StartCoroutine(WeaponsFree());
+    }
+
+    IEnumerator WeaponsFree()
+    {
+        yield return new WaitForSeconds(5.0f);
+        _hasPlayerLaserCooledDown = true;
+        canPlayerUseThrusters = true;
     }
 
 
@@ -608,5 +629,14 @@ public class PlayerScript : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         _speed /= _speedMultiplier;
         _isPlayerSpeedBoostActive = false;
+    }
+
+    IEnumerator WarningIncomingWave(float time)
+    {
+        yield return new WaitForSeconds(time);
+        PlayClip(_warningIncomingWave);
+        _spawnManager.StartSpawning();
+
+
     }
 }

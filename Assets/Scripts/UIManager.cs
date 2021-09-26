@@ -101,6 +101,15 @@ public class UIManager : MonoBehaviour
     public void UpdateHomingMissileCount(int homingMissileCount)
     {
         _homingMissileCountText.text = "Missiles: " + homingMissileCount.ToString();
+
+        if (homingMissileCount > 0)
+        {
+            _homingMissileCountText.color = Color.green;
+        }
+        else
+        {
+            _homingMissileCountText.color = Color.red;
+        }
     }
 
     public void UpdateLives(int currentLives)

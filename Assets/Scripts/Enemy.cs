@@ -105,7 +105,7 @@ public class Enemy : MonoBehaviour
                 player.Damage();
             }
 
- //           _audioSource.Play();
+            _audioSource.Play();
             DestroyEnemyShip();
         }
 
@@ -120,7 +120,7 @@ public class Enemy : MonoBehaviour
                                       // Switch statement to attribute different values to "points"
             }
 
-//            _audioSource.Play();
+            _audioSource.Play();
             DestroyEnemyShip();
         }
 

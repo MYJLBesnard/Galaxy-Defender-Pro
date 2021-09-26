@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class StartGameAsteroid : MonoBehaviour
 {
-    [SerializeField]
-    private float _rotationSpeed;
-
-    [SerializeField]
-    private GameObject _explosionPrefab;
+    [SerializeField] private float _asteroidSpeed;
+    [SerializeField] private bool _startOfGame = true;
+    [SerializeField] private GameObject _explosionPrefab;
+    [SerializeField] private AudioClip _explosionSoundEffect;
     private SpawnManager _spawnManager;
     private PlayerScript _playerScript;
 
     private void Start()
     {
-        _rotationSpeed = Random.Range(3.5f, 12f);
+        _asteroidSpeed = 2.0f;
 
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
 
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
-
-
 
         if (_spawnManager == null)
         {
@@ -35,20 +32,35 @@ public class StartGameAsteroid : MonoBehaviour
 
     void Update()
     {
-        transform.Rotate(Vector3.forward * _rotationSpeed * Time.deltaTime);
+        transform.Translate(Vector3.down * _asteroidSpeed * Time.deltaTime);
+
+        if (transform.position.y <= 7.0f)
+        {
+            transform.position = new Vector3(transform.position.x, 7.0f, 0);
+        }
+
+        if (transform.position.y <= 7.0f && _startOfGame == true)
+        {
+            SpaceCommandDestroyAsteroid();
+        }
+    }
+
+    public void SpaceCommandDestroyAsteroid()
+    {
+        _startOfGame = false;
+        _playerScript.AsteroidBlockingSensors();
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "LaserPlayer")
+        if (other.tag == "LaserPlayer" || other.tag == "PlayerHomingMissile")
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+
+            _playerScript.PlayClip(_explosionSoundEffect);
             Destroy(other.gameObject);
-            Destroy(this.gameObject, 0.25f);
-
+            Destroy(this.gameObject, 0.5f);
             _playerScript.AsteroidDestroyed();
-
-            _spawnManager.StartSpawning();
         }
     }
 }
