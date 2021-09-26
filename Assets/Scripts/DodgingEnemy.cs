@@ -111,7 +111,7 @@ public class DodgingEnemy : MonoBehaviour
                 player.Damage();
             }
 
-            _audioSource.Play();
+ //           _audioSource.Play();
             DestroyEnemyShip();
         }
 
@@ -126,7 +126,7 @@ public class DodgingEnemy : MonoBehaviour
                                       // Switch statement to attribute different values to "points"
             }
 
-            _audioSource.Play();
+ //           _audioSource.Play();
             DestroyEnemyShip();
         }
 

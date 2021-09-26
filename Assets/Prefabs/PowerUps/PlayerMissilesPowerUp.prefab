@@ -390,6 +390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3244706802909736484}
   - component: {fileID: 3244706802909736487}
+  - component: {fileID: 1211525798}
   m_Layer: 0
   m_Name: PlayerMissilesPowerUp
   m_TagString: Untagged
@@ -432,6 +433,21 @@ CircleCollider2D:
   m_Offset: {x: 0.03, y: -0.02}
   serializedVersion: 2
   m_Radius: 0.34
+--- !u!114 &1211525798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3244706802909736485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c172bdfe46ee64d488fe41aec15c4bdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speedOfPowerUps: 1.5
+  _powerUpID: 5
+  _powerUpAudioClip: {fileID: 8300000, guid: 286316d99781e4f7d9403222affcbf4d, type: 3}
 --- !u!1 &3244706802989281114
 GameObject:
   m_ObjectHideFlags: 0

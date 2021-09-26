@@ -15,13 +15,18 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField] private int _lives = 3;
     [SerializeField] private int _score;
-    [SerializeField] private int _ammoCount =25;
+    [SerializeField] private int _ammoCount =20;
 
     [SerializeField] private AudioClip _powerupAudioClip;
     [SerializeField] private AudioClip _playerLaserShotAudioClip;
     [SerializeField] private AudioClip _warningCoreTempCritical;
     [SerializeField] private AudioClip _warningCoreTempExceeded;
     [SerializeField] private AudioClip _coreTempNominal;
+    [SerializeField] private AudioClip _playerShields100AudioClip;
+    [SerializeField] private AudioClip _playerShields65AudioClip;
+    [SerializeField] private AudioClip _playerShields35AudioClip;
+    [SerializeField] private AudioClip _playerShieldsDepletedAudioClip;
+    [SerializeField] private AudioClip _shipRepairsUnderwayAudioClip;
     private AudioSource _audioSource;
 
 
@@ -58,9 +63,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float _playerShieldAlpha = 1.0f;
 
     [SerializeField] private GameObject _playerHomingMissilePrefab;
-    [SerializeField] private bool _isPlayerHomingMissilesActivate = true; // set to true temporarily for testing.  Should start false by
-                                                                          // default until missiles powerup is collected.
-    [SerializeField] private int _playerHomingMissileLoadout = 10;
+    [SerializeField] private bool _isPlayerHomingMissilesActivate = false; 
+    [SerializeField] private int _homingMissileCount = 0;
 
     void Start()
     {
@@ -113,13 +117,13 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            if (_isPlayerHomingMissilesActivate == true && _playerHomingMissileLoadout > 0)
+            if (_isPlayerHomingMissilesActivate == true && _homingMissileCount > 0)
             {
                 FireHomingMissile();
             }
         }
 
-        if (_playerHomingMissileLoadout == 0)
+        if (_homingMissileCount == 0)
         {
             _isPlayerHomingMissilesActivate = false;
         }
@@ -128,7 +132,9 @@ public class PlayerScript : MonoBehaviour
     private void FireHomingMissile()
     {
         Instantiate(_playerHomingMissilePrefab, transform.position + new Vector3(0, 1.4f, 0), Quaternion.identity);
-        _playerHomingMissileLoadout--;
+        _homingMissileCount--;
+        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+
     }
 
     void CalculateThrustersScale()
@@ -342,6 +348,17 @@ public class PlayerScript : MonoBehaviour
         _uiManager.UpdateAmmoCount(_ammoCount);
     }
 
+    public void PlayerHomingMissiles()
+    {
+        _homingMissileCount = _homingMissileCount + 5;
+        if (_homingMissileCount > 25)
+        {
+            _homingMissileCount = 25;
+        }
+        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+        _isPlayerHomingMissilesActivate = true;
+    }
+
     public void PlayClip(AudioClip soundEffectClip)
     {
         _audioSource.PlayOneShot(soundEffectClip);
@@ -373,14 +390,17 @@ public class PlayerScript : MonoBehaviour
             {
                 case 1:
                     _playerShieldAlpha = 0.75f;
+                    PlayClip(_playerShields65AudioClip);
                     _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
                     break;
                 case 2:
                     _playerShieldAlpha = 0.40f;
+                    PlayClip(_playerShields35AudioClip);
                     _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
                     break;
                 case 3:
                     _isPlayerShieldActive = false;
+                    PlayClip(_playerShieldsDepletedAudioClip);
                     _playerShield.SetActive(false);
                     break;
             }
@@ -554,6 +574,8 @@ public class PlayerScript : MonoBehaviour
             poolDamageAnimations.Add(temp);
             temp.SetActive(false);
             activatedDamageAnimations.Remove(temp);
+            PlayClip(_shipRepairsUnderwayAudioClip);
+
         }
     }
 
@@ -561,6 +583,7 @@ public class PlayerScript : MonoBehaviour
     {
         _isPlayerShieldActive = true;
         _playerShield.SetActive(true);
+        PlayClip(_playerShields100AudioClip);
         _shieldHits = 0;
         _playerShieldAlpha = 1.0f;
         _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
@@ -571,7 +594,7 @@ public class PlayerScript : MonoBehaviour
     public void HomingMissilesActivate()
     {
         _isPlayerHomingMissilesActivate = true;
-        _playerHomingMissileLoadout = 10;
+        //_playerHomingMissileLoadout = 10;
     }
 
     IEnumerator TripleShotPowerDownTimer()
