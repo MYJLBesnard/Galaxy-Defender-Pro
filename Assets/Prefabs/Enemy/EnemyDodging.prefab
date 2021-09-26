@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5866150816719639248}
   - component: {fileID: 3495851661207778834}
   - component: {fileID: 3961438793415551184}
-  - component: {fileID: 3866587241613770580}
   - component: {fileID: 327051933580180043}
+  - component: {fileID: 8611454615807505828}
   m_Layer: 0
   m_Name: EnemyDodging
   m_TagString: Enemy
@@ -152,30 +152,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3866587241613770580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3852028416767491656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 451720254adc548d49c80bedf406e792, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dodgingEnemySpeed: 0
-  _dodgingAmplitude: 0
-  _dodgingFrequency: 0.5
-  _randomXStartPos: 0
-  _dodgingEnemyPrefab: {fileID: 3852028416767491656}
-  _stopUpdating: 0
-  _explosionSoundEffect: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc,
-    type: 3}
-  _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,
-    type: 3}
-  _enemyDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: 96b51ad5e8dc0492baf64f9be40d2bb0,
-    type: 3}
 --- !u!82 &327051933580180043
 AudioSource:
   m_ObjectHideFlags: 0
@@ -272,3 +248,31 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8611454615807505828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3852028416767491656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306b285d513004d08899af85842e4253, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyOnePrefab: {fileID: 4590086578092343861, guid: 31ce25f592b0746278d3ec5ec49d8999,
+    type: 3}
+  _dodgingEnemyPrefab: {fileID: 3852028416767491656}
+  _enemyType: 1
+  _enemyOneSpeed: 4
+  _dodgingEnemySpeed: 0
+  _dodgingAmplitude: 0
+  _dodgingFrequency: 0.5
+  _randomXStartPos: 0
+  _stopUpdating: 0
+  _explosionSoundEffect: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc,
+    type: 3}
+  _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,
+    type: 3}
+  _enemyDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: 96b51ad5e8dc0492baf64f9be40d2bb0,
+    type: 3}

@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     [Header("UI Text Fields")]
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private TMP_Text _ammoCountText;
+    [SerializeField] private TMP_Text _homingMissileCountText;
     [SerializeField] private TMP_Text _readyText;
     [SerializeField] private TMP_Text _setText;
     [SerializeField] private TMP_Text _defendText;
@@ -95,6 +96,11 @@ public class UIManager : MonoBehaviour
         {
             _ammoCountText.color = Color.red;
         }
+    }
+
+    public void UpdateHomingMissileCount(int homingMissileCount)
+    {
+        _homingMissileCountText.text = "Missiles: " + homingMissileCount.ToString();
     }
 
     public void UpdateLives(int currentLives)

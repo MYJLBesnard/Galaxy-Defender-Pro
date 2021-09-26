@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DodgingEnemy : MonoBehaviour
+public class EnemyTest : MonoBehaviour
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
+    private SpawnManager _spawnManager;
+
+    [SerializeField] private GameObject _enemyOnePrefab;
+    [SerializeField] private GameObject _dodgingEnemyPrefab;
+    [SerializeField] private int _enemyType = 1;
+    [SerializeField] private float _enemyOneSpeed;
 
     [SerializeField] private float _dodgingEnemySpeed;
     [SerializeField] private float _dodgingAmplitude;
@@ -13,7 +19,6 @@ public class DodgingEnemy : MonoBehaviour
     private float x, y, z;
     public float _randomXStartPos = 0;
 
-    [SerializeField] private GameObject _dodgingEnemyPrefab;
 
     [SerializeField] private bool _stopUpdating = false;
 
@@ -27,8 +32,10 @@ public class DodgingEnemy : MonoBehaviour
 
     void Start()
     {
+        _enemyOneSpeed = Random.Range(2.5f, 4.5f);
         _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _animEnemyDestroyed = GetComponent<Animator>();
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
         _dodgingAmplitude = Random.Range(1.0f, 2.5f);
@@ -82,16 +89,38 @@ public class DodgingEnemy : MonoBehaviour
             z = transform.position.z;
             x = Mathf.Cos((_dodgingEnemySpeed * Time.time * _dodgingFrequency) * _dodgingAmplitude);
 
-            transform.position = new Vector3((x + _randomXStartPos), y, z);
+            if (_spawnManager.enemyType == 1)
+            //if (_spawnManager.waveCurrent == 0 && _spawnManager.enemyType == 1)
+            //if (_spawnManager.waveCurrent == 0)
 
-            transform.Translate(Vector3.down * _dodgingEnemySpeed * Time.deltaTime);
-
-            if (transform.position.y < -7.0f)
             {
-                float randomX = Random.Range(-8f, 8f);
-                transform.position = new Vector3(randomX, 7.0f, 0);
-                _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
+                transform.position = new Vector3(_randomXStartPos, y, z);
+                transform.Translate(Vector3.down * _enemyOneSpeed * Time.deltaTime);
+
+                if (transform.position.y < -7.0f)
+                {
+                    float randomX = Random.Range(-8f, 8f);
+                    transform.position = new Vector3(randomX, 7.0f, 0);
+                    _enemyOneSpeed = Random.Range(2.5f, 4.5f);
+                }
             }
+
+            if (_spawnManager.enemyType == 2)
+            //if (_spawnManager.waveCurrent == 1 && _spawnManager.enemyType ==2)
+            //if (_spawnManager.waveCurrent == 1)
+            {
+                transform.position = new Vector3((x + _randomXStartPos), y, z);
+
+                transform.Translate(Vector3.down * _dodgingEnemySpeed * Time.deltaTime);
+
+                if (transform.position.y < -7.0f)
+                {
+                    float randomX = Random.Range(-8f, 8f);
+                    transform.position = new Vector3(randomX, 7.0f, 0);
+                    _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
+                }
+            }
+
         }
     }
 
@@ -111,7 +140,7 @@ public class DodgingEnemy : MonoBehaviour
                 player.Damage();
             }
 
- //           _audioSource.Play();
+            _audioSource.Play();
             DestroyEnemyShip();
         }
 
@@ -121,12 +150,17 @@ public class DodgingEnemy : MonoBehaviour
 
             if (_player != null)
             {
-                _player.AddScore(15); // calls the AddScore() method in the PlayerScript to add 15 points to the score
-                                      // the value of 15 is set to this type of enemy, but we could expand later with a
-                                      // Switch statement to attribute different values to "points"
+                if(_enemyType == 1)
+                {
+                    _player.AddScore(10);
+                }
+                else if (_enemyType == 2)
+                {
+                    _player.AddScore(15);
+                }
             }
 
- //           _audioSource.Play();
+            _audioSource.Play();
             DestroyEnemyShip();
         }
 
@@ -146,6 +180,7 @@ public class DodgingEnemy : MonoBehaviour
 
     private void DestroyEnemyShip()
     {
+        _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
         _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
         Destroy(GetComponent<Rigidbody2D>());
@@ -153,7 +188,6 @@ public class DodgingEnemy : MonoBehaviour
         Destroy(this.gameObject, 2.8f);
     }
 }
-
 
 
 
