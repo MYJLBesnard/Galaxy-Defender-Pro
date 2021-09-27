@@ -120,14 +120,13 @@ public class EnemyTest : MonoBehaviour
                     _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
                 }
             }
-
         }
     }
 
-    public void PlayClip(AudioClip soundEffectClip)
-    {
-        _audioSource.PlayOneShot(soundEffectClip);
-    }
+    //public void PlayClip(AudioClip soundEffectClip)
+    //{
+    //    _audioSource.PlayOneShot(soundEffectClip);
+    //}
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotatingIcon : MonoBehaviour
+public class RotatingObject : MonoBehaviour
 {
     [SerializeField] private float _rotationSpeed = -50.0f;
 
