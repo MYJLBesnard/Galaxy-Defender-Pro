@@ -446,42 +446,6 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    /*
-    // Damage() using the left/right engine damage sprites
-    public void Damage()
-    {
-        if (_isPlayerShieldActive == true)
-        {
-            _isPlayerShieldActive = false;
-            _playerShield.SetActive(false);
-            return;
-        }
-
-            _lives--;
-
-        if (_lives == 2)
-        {
-            _leftEngineDamage.SetActive(true);
-        }
-
-        else if (_lives == 1)
-        {
-            _rightEngineDamage.SetActive(true);
-        }
-
-        _uiManager.UpdateLives(_lives);
-
-
-        if (_lives < 1)
-        {
-            _spawnManager.OnPlayerDeath();
-            Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
-        }
-    }
-    */
-
-
     IEnumerator ResetPlayerPosition()
     {
         GetComponent<BoxCollider2D>().enabled = false;
