@@ -123,11 +123,6 @@ public class EnemyTest : MonoBehaviour
         }
     }
 
-    //public void PlayClip(AudioClip soundEffectClip)
-    //{
-    //    _audioSource.PlayOneShot(soundEffectClip);
-    //}
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
