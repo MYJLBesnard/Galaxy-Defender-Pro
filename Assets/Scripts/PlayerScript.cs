@@ -33,7 +33,7 @@ public class PlayerScript : MonoBehaviour
     private AudioSource _audioSource;
 
 
-    [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab;
+    [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
     [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
     [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
@@ -68,6 +68,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private GameObject _playerHomingMissilePrefab;
     [SerializeField] private bool _isPlayerHomingMissilesActivate = false; 
     [SerializeField] private int _homingMissileCount = 0;
+
+    [SerializeField] private bool _isPlayerLateralLaserActive = true; 
 
     void Start()
     {
@@ -332,6 +334,18 @@ public class PlayerScript : MonoBehaviour
         else
         {
             Instantiate(_playerDoubleShotLaserPrefab, transform.position, Quaternion.identity);
+        }
+
+        if (_isPlayerLateralLaserActive == true)
+        {
+            Quaternion rotationLeft = Quaternion.Euler(new Vector3(0, 0, 90));
+            Quaternion rotationRight = Quaternion.Euler(new Vector3(0, 0, 270));
+
+            Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), rotationLeft);
+            Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), rotationRight);
+
+
+
         }
 
         _hasPlayerLaserCooledDown = false;

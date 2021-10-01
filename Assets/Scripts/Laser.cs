@@ -7,6 +7,7 @@ public class Laser : MonoBehaviour
     [SerializeField]
     private float _laserSpeed = 8.0f;
     private bool _isEnemyLaser = false;
+    private bool _playerLateralLaser = true;
 
         void Update()
     {
@@ -17,6 +18,11 @@ public class Laser : MonoBehaviour
         else
         {
             LaserMoveDown();
+        }
+
+        if (_playerLateralLaser == true)
+        {
+            LaserMoveLateral();
         }
     }
 
@@ -49,6 +55,22 @@ public class Laser : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
+    void LaserMoveLateral()
+    {
+        transform.Translate(Vector3.left * _laserSpeed * Time.deltaTime);
+        transform.Translate(Vector3.right * _laserSpeed * Time.deltaTime);
+        if (transform.position.x < -12.0f || transform.position.x > 12.0f)
+        {
+            if(transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
+            }
+
+            Destroy(this.gameObject);
+        }
+    }
+
 
     public void AssignEnemyLaser()
     {
