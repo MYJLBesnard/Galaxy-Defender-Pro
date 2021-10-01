@@ -545,8 +545,7 @@ public class PlayerScript : MonoBehaviour
         else
         {
             return;
-        }
-      
+        }    
     }
 
     public void HealthBoostActivate()
@@ -560,7 +559,6 @@ public class PlayerScript : MonoBehaviour
             temp.SetActive(false);
             activatedDamageAnimations.Remove(temp);
             PlayClip(_shipRepairsUnderwayAudioClip);
-
         }
     }
 
@@ -572,14 +570,11 @@ public class PlayerScript : MonoBehaviour
         _shieldHits = 0;
         _playerShieldAlpha = 1.0f;
         _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
-
-
     }
 
     public void HomingMissilesActivate()
     {
         _isPlayerHomingMissilesActivate = true;
-        //_playerHomingMissileLoadout = 10;
     }
 
     IEnumerator TripleShotPowerDownTimer()
@@ -600,7 +595,5 @@ public class PlayerScript : MonoBehaviour
         yield return new WaitForSeconds(time);
         PlayClip(_warningIncomingWave);
         _spawnManager.StartSpawning();
-
-
     }
 }

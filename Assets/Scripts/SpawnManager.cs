@@ -43,7 +43,6 @@ public class SpawnManager : MonoBehaviour
             {
                 enemyType = 2;
                 GameObject newEnemy = Instantiate(_dodgingEnemyPrefab, pxToSpawn, Quaternion.identity);
-                //GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
             }
 
