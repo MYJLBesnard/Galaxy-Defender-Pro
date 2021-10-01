@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class HomingMissilePlayer : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    private Rigidbody2D _rb;
     public GameObject homingMissileExplosionEffect;
     private GameObject _closestEnemy;
     [SerializeField] private float _missileSpeed = 12.0f;
@@ -13,7 +13,7 @@ public class HomingMissilePlayer : MonoBehaviour
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        _rb = GetComponent<Rigidbody2D>();
     }
 
 
@@ -70,11 +70,11 @@ public class HomingMissilePlayer : MonoBehaviour
 
     private void MoveTowardsEnemy()
     {
-        Vector2 direction = (Vector2)_closestEnemy.transform.position - rb.position;
+        Vector2 direction = (Vector2)_closestEnemy.transform.position - _rb.position;
         direction.Normalize();
         float rotateAmount = Vector3.Cross(direction, transform.up).z;
-        rb.angularVelocity = -rotateAmount * _rotateSpeed;
-        rb.velocity = transform.up * _missileSpeed;
+        _rb.angularVelocity = -rotateAmount * _rotateSpeed;
+        _rb.velocity = transform.up * _missileSpeed;
     }
 }
 
