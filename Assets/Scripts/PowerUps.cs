@@ -11,7 +11,8 @@ public class PowerUps : MonoBehaviour
                                               // 2 = Shields,
                                               // 3 = Health,
                                               // 4 = Ammo,
-                                              // 5 = Homing Missiles.
+                                              // 5 = Homing Missiles,
+                                              // 6 = Lateral Laser Canon.
     [SerializeField] private AudioClip _powerUpAudioClip = null;
 
     void Update()
@@ -52,6 +53,9 @@ public class PowerUps : MonoBehaviour
                         break;
                     case 5:
                         player.PlayerHomingMissiles();
+                        break;
+                    case 6:
+                        player.LateralLaserShotActive();
                         break;
                 }
             }
