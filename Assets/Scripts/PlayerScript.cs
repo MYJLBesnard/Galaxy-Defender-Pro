@@ -33,11 +33,12 @@ public class PlayerScript : MonoBehaviour
     private AudioSource _audioSource;
 
 
-    [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab;
+    [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
     [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
     [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
     [SerializeField] private GameObject _bigExplosionPrefab;
+    [SerializeField] private GameObject _lateralLaserCanonLeft, _lateralLaserCanonRight;
 
     [SerializeField] private GameObject _leftEngineDamage, _rightEngineDamage;
 
@@ -68,6 +69,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private GameObject _playerHomingMissilePrefab;
     [SerializeField] private bool _isPlayerHomingMissilesActivate = false; 
     [SerializeField] private int _homingMissileCount = 0;
+
+    [SerializeField] private bool _isPlayerLateralLaserActive = false; 
 
     void Start()
     {
@@ -334,6 +337,14 @@ public class PlayerScript : MonoBehaviour
             Instantiate(_playerDoubleShotLaserPrefab, transform.position, Quaternion.identity);
         }
 
+        if (_isPlayerLateralLaserActive == true)
+        {
+            Quaternion rotationLeft = Quaternion.Euler(new Vector3(0, 0, 90));
+            Quaternion rotationRight = Quaternion.Euler(new Vector3(0, 0, 270));
+            Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x - 1.1f, transform.position.y, transform.position.z), rotationLeft);
+            Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x + 1.1f, transform.position.y, transform.position.z), rotationRight);
+        }
+
         _hasPlayerLaserCooledDown = false;
         StartCoroutine(PlayerLaserCoolDownTimer());
 
@@ -446,42 +457,6 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    /*
-    // Damage() using the left/right engine damage sprites
-    public void Damage()
-    {
-        if (_isPlayerShieldActive == true)
-        {
-            _isPlayerShieldActive = false;
-            _playerShield.SetActive(false);
-            return;
-        }
-
-            _lives--;
-
-        if (_lives == 2)
-        {
-            _leftEngineDamage.SetActive(true);
-        }
-
-        else if (_lives == 1)
-        {
-            _rightEngineDamage.SetActive(true);
-        }
-
-        _uiManager.UpdateLives(_lives);
-
-
-        if (_lives < 1)
-        {
-            _spawnManager.OnPlayerDeath();
-            Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
-            Destroy(this.gameObject);
-        }
-    }
-    */
-
-
     IEnumerator ResetPlayerPosition()
     {
         GetComponent<BoxCollider2D>().enabled = false;
@@ -570,6 +545,14 @@ public class PlayerScript : MonoBehaviour
         StartCoroutine(TripleShotPowerDownTimer());
     }
 
+    public void LateralLaserShotActive()
+    {
+        _isPlayerLateralLaserActive = true;
+        _lateralLaserCanonLeft.SetActive(true);
+        _lateralLaserCanonRight.SetActive(true);
+        StartCoroutine(LateralShotPowerDownTimer());
+    }
+
     public void SpeedBoostActivate()
     {
         if (_isPlayerSpeedBoostActive == false) // only give the Player a temp speed boost if the PowerUp is not already collected
@@ -581,8 +564,7 @@ public class PlayerScript : MonoBehaviour
         else
         {
             return;
-        }
-      
+        }    
     }
 
     public void HealthBoostActivate()
@@ -596,7 +578,6 @@ public class PlayerScript : MonoBehaviour
             temp.SetActive(false);
             activatedDamageAnimations.Remove(temp);
             PlayClip(_shipRepairsUnderwayAudioClip);
-
         }
     }
 
@@ -608,20 +589,25 @@ public class PlayerScript : MonoBehaviour
         _shieldHits = 0;
         _playerShieldAlpha = 1.0f;
         _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
-
-
     }
 
     public void HomingMissilesActivate()
     {
         _isPlayerHomingMissilesActivate = true;
-        //_playerHomingMissileLoadout = 10;
     }
 
     IEnumerator TripleShotPowerDownTimer()
     {
         yield return new WaitForSeconds(5.0f);
         _isPlayerTripleShotActive = false;
+    }
+
+    IEnumerator LateralShotPowerDownTimer()
+    {
+        yield return new WaitForSeconds(15.0f);
+        _isPlayerLateralLaserActive = false;
+        _lateralLaserCanonLeft.SetActive(false);
+        _lateralLaserCanonRight.SetActive(false);
     }
 
     IEnumerator SpeedBoostPowerDownTimer()
@@ -636,7 +622,5 @@ public class PlayerScript : MonoBehaviour
         yield return new WaitForSeconds(time);
         PlayClip(_warningIncomingWave);
         _spawnManager.StartSpawning();
-
-
     }
 }
