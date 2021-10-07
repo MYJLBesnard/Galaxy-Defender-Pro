@@ -6,14 +6,14 @@ public class EnemyTest : MonoBehaviour
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
-    private SpawnManager _spawnManager;
+    private SpawnManager _spawnManager;  //***********
 
     [SerializeField] private GameObject _enemyOnePrefab;
     [SerializeField] private GameObject _dodgingEnemyPrefab;
     [SerializeField] private int _enemyType = 1;
-    [SerializeField] private float _enemyOneSpeed;
+    [SerializeField] public float _enemySpeed;
 
-    [SerializeField] private float _dodgingEnemySpeed;
+    [SerializeField] public float _dodgingEnemySpeed;
     [SerializeField] private float _dodgingAmplitude;
     [SerializeField] private float _dodgingFrequency = 0.5f;
     private float x, y, z;
@@ -30,16 +30,25 @@ public class EnemyTest : MonoBehaviour
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
 
+    private GameManager _gameManager; // *************
+
+
     void Start()
     {
-        _enemyOneSpeed = Random.Range(2.5f, 4.5f);
-        _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
+        //_enemySpeed = Random.Range(2.5f, 4.5f);
+       // _enemySpeed = _gameManager.currentEnemySpeed;
+
+        //_dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
+       // _dodgingEnemySpeed = _gameManager.currentEnemySpeed;
+
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _animEnemyDestroyed = GetComponent<Animator>();
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
         _dodgingAmplitude = Random.Range(1.0f, 2.5f);
         _audioSource = GetComponent<AudioSource>();
+        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+
 
         if (_player == null)
         {
@@ -59,6 +68,11 @@ public class EnemyTest : MonoBehaviour
         {
             _audioSource.clip = _explosionSoundEffect;
         }
+
+        if (_gameManager == null)
+        {
+            Debug.LogError("The Game_Manager is null.");
+        }
     }
 
     void Update()
@@ -67,7 +81,9 @@ public class EnemyTest : MonoBehaviour
 
         if (Time.time > _enemyCanFire && _stopUpdating == false)
         {
-            _enemyRateOfFire = Random.Range(3f, 7f);
+            //_enemyRateOfFire = Random.Range(3f, 7f);
+            _enemyRateOfFire = _gameManager.currentEnemyRateOfFire;
+
             _enemyCanFire = Time.time + _enemyRateOfFire;
             GameObject enemyLaser = Instantiate(_enemyDoubleShotLaserPrefab, transform.position, Quaternion.identity);
             Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
@@ -83,6 +99,11 @@ public class EnemyTest : MonoBehaviour
 
     void CalculateMovement()
     {
+
+        _enemySpeed = _gameManager.currentEnemySpeed;
+        _dodgingEnemySpeed = _gameManager.currentEnemySpeed;
+
+
         if (_stopUpdating == false)
         {
             y = transform.position.y;
@@ -95,13 +116,13 @@ public class EnemyTest : MonoBehaviour
 
             {
                 transform.position = new Vector3(_randomXStartPos, y, z);
-                transform.Translate(Vector3.down * _enemyOneSpeed * Time.deltaTime);
+                transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
                 if (transform.position.y < -7.0f)
                 {
                     float randomX = Random.Range(-8f, 8f);
                     transform.position = new Vector3(randomX, 7.0f, 0);
-                    _enemyOneSpeed = Random.Range(2.5f, 4.5f);
+                    //_enemySpeed = Random.Range(2.5f, 4.5f);
                 }
             }
 
@@ -117,7 +138,7 @@ public class EnemyTest : MonoBehaviour
                 {
                     float randomX = Random.Range(-8f, 8f);
                     transform.position = new Vector3(randomX, 7.0f, 0);
-                    _dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
+                    //_dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
                 }
             }
         }

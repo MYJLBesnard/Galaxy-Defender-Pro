@@ -392,8 +392,8 @@ GameObject:
   - component: {fileID: 3244706802909736487}
   - component: {fileID: 1211525798}
   m_Layer: 0
-  m_Name: PlayerMissilesPowerUp
-  m_TagString: PlayerPowerUos
+  m_Name: PlayerMissilesDispersed
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -427,7 +427,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.03, y: -0.02}
@@ -445,9 +445,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c172bdfe46ee64d488fe41aec15c4bdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedOfPowerUps: 1.5
+  _speedOfPowerUps: 0
   _powerUpID: 5
-  _powerUpAudioClip: {fileID: 8300000, guid: 286316d99781e4f7d9403222affcbf4d, type: 3}
+  _powerUpAudioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
 --- !u!1 &3244706802989281114
 GameObject:
   m_ObjectHideFlags: 0

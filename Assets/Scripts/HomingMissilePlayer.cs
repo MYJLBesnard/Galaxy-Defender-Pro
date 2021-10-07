@@ -10,6 +10,7 @@ public class HomingMissilePlayer : MonoBehaviour
     private GameObject _closestEnemy;
     [SerializeField] private float _missileSpeed = 12.0f;
     [SerializeField] private float _rotateSpeed = 350f;
+    [SerializeField] private GameObject _selfdestructExplosion;
 
     void Start()
     {
@@ -36,6 +37,8 @@ public class HomingMissilePlayer : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        StartCoroutine(MissileSelfDestruct());
     }
 
     private GameObject FindClosestEnemy()
@@ -75,6 +78,16 @@ public class HomingMissilePlayer : MonoBehaviour
         float rotateAmount = Vector3.Cross(direction, transform.up).z;
         _rb.angularVelocity = -rotateAmount * _rotateSpeed;
         _rb.velocity = transform.up * _missileSpeed;
+    }
+
+    IEnumerator MissileSelfDestruct()
+    {
+        yield return new WaitForSeconds(2.5f); // sets the missile self-destructs seconds after launch
+        Instantiate(_selfdestructExplosion, transform.position, Quaternion.identity);
+
+        //Destroy(this.gameObject, 0.025f); // using this time delay on the destroy gives a neat little effect
+        Destroy(this.gameObject);
+
     }
 }
 

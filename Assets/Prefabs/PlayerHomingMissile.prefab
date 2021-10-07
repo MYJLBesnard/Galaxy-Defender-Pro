@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 642646383187664999}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.035, y: 0.025, z: 1}
+  m_LocalScale: {x: 0.03, y: 0.015, z: 1}
   m_Children:
   - {fileID: 642646384475880188}
   m_Father: {fileID: 0}
@@ -137,7 +137,9 @@ MonoBehaviour:
   homingMissileExplosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
   _missileSpeed: 12
-  rotateSpeed: 350
+  _rotateSpeed: 350
+  _selfdestructExplosion: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
+    type: 3}
 --- !u!1 &642646384475880189
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,8 +166,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 642646384475880189}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.21, y: -30.5, z: 0}
-  m_LocalScale: {x: 9.6, y: 10.15, z: 1}
+  m_LocalPosition: {x: -0.15, y: -32.4, z: 0}
+  m_LocalScale: {x: 3.91, y: 10.61, z: 1}
   m_Children: []
   m_Father: {fileID: 642646383187664997}
   m_RootOrder: 0
@@ -229,7 +231,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: a45d21c30e0154a9ca1a5d6fb2bf3cfa, type: 3}
-  m_Color: {r: 0.35826805, g: 0.5460063, b: 0.9150943, a: 1}
+  m_Color: {r: 0.98504615, g: 1, b: 0.2971698, a: 0.3254902}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

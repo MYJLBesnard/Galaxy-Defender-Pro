@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2830385947293627827}
   m_Layer: 0
   m_Name: PlayerHealthPowerUp
-  m_TagString: Untagged
+  m_TagString: PlayerPowerUos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
