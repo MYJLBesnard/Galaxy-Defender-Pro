@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2075782326692529115}
   - component: {fileID: 2075782326692529114}
   m_Layer: 0
-  m_Name: LateralLaserCanonLeft (1)
+  m_Name: LateralLaserCanonLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 553912836213239421}
   m_Layer: 0
   m_Name: LateralLaserPowerUp
-  m_TagString: Untagged
+  m_TagString: PlayerPowerUos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c172bdfe46ee64d488fe41aec15c4bdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedOfPowerUps: 0.5
+  _speedOfPowerUps: 1.5
   _powerUpID: 6
   _powerUpAudioClip: {fileID: 8300000, guid: 9ed7ad09bdb2b4208b656ac854078d99, type: 3}
 --- !u!58 &2190047131812064613
@@ -194,7 +194,7 @@ GameObject:
   - component: {fileID: 2075782327112443899}
   - component: {fileID: 2075782327112443898}
   m_Layer: 0
-  m_Name: LateralLaserCanonRight (1)
+  m_Name: LateralLaserCanonRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

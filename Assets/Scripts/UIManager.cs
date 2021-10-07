@@ -81,7 +81,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateAmmoCount(int ammoCount)
     {
-        _ammoCountText.text = "AMMO: " + ammoCount.ToString();
+        _ammoCountText.text = "AMMO: " + ammoCount.ToString() + "/25";
 
         if (ammoCount > 15)
         {
@@ -100,7 +100,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHomingMissileCount(int homingMissileCount)
     {
-        _homingMissileCountText.text = "Missiles: " + homingMissileCount.ToString();
+        _homingMissileCountText.text = "Missiles: " + homingMissileCount.ToString() + "/25";
 
         if (homingMissileCount > 0)
         {

@@ -6,22 +6,66 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameObject _enemyPrefab, _dodgingEnemyPrefab;
     [SerializeField] private GameObject _enemyContainer;
-    [SerializeField] private GameObject[] _playerPowerUps;
-    [SerializeField] private GameObject _enemyOnePrefab;
+    [SerializeField] public GameObject[] _playerPowerUps;
+    [SerializeField] private GameManager _gameManager;
+    [SerializeField] private PlayerScript _playerScript;
 
-    [SerializeField] private int _shipsInWave = 10;
+    private int _shipsInWave = 0;
     public int totalEnemyShipsDestroyed = 0;
     public int waveCurrent = 0;
-    public int enemyType = 1;
-
+    public int enemyType = 0;
 
     [SerializeField] private bool _stopSpawning = false;
+    [SerializeField] private bool _stopSpawningEnemies = false;
+
+    [SerializeField] private AudioClip _warningIncomingWave;
+    [SerializeField] private AudioClip _attackWaveRepelled;
+
+
+    private GameObject _typeOfEnemy;
 
     private float _xPos;
+
+    private void Start()
+    {
+        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
+
+        if (_gameManager == null)
+        {
+            Debug.LogError("The Game_Manager is null.");
+        }
+
+        if (_playerScript == null)
+        {
+            Debug.LogError("The PlayerScript is null.");
+        }
+ }
 
     public void EnemyShipsDestroyedCounter()
     {
         totalEnemyShipsDestroyed++;
+
+        if (totalEnemyShipsDestroyed == _gameManager.currentSizeOfWave)
+        {
+            if (waveCurrent == _gameManager.howManyLevels - 1)
+            {
+                Debug.Log("No more waves!");
+                _stopSpawning = true;
+                _stopSpawningEnemies = true;
+                _playerScript.PlayClip(_attackWaveRepelled);
+            }
+            else
+            {
+                Debug.Log("Wave completed!");
+                waveCurrent++;
+                _gameManager.currentAttackWave++;
+                _gameManager.UpdateAttackWave();
+                _playerScript.PlayClip(_attackWaveRepelled);
+
+                StartCoroutine(StartNewWave());
+            }
+        }
     }
 
     public void StartSpawning()
@@ -39,30 +83,56 @@ public class SpawnManager : MonoBehaviour
             _xPos = Random.Range(-8.0f, 8.0f);
             Vector3 pxToSpawn = new Vector3(_xPos, 7, 0);
 
-            if (waveCurrent > 0)
+            if (_stopSpawningEnemies == false)
             {
-                enemyType = 2;
-                GameObject newEnemy = Instantiate(_dodgingEnemyPrefab, pxToSpawn, Quaternion.identity);
+                _typeOfEnemy = null;
+                switch (_gameManager.currentAttackWave)
+                {
+                    case 0:
+                        enemyType = 1;
+                        _typeOfEnemy = _enemyPrefab;
+                        break;
+
+                    case 1:
+                        enemyType = 2;
+                        _typeOfEnemy = _dodgingEnemyPrefab;
+                        break;
+
+                    case 2:
+                        enemyType = 1;
+                        _typeOfEnemy = _enemyPrefab;
+                        break;
+
+                    default:
+                        break;
+                }
+ 
+                GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
+                _shipsInWave++;
+
             }
 
-            else if (waveCurrent == 0)
+            if (_shipsInWave == _gameManager.currentSizeOfWave)
             {
-                enemyType = 1;
-                GameObject newEnemy = Instantiate(_enemyPrefab, pxToSpawn, Quaternion.identity);
-                newEnemy.transform.parent = _enemyContainer.transform;
-            }         
+                _stopSpawningEnemies = true;
+            }
 
-            _shipsInWave++;
-
-                if (_shipsInWave == 3)
-            {
-                _shipsInWave = 0;
-                waveCurrent++;
-            }            
-
-            yield return new WaitForSeconds(Random.Range(2f, 6f));
+            yield return new WaitForSeconds(_gameManager.currentEnemyRateOfSpawning);
         }
+    }
+
+    IEnumerator StartNewWave()
+    {
+        _stopSpawning = true;
+        _shipsInWave = 0;
+        totalEnemyShipsDestroyed = 0;
+        yield return new WaitForSeconds(5.0f);
+        _playerScript.PlayClip(_warningIncomingWave);
+        _stopSpawning = false;
+        _stopSpawningEnemies = false;
+        OnPlayerReady();
+        StartSpawning();
     }
 
     IEnumerator SpawnPowerUps()

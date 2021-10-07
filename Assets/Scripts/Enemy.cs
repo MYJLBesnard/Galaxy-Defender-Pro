@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
     private Animator _animEnemyDestroyed;
 
     [SerializeField] private GameObject _enemyOnePrefab;
-    [SerializeField] private float _enemyOneSpeed;
+    [SerializeField] private float _enemySpeed;
     private float y, z;
     private float _randomXStartPos = 0;
 
@@ -22,13 +22,17 @@ public class Enemy : MonoBehaviour
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
 
+    [SerializeField] private GameManager _gameManager;
+
     void Start()
     {
-        _enemyOneSpeed = Random.Range(2.5f, 4.5f);
+        //_enemySpeed = Random.Range(2.5f, 4.5f);
+        _enemySpeed = _gameManager.currentEnemySpeed;
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _animEnemyDestroyed = GetComponent<Animator>();
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
         _audioSource = GetComponent<AudioSource>();
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
         if (_player == null)
         {
@@ -48,6 +52,12 @@ public class Enemy : MonoBehaviour
         {
             _audioSource.clip = _explosionSoundEffect;
         }
+
+
+        if (_gameManager == null)
+        {
+            Debug.LogError("The Game Manager is null.");
+        }
     }
 
     void Update()
@@ -56,7 +66,9 @@ public class Enemy : MonoBehaviour
 
         if (Time.time > _enemyCanFire && _stopUpdating == false)
         {
-            _enemyRateOfFire = Random.Range(3f, 7f);
+            //_enemyRateOfFire = Random.Range(3f, 7f);
+            _enemyRateOfFire = _gameManager.currentEnemyRateOfFire;
+
             _enemyCanFire = Time.time + _enemyRateOfFire;
             GameObject enemyLaser = Instantiate(_enemyDoubleShotLaserPrefab, transform.position, Quaternion.identity);
             Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
@@ -78,13 +90,13 @@ public class Enemy : MonoBehaviour
             z = transform.position.z;
 
             transform.position = new Vector3(_randomXStartPos, y, z);
-            transform.Translate(Vector3.down * _enemyOneSpeed * Time.deltaTime);
+            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
             if (transform.position.y < -7.0f)
             {
                 float randomX = Random.Range(-8f, 8f);
                 transform.position = new Vector3(randomX, 7.0f, 0);
-                _enemyOneSpeed = Random.Range(2.5f, 4.5f);
+                //_enemySpeed = Random.Range(2.5f, 4.5f);
             }
         }
     }

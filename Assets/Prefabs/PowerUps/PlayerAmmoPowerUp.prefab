@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 8905738446420623645}
   m_Layer: 0
   m_Name: PlayerAmmoPowerUp
-  m_TagString: Untagged
+  m_TagString: PlayerPowerUos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

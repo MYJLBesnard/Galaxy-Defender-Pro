@@ -33,7 +33,8 @@ public class PlayerScript : MonoBehaviour
     private AudioSource _audioSource;
 
 
-    [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab;
+    [SerializeField]
+    private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab, _playerMissilesDispersed;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
     [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
     [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
@@ -104,7 +105,7 @@ public class PlayerScript : MonoBehaviour
             Debug.LogError("The CameraShaker on the Main Camera is null.");
         }
 
-        StartCoroutine(ResetPlayerPosition());
+    StartCoroutine(ResetPlayerPosition());
     }
 
     void Update()
@@ -137,7 +138,7 @@ public class PlayerScript : MonoBehaviour
 
     private void FireHomingMissile()
     {
-        Instantiate(_playerHomingMissilePrefab, transform.position + new Vector3(0, 1.4f, 0), Quaternion.identity);
+        Instantiate(_playerHomingMissilePrefab, transform.position + new Vector3(0, -0.141f, 0), Quaternion.identity);
         _homingMissileCount--;
         _uiManager.UpdateHomingMissileCount(_homingMissileCount);
 
@@ -297,15 +298,23 @@ public class PlayerScript : MonoBehaviour
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
-        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
-
-        if (transform.position.x > 11.3f)
+        if (_asteroidDestroyed == false)
         {
-            transform.position = new Vector3(-11.3f, transform.position.y, 0);
+            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 1.5f), 0);
         }
-        else if (transform.position.x < -11.3f)
+
+        if (_asteroidDestroyed == true)
         {
-            transform.position = new Vector3(11.3f, transform.position.y, 0);
+            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 3.0f), 0);
+        }
+
+        if (transform.position.x > 10.25f)
+        {
+            transform.position = new Vector3(-10.25f, transform.position.y, 0);
+        }
+        else if (transform.position.x < -10.25f)
+        {
+            transform.position = new Vector3(10.25f, transform.position.y, 0);
         }
     }
 
@@ -341,8 +350,8 @@ public class PlayerScript : MonoBehaviour
         {
             Quaternion rotationLeft = Quaternion.Euler(new Vector3(0, 0, 90));
             Quaternion rotationRight = Quaternion.Euler(new Vector3(0, 0, 270));
-            Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x - 1.1f, transform.position.y, transform.position.z), rotationLeft);
-            Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x + 1.1f, transform.position.y, transform.position.z), rotationRight);
+            Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x - 0.93f, transform.position.y + 0.024f, transform.position.z), rotationLeft);
+            Instantiate(_playerLateralLaserPrefab, new Vector3(transform.position.x + 0.93f, transform.position.y + 0.024f, transform.position.z), rotationRight);
         }
 
         _hasPlayerLaserCooledDown = false;
@@ -444,6 +453,12 @@ public class PlayerScript : MonoBehaviour
             {
                 ResetDamageAnimationList();
                 ResetStateOfCore();
+                DisperseHomingMissiles();
+
+                _isPlayerLateralLaserActive = false;
+                _lateralLaserCanonLeft.SetActive(false);
+                _lateralLaserCanonRight.SetActive(false);
+
                 StartCoroutine(ResetPlayerPosition());
             }
         }
@@ -594,6 +609,20 @@ public class PlayerScript : MonoBehaviour
     public void HomingMissilesActivate()
     {
         _isPlayerHomingMissilesActivate = true;
+    }
+
+    public void DisperseHomingMissiles() // upon player destruction, scatters remaining homing missiles around the screen to be picked up by
+                                         // player on his next life.
+    {
+        int homingMissilesRemaining = _homingMissileCount / 5;
+        for (int i = 0; i < homingMissilesRemaining; i++)
+        {
+            float x = Random.Range(-9, 9);
+            float y = Random.Range(0, -3.5f);
+            Instantiate(_playerMissilesDispersed, new Vector3(transform.position.x + x, y, transform.position.z), Quaternion.identity);
+        }
+        _homingMissileCount = 0;
+        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
     }
 
     IEnumerator TripleShotPowerDownTimer()
