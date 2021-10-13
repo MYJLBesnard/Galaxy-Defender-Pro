@@ -38,13 +38,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4434498365246730605}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5c451b63553a477a9e7391a6be98414, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
   _isPlayer: 0
   _isEnemy: 1
+  _isEnemy3: 0
   _enemyDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: 96b51ad5e8dc0492baf64f9be40d2bb0,
     type: 3}
 --- !u!1 &4590086578092343861
@@ -63,7 +65,7 @@ GameObject:
   - component: {fileID: -7696838321736768663}
   - component: {fileID: -8891832379322240045}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Enemy0
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -309,7 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 4590086578092343861}
-  _enemyType: 1
+  _enemyType: 0
   _enemySpeed: 0
   _dodgingEnemySpeed: 0
   _dodgingAmplitude: 0

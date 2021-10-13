@@ -453,7 +453,7 @@ public class PlayerScript : MonoBehaviour
             {
                 ResetDamageAnimationList();
                 ResetStateOfCore();
-                DisperseHomingMissiles();
+                StartCoroutine(DisperseHomingMissiles());
 
                 _isPlayerLateralLaserActive = false;
                 _lateralLaserCanonLeft.SetActive(false);
@@ -611,15 +611,26 @@ public class PlayerScript : MonoBehaviour
         _isPlayerHomingMissilesActivate = true;
     }
 
-    public void DisperseHomingMissiles() // upon player destruction, scatters remaining homing missiles around the screen to be picked up by
+    IEnumerator DisperseHomingMissiles() // upon player destruction, scatters remaining homing missiles around the screen to be picked up by
                                          // player on his next life.
     {
+        yield return new WaitForSeconds(0.5f);
+
         int homingMissilesRemaining = _homingMissileCount / 5;
         for (int i = 0; i < homingMissilesRemaining; i++)
         {
-            float x = Random.Range(-9, 9);
-            float y = Random.Range(0, -3.5f);
-            Instantiate(_playerMissilesDispersed, new Vector3(transform.position.x + x, y, transform.position.z), Quaternion.identity);
+            float x = Random.Range(-6f, 6f);
+            float y = Random.Range(0f, -3.5f);
+            Instantiate(_playerMissilesDispersed, new Vector3(x, y, transform.position.z), Quaternion.identity);
+
+            if (transform.position.x > 9.75f)
+            {
+                transform.position = new Vector3(9.5f, y, transform.position.z);
+            }
+            else if (transform.position.x < -9.75f)
+            {
+                transform.position = new Vector3(-9.5f, y, transform.position.z);
+            }
         }
         _homingMissileCount = 0;
         _uiManager.UpdateHomingMissileCount(_homingMissileCount);

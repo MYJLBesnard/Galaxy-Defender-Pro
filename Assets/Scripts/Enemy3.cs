@@ -15,6 +15,7 @@ public class Enemy3 : MonoBehaviour
     private float x, y, z;
     public float _randomXStartPos;
     [SerializeField] private bool _stopUpdating = false;
+    [SerializeField] public bool _speedBurstActive = false;
 
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;
@@ -35,7 +36,6 @@ public class Enemy3 : MonoBehaviour
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
         _audioSource = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-
 
         if (_player == null)
         {
@@ -160,12 +160,13 @@ public class Enemy3 : MonoBehaviour
 
     public IEnumerator SpeedBurst()
     {
-        Debug.Log("Running Speed Burst");
-        _enemySpeed = 10.0f;
-
-        transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-        yield return new WaitForSeconds(0.25f);
-        _enemySpeed = _gameManager.currentEnemySpeed;
+        if (_stopUpdating == false)
+        {
+            Debug.Log("Running Speed Burst");
+            _enemySpeed = 10.0f;
+            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+            yield return new WaitForSeconds(0.1f);
+        }  
     }
 }
 

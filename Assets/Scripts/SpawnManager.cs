@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemy3Prefab, _enemyPrefab, _dodgingEnemyPrefab;
+   // [SerializeField] private GameObject _enemy3Prefab, _enemyPrefab, _dodgingEnemyPrefab;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] public GameObject[] _playerPowerUps;
     [SerializeField] public GameObject[] _typesOfEnemy;
@@ -91,21 +91,33 @@ public class SpawnManager : MonoBehaviour
                 switch (_gameManager.currentAttackWave)
                 {
                     case 0:
-                        int type = 0;
-                        _typeOfEnemy = _typesOfEnemy[type];
-                        enemyType = type;
+                        int type0 = 0;
+                        _typeOfEnemy = _typesOfEnemy[type0];
+                        enemyType = type0;
                         break;
 
                     case 1:
-                        int type2 = Random.Range(1, 2);
+                        int type1 = 1;
+                        _typeOfEnemy = _typesOfEnemy[type1];
+                        enemyType = type1;
+                        break;
+
+                    case 2:
+                        int type2 = 2;
                         _typeOfEnemy = _typesOfEnemy[type2];
                         enemyType = type2;
                         break;
 
-                    case 2:
-                        int type3 = Random.Range(2, 3);
+                    case 3:
+                        int type3 = Random.Range(2, 4);
                         _typeOfEnemy = _typesOfEnemy[type3];
                         enemyType = type3;
+                        break;
+
+                    case 4:
+                        int type4 = Random.Range(2, 5);
+                        _typeOfEnemy = _typesOfEnemy[type4];
+                        enemyType = type4;
                         break;
 
                     default:

@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyTest : MonoBehaviour
+public class Enemy4 : MonoBehaviour
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
     private SpawnManager _spawnManager;  //***********
 
-    [SerializeField] private int _enemyType;
-    [SerializeField] public float _enemySpeed;
+    [SerializeField] private GameObject _enemyPrefab;
+//    [SerializeField] private int _enemyValue;
+    public float _enemySpeed;
 
     private float x, y, z;
-    public float _randomXStartPos = 0;
-
+    public float _randomXStartPos;
     [SerializeField] private bool _stopUpdating = false;
+    [SerializeField] public bool _speedBurstActive = false;
 
-    [SerializeField] private AudioClip _explosionSoundEffect;
     private AudioSource _audioSource;
-
+    [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
+
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
 
@@ -35,7 +36,6 @@ public class EnemyTest : MonoBehaviour
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
         _audioSource = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-
 
         if (_player == null)
         {
@@ -64,6 +64,7 @@ public class EnemyTest : MonoBehaviour
 
     void Update()
     {
+
         CalculateMovement();
 
         if (Time.time > _enemyCanFire && _stopUpdating == false)
@@ -92,16 +93,16 @@ public class EnemyTest : MonoBehaviour
         {
             y = transform.position.y;
             z = transform.position.z;
-            x = transform.position.x;
 
-                transform.position = new Vector3(_randomXStartPos, y, z);
-                transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+            transform.position = new Vector3(_randomXStartPos, y, z);
+            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
-                if (transform.position.y < -7.0f)
-                {
-                    float randomX = Random.Range(-8f, 8f);
-                    transform.position = new Vector3(randomX, 7.0f, 0);
-                }
+            if (transform.position.y < -7.0f)
+            {
+                float randomX = Random.Range(-8f, 8f);
+                transform.position = new Vector3(randomX, 7.0f, 0);
+            }
+
         }
     }
 
@@ -126,14 +127,7 @@ public class EnemyTest : MonoBehaviour
 
             if (_player != null)
             {
-                if(_enemyType == 1)
-                {
-                    _player.AddScore(10);
-                }
-                else if (_enemyType == 2)
-                {
-                    _player.AddScore(15);
-                }
+                _player.AddScore(20);
             }
 
             _audioSource.Play();
@@ -162,6 +156,24 @@ public class EnemyTest : MonoBehaviour
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 2.8f);
+    }
+
+    public IEnumerator LaserBurst()
+    {
+        if (_stopUpdating == false)
+        {
+            Debug.Log("Running Laser Burst");
+            Vector3 position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
+            GameObject enemyLaser = Instantiate(_enemyDoubleShotLaserPrefab, position, Quaternion.identity);
+            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+
+            for (int i = 0; i < lasers.Length; i++)
+            {
+                lasers[i].AssignEnemyLaser();
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }  
     }
 }
 
