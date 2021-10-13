@@ -8,6 +8,7 @@ TagManager:
   - LaserPlayer
   - LaserDoubleShotEnemy
   - PlayerHomingMissile
+  - PlayerPowerUos
   layers:
   - Default
   - TransparentFX

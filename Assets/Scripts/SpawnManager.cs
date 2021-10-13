@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _enemyPrefab, _dodgingEnemyPrefab;
+    [SerializeField] private GameObject _enemy3Prefab, _enemyPrefab, _dodgingEnemyPrefab;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] public GameObject[] _playerPowerUps;
+    [SerializeField] public GameObject[] _typesOfEnemy;
+
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private PlayerScript _playerScript;
 
@@ -89,24 +91,27 @@ public class SpawnManager : MonoBehaviour
                 switch (_gameManager.currentAttackWave)
                 {
                     case 0:
-                        enemyType = 1;
-                        _typeOfEnemy = _enemyPrefab;
+                        int type = 0;
+                        _typeOfEnemy = _typesOfEnemy[type];
+                        enemyType = type;
                         break;
 
                     case 1:
-                        enemyType = 2;
-                        _typeOfEnemy = _dodgingEnemyPrefab;
+                        int type2 = Random.Range(1, 2);
+                        _typeOfEnemy = _typesOfEnemy[type2];
+                        enemyType = type2;
                         break;
 
                     case 2:
-                        enemyType = 1;
-                        _typeOfEnemy = _enemyPrefab;
+                        int type3 = Random.Range(2, 3);
+                        _typeOfEnemy = _typesOfEnemy[type3];
+                        enemyType = type3;
                         break;
 
                     default:
                         break;
                 }
- 
+
                 GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawn, Quaternion.identity);
                 newEnemy.transform.parent = _enemyContainer.transform;
                 _shipsInWave++;

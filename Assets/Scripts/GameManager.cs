@@ -19,6 +19,7 @@ public class LevelInfo
     public float EnemyRateOfSpawningd = 5.0f;   // How often Enemy spawns (seconds)
     public float EnemyRateOfFire = 2.5f; // How often Enemy ships fire (seconds)
     public float PowerUpRateOfSpawning = 3.5f; // How often Power-Up spawns (seconds)
+    public float EnemySensorRange = 3.0f; // How far the RayCast can sense a hit 
 }
 
 // ---------------------------------------------------------------------------------
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour
     public float currentEnemyRateOfSpawning { get { return Waves[_currentWave].EnemyRateOfSpawningd; } }
     public float currentEnemyRateOfFire { get { return Waves[_currentWave].EnemyRateOfFire; } }
     public float currentPowerUpRateOfSpawning { get { return Waves[_currentWave].PowerUpRateOfSpawning; } }
+    public float currentEnemySensorRange {  get { return Waves[_currentWave].EnemySensorRange; } }
 
     /*
     // Number of lives remaining
@@ -75,6 +77,7 @@ public class GameManager : MonoBehaviour
     {
         _currentWave = currentAttackWave;
     }
+
 
     void Update()
     {
@@ -113,4 +116,7 @@ public class GameManager : MonoBehaviour
             return _instance;
         }
     }
+
+
+
 }

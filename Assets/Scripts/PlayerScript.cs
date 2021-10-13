@@ -318,7 +318,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    void PlayerFireLaser()
+    public void PlayerFireLaser()
     {
         if (_ammoCount <= 0)
         {
