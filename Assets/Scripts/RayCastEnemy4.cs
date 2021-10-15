@@ -25,10 +25,6 @@ public class RayCastEnemy4 : MonoBehaviour
                 Debug.Log(hit.collider.tag);
                 if (hit.collider.tag == "Player")
                 {
-                    
-
-                    
-
                     RunLaserBurst();
                 }
             }

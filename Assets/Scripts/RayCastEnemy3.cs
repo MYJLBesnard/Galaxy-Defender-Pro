@@ -25,17 +25,6 @@ public class RayCastEnemy3 : MonoBehaviour
                 Debug.Log(hit.collider.tag);
                 if (hit.collider.tag == "Player")
                 {
-                    /*
-                    Vector3 position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
-                    GameObject enemyLaser = Instantiate(_enemyDoubleShotLaserPrefab, position, Quaternion.identity);
-                    Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-
-                    for (int i = 0; i < lasers.Length; i++)
-                    {
-                        lasers[i].AssignEnemyLaser();
-                    }
-                    */
-
                     RunSpeedBurst();
                 }
             }

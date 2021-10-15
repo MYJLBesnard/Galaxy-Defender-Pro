@@ -2,22 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyTest : MonoBehaviour
+public class EnemyBasic1 : MonoBehaviour
 {
     private PlayerScript _player;
-    private Animator _animEnemyDestroyed;
     private SpawnManager _spawnManager;  //***********
 
     [SerializeField] private int _enemyType;
     [SerializeField] public float _enemySpeed;
 
-    private float x, y, z;
-    public float _randomXStartPos = 0;
-
     [SerializeField] private bool _stopUpdating = false;
 
     [SerializeField] private AudioClip _explosionSoundEffect;
-    private AudioSource _audioSource;
 
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
@@ -26,34 +21,26 @@ public class EnemyTest : MonoBehaviour
 
     private GameManager _gameManager; // *************
 
+    [SerializeField] private GameObject _explosionPrefab;
+
+    public float startWaitTime;
+    public Transform[] enemyWaypoints;
+
+    private float waitTime;
+    private int randomSpot;
+
 
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
-        _animEnemyDestroyed = GetComponent<Animator>();
-        _randomXStartPos = Random.Range(-8.0f, 8.0f);
-        _audioSource = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-
+        randomSpot = Random.Range(0, enemyWaypoints.Length);
+        waitTime = startWaitTime;
 
         if (_player == null)
         {
             Debug.Log("The PlayerScript is null.");
-        }
-
-        if (_animEnemyDestroyed == null)
-        {
-            Debug.Log("The Enemy Dstroyed anim is null.");
-        }
-
-        if (_audioSource == null)
-        {
-            Debug.LogError("The Enemy Audio Source is null.");
-        }
-        else
-        {
-            _audioSource.clip = _explosionSoundEffect;
         }
 
         if (_gameManager == null)
@@ -64,19 +51,21 @@ public class EnemyTest : MonoBehaviour
 
     void Update()
     {
+
         CalculateMovement();
+
 
         if (Time.time > _enemyCanFire && _stopUpdating == false)
         {
             _enemyRateOfFire = _gameManager.currentEnemyRateOfFire;
 
             _enemyCanFire = Time.time + _enemyRateOfFire;
-            GameObject enemyLaser = Instantiate(_enemyDoubleShotLaserPrefab, transform.position, Quaternion.identity);
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
+            //    GameObject enemyLaser = Instantiate(_enemyDoubleShotLaserPrefab, transform.position, Quaternion.identity);
+            //    Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
-            for (int i = 0; i < lasers.Length; i++)
+            //    for (int i = 0; i < lasers.Length; i++)
             {
-                lasers[i].AssignEnemyLaser();
+                //        lasers[i].AssignEnemyLaser();
             }
 
             //PlayClip(_enemyLaserShotAudioClip);
@@ -85,25 +74,24 @@ public class EnemyTest : MonoBehaviour
 
     void CalculateMovement()
     {
-
         _enemySpeed = _gameManager.currentEnemySpeed;
 
-        if (_stopUpdating == false)
+        transform.position = Vector2.MoveTowards(transform.position, enemyWaypoints[randomSpot].position, _enemySpeed * Time.deltaTime);
+
+        if (Vector2.Distance(transform.position, enemyWaypoints[randomSpot].position) < 0.2f)
         {
-            y = transform.position.y;
-            z = transform.position.z;
-            x = transform.position.x;
-
-                transform.position = new Vector3(_randomXStartPos, y, z);
-                transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-
-                if (transform.position.y < -7.0f)
-                {
-                    float randomX = Random.Range(-8f, 8f);
-                    transform.position = new Vector3(randomX, 7.0f, 0);
-                }
+            if (waitTime <= 0)
+            {
+                randomSpot = Random.Range(0, enemyWaypoints.Length);
+                waitTime = startWaitTime;
+            }
+            else
+            {
+                waitTime -= Time.deltaTime;
+            }
         }
     }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -116,7 +104,7 @@ public class EnemyTest : MonoBehaviour
                 player.Damage();
             }
 
-            _audioSource.Play();
+            _player.PlayClip(_explosionSoundEffect);
             DestroyEnemyShip();
         }
 
@@ -136,7 +124,7 @@ public class EnemyTest : MonoBehaviour
                 }
             }
 
-            _audioSource.Play();
+            _player.PlayClip(_explosionSoundEffect);
             DestroyEnemyShip();
         }
 
@@ -149,19 +137,21 @@ public class EnemyTest : MonoBehaviour
 
             Destroy(other.gameObject);
 
-            _audioSource.Play();
+            _player.PlayClip(_explosionSoundEffect);
             DestroyEnemyShip();
         }
     }
 
-    private void DestroyEnemyShip()
+    public void DestroyEnemyShip()
     {
+        Debug.Log("destroy roaming enemy?");
+        Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+
         _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
-        _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
-        Destroy(this.gameObject, 2.8f);
+        Destroy(this.gameObject, 0.5f);
     }
 }
 
