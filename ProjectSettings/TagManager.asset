@@ -9,6 +9,8 @@ TagManager:
   - LaserDoubleShotEnemy
   - PlayerHomingMissile
   - PlayerPowerUos
+  - NavPoint
+  - LaserRearShotEnemy
   layers:
   - Default
   - TransparentFX

@@ -95,6 +95,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _laserSpeed: 8
+  _isPlayerLaser: 1
+  _isEnemyLaser: 0
+  _playerLateralLaser: 0
+  _isRearShootingLaser: 0
 --- !u!1001 &2390432534481953710
 PrefabInstance:
   m_ObjectHideFlags: 0

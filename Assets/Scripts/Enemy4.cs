@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy4 : MonoBehaviour
+public class Enemy4 : MonoBehaviour // Laser Burst
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
     private SpawnManager _spawnManager;  //***********
 
     [SerializeField] private GameObject _enemyPrefab;
-//    [SerializeField] private int _enemyValue;
     public float _enemySpeed;
-
-    private float x, y, z;
+    private float y, z;
     public float _randomXStartPos;
     [SerializeField] private bool _stopUpdating = false;
-    [SerializeField] public bool _speedBurstActive = false;
 
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;

@@ -4,31 +4,53 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    [SerializeField]
-    private float _laserSpeed = 8.0f;
-    private bool _isEnemyLaser = false;
-    private bool _playerLateralLaser = true;
+    [SerializeField] private float _laserSpeed = 8.0f;
+    [SerializeField] private bool _isPlayerLaser = false, _isEnemyLaser = false, _isPlayerLateralLaser = false, _isEnemyRearShootingLaser = false;
 
-        void Update()
+
+    void Update()
     {
-        if (_isEnemyLaser == false)
+        if (_isPlayerLaser == true)
         {
             LaserMoveUp();
         }
-        else
+
+        if (_isEnemyLaser == true)
         {
             LaserMoveDown();
         }
 
-        if (_playerLateralLaser == true)
+        if (_isPlayerLateralLaser == true)
         {
             LaserMoveLateral();
+        }
+
+        if (_isEnemyRearShootingLaser == true)
+        {
+            LaserMoveUp();
         }
     }
 
     void LaserMoveUp()
     {
         transform.Translate(Vector3.up * _laserSpeed * Time.deltaTime);
+
+
+        if (transform.position.y > 6.00f)
+        {
+            if (transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
+            }
+
+            Destroy(this.gameObject);
+        }
+    }
+
+    void LaserShootRear()
+    {
+        transform.Translate(Vector3.up * _laserSpeed * Time.deltaTime);
+
 
         if (transform.position.y > 6.00f)
         {
@@ -75,11 +97,17 @@ public class Laser : MonoBehaviour
     public void AssignEnemyLaser()
     {
         _isEnemyLaser = true;
+
+        if (_isEnemyRearShootingLaser == true)
+        {
+            _isEnemyLaser = false;
+
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player" && _isEnemyLaser == true)
+        if (other.tag == "Player" && _isEnemyLaser == true || other.tag == "Player" && _isEnemyRearShootingLaser == true)
         {
             PlayerScript player = other.GetComponent<PlayerScript>();
 

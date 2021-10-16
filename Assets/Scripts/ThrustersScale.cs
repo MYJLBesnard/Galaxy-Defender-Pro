@@ -5,7 +5,7 @@ using UnityEngine;
 public class ThrustersScale : MonoBehaviour
 {
     [SerializeField] private PlayerScript _playerScript;
-    [SerializeField] private bool _canThrustersScale = false;
+    //[SerializeField] private bool _canThrustersScale = false;
 
     void Start()
     {

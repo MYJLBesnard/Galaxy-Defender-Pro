@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3067760774647161641}
   - component: {fileID: 8420673662098077520}
   m_Layer: 0
-  m_Name: RayCastHolder
+  m_Name: RayCastHolder4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,7 +312,6 @@ MonoBehaviour:
   _enemySpeed: 0
   _randomXStartPos: 0
   _stopUpdating: 0
-  _speedBurstActive: 0
   _explosionSoundEffect: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc,
     type: 3}
   _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,

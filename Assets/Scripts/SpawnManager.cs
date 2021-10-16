@@ -120,6 +120,12 @@ public class SpawnManager : MonoBehaviour
                         enemyType = type4;
                         break;
 
+                    case 5:
+                        int type5 = Random.Range(2, 6);
+                        _typeOfEnemy = _typesOfEnemy[type5];
+                        enemyType = type5;
+                        break;
+
                     default:
                         break;
                 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy3 : MonoBehaviour
+public class Enemy3 : MonoBehaviour // Speed Burst
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;

@@ -13,7 +13,6 @@ public class EnemyBasic1 : MonoBehaviour
     [SerializeField] private bool _stopUpdating = false;
 
     [SerializeField] private AudioClip _explosionSoundEffect;
-
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
     private float _enemyRateOfFire = 3.0f;
