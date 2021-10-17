@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy5 : MonoBehaviour // Rear Burst
+public class Enemy6 : MonoBehaviour // Arc Laser Burst
 {
     private PlayerScript _player;
     private SpawnManager _spawnManager;  //***********
@@ -16,11 +16,11 @@ public class Enemy5 : MonoBehaviour // Rear Burst
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
-    [SerializeField] private GameObject _enemyRearShotLaserPrefab;
+    [SerializeField] private GameObject _enemyArcLaserPrefab;
     [SerializeField] private GameObject _explosionPrefab;
 
     private GameManager _gameManager; // *************
-    private Enemy5Shield _enemy5Shield;
+    private Enemy6Shield _enemy6Shield;
 
     void Start()
     {
@@ -29,7 +29,7 @@ public class Enemy5 : MonoBehaviour // Rear Burst
         _randomXStartPos = Random.Range(-8.0f, 8.0f);
         _audioSource = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-        _enemy5Shield = GameObject.Find("Enemy5Shield").GetComponent<Enemy5Shield>();
+        _enemy6Shield = GameObject.Find("Enemy6Shield").GetComponent<Enemy6Shield>();
 
         if (_player == null)
         {
@@ -50,9 +50,9 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             Debug.LogError("The Game_Manager is null.");
         }
 
-        if (_enemy5Shield == null)
+        if (_enemy6Shield == null)
         {
-            Debug.LogError("The Enemy5Shield script is null.");
+            Debug.LogError("The Enemy6Shiled script is null.");
         }
     }
 
@@ -95,7 +95,7 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             }
 
             _audioSource.Play();
-            _enemy5Shield.Enemy5Damage();
+            _enemy6Shield.Enemy6Damage();
 
             //DestroyEnemyShip();
         }
@@ -110,7 +110,7 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             }
 
             _audioSource.Play();
-            _enemy5Shield.Enemy5Damage();
+            _enemy6Shield.Enemy6Damage();
 
             //DestroyEnemyShip();
         }
@@ -125,7 +125,7 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             Destroy(other.gameObject);
 
             _audioSource.Play();
-            _enemy5Shield.Enemy5Damage();
+            _enemy6Shield.Enemy6Damage();
 
             //DestroyEnemyShip();
         }
@@ -133,7 +133,7 @@ public class Enemy5 : MonoBehaviour // Rear Burst
 
     public void DestroyEnemyShip()
     {
-        Debug.Log("Destroy Rear Shooting Enemy?");
+        Debug.Log("Destroy Arc Shooting Enemy?");
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
 
         _spawnManager.EnemyShipsDestroyedCounter();
@@ -143,22 +143,13 @@ public class Enemy5 : MonoBehaviour // Rear Burst
         Destroy(this.gameObject, 0.5f);
     }
 
-    public IEnumerator RearLaserBurst()
+    public IEnumerator ArcBurst()
     {
-        if (_stopUpdating == false)
-        {
-            Debug.Log("Running Rear Laser Burst");
-            Vector3 position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
-            GameObject enemyLaser = Instantiate(_enemyRearShotLaserPrefab, position, Quaternion.identity);
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-
-            for (int i = 0; i < lasers.Length; i++)
-            {
-                lasers[i].AssignEnemyLaser();
-            }
-
-            yield return new WaitForSeconds(0.1f);
-        }  
+        Debug.Log("Running Arc Laser Burst");
+        _enemyArcLaserPrefab.SetActive(true);
+        yield return new WaitForSeconds(1.0f);
+        Debug.Log("Stopping Arc Laser");
+        _enemyArcLaserPrefab.SetActive(false);
     }
 }
 

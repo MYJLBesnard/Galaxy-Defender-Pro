@@ -5,7 +5,7 @@ using UnityEngine;
 public class Laser : MonoBehaviour
 {
     [SerializeField] private float _laserSpeed = 8.0f;
-    [SerializeField] private bool _isPlayerLaser = false, _isEnemyLaser = false, _isPlayerLateralLaser = false, _isEnemyRearShootingLaser = false;
+    [SerializeField] private bool _isPlayerLaser = false, _isEnemyLaser = false, _isPlayerLateralLaser = false, _isEnemyRearShootingLaser = false, _isEnemyArcLaser = false;
 
 
     void Update()
@@ -115,6 +115,16 @@ public class Laser : MonoBehaviour
             {
                 player.Damage();
                 Destroy(this.gameObject);
+            }
+        }
+
+        if (other.tag == "Player" && _isEnemyArcLaser == true)
+        {
+            PlayerScript player = other.GetComponent<PlayerScript>();
+
+            if (player != null)
+            {
+                player.Damage();
             }
         }
     }
