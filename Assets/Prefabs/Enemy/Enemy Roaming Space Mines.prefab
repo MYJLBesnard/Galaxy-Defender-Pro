@@ -527,7 +527,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1141245683777353071}
-  - component: {fileID: 1141245683777353070}
   m_Layer: 0
   m_Name: Enemy Roaming Space Mines
   m_TagString: Enemy
@@ -542,7 +541,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141245683777353064}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
@@ -551,55 +550,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1141245683777353070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1141245683777353064}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d00a4a759d2b84272a9c3f6ef3ebc680, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemyType: 1
-  _enemySpeed: 1
-  _stopUpdating: 0
-  _explosionSoundEffect: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc,
-    type: 3}
-  _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,
-    type: 3}
-  _enemyDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: 96b51ad5e8dc0492baf64f9be40d2bb0,
-    type: 3}
-  _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
-    type: 3}
-  startWaitTime: 0.1
-  enemyWaypoints:
-  - {fileID: 1141245685215431712}
-  - {fileID: 1141245683831308413}
-  - {fileID: 1141245684429137141}
-  - {fileID: 1141245684662486530}
-  - {fileID: 1141245684535815435}
-  - {fileID: 1141245683516885458}
-  - {fileID: 1141245684085021632}
-  - {fileID: 1141245685007708482}
-  - {fileID: 1141245685000305657}
-  - {fileID: 1141245685239346430}
-  - {fileID: 1141245684701153753}
-  - {fileID: 1141245683466673521}
-  - {fileID: 1141245684931919271}
-  - {fileID: 1141245683946032742}
-  - {fileID: 1141245683424116514}
-  - {fileID: 1141245685340988379}
-  - {fileID: 1141245685064821237}
-  - {fileID: 1141245683388289183}
-  - {fileID: 1141245684208519174}
-  - {fileID: 1141245684389707180}
-  - {fileID: 1141245683676671565}
-  - {fileID: 1141245685363377360}
-  - {fileID: 1141245685198700920}
-  - {fileID: 1141245684457886131}
 --- !u!1 &1141245683831308414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,7 +1490,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141245684453825820}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 13.54, y: 3.83, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1141245684090258693}

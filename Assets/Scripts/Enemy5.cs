@@ -22,6 +22,11 @@ public class Enemy5 : MonoBehaviour // Rear Burst
     private GameManager _gameManager; // *************
     private Enemy5Shield _enemy5Shield;
 
+    [SerializeField] private GameObject _enemyShield;
+    [SerializeField] private bool _isEnemyShieldActive = true;
+    [SerializeField] public int _shield5Hits = 0;
+    [SerializeField] private float _enemyShieldAlpha = 1.0f;
+
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
@@ -61,6 +66,33 @@ public class Enemy5 : MonoBehaviour // Rear Burst
         CalculateMovement();
     }
 
+    void Enemy5Damage()
+    {
+        if (_isEnemyShieldActive == true)
+        {
+            _shield5Hits++;
+
+            switch (_shield5Hits)
+            {
+                case 1:
+                    _enemyShieldAlpha = 0.75f;
+                    _enemyShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _enemyShieldAlpha);
+                    break;
+                case 2:
+                    _enemyShieldAlpha = 0.40f;
+                    _enemyShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _enemyShieldAlpha);
+                    break;
+                case 3:
+                    _isEnemyShieldActive = false;
+                    _enemyShield.SetActive(false);
+                    break;
+            }
+            return;
+        }
+
+        DestroyEnemyShip();
+    }
+
     void CalculateMovement()
     {
 
@@ -72,14 +104,13 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             z = transform.position.z;
 
             transform.position = new Vector3(_randomXStartPos, y, z);
-            transform.Translate(Vector3.right * _enemySpeed * Time.deltaTime);
+            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
             if (transform.position.y < -7.0f)
             {
                 float randomX = Random.Range(-8f, 8f);
                 transform.position = new Vector3(randomX, 7.0f, 0);
             }
-
         }
     }
 
@@ -95,9 +126,7 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             }
 
             _audioSource.Play();
-            _enemy5Shield.Enemy5Damage();
-
-            //DestroyEnemyShip();
+            Enemy5Damage();
         }
 
         if (other.tag == "LaserPlayer")
@@ -106,34 +135,29 @@ public class Enemy5 : MonoBehaviour // Rear Burst
 
             if (_player != null)
             {
-                _player.AddScore(20);
+                _player.AddScore(50);
             }
 
             _audioSource.Play();
-            _enemy5Shield.Enemy5Damage();
-
-            //DestroyEnemyShip();
+            Enemy5Damage();
         }
 
         if (other.tag == "PlayerHomingMissile")
         {
             if (_player != null)
             {
-                _player.AddScore(10);
+                _player.AddScore(50);
             }
 
             Destroy(other.gameObject);
 
             _audioSource.Play();
-            _enemy5Shield.Enemy5Damage();
-
-            //DestroyEnemyShip();
+            Enemy5Damage();
         }
     }
 
     public void DestroyEnemyShip()
     {
-        Debug.Log("Destroy Rear Shooting Enemy?");
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
 
         _spawnManager.EnemyShipsDestroyedCounter();

@@ -91,7 +91,7 @@ public class SpawnManager : MonoBehaviour
                 switch (_gameManager.currentAttackWave)
                 {
                     case 0:
-                        int type0 = 0;
+                        int type0 = 6;
                         _typeOfEnemy = _typesOfEnemy[type0];
                         enemyType = type0;
                         break;

@@ -143,7 +143,6 @@ public class EnemyBasic1 : MonoBehaviour
 
     public void DestroyEnemyShip()
     {
-        Debug.Log("destroy roaming enemy?");
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
 
         _spawnManager.EnemyShipsDestroyedCounter();

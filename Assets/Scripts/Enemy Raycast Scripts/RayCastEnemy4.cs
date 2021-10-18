@@ -7,7 +7,6 @@ public class RayCastEnemy4 : MonoBehaviour
     private GameManager _gameManager;
     public Enemy4 _enemy4Script;
     public GameObject Enemy4;
-
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
 
     private void Start()

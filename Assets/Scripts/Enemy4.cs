@@ -18,7 +18,8 @@ public class Enemy4 : MonoBehaviour // Laser Burst
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
-
+   // [SerializeField] private GameObject _thrusters;
+    
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
 
@@ -99,7 +100,6 @@ public class Enemy4 : MonoBehaviour // Laser Burst
                 float randomX = Random.Range(-8f, 8f);
                 transform.position = new Vector3(randomX, 7.0f, 0);
             }
-
         }
     }
 
@@ -124,7 +124,7 @@ public class Enemy4 : MonoBehaviour // Laser Burst
 
             if (_player != null)
             {
-                _player.AddScore(20);
+                _player.AddScore(40);
             }
 
             _audioSource.Play();
@@ -150,6 +150,7 @@ public class Enemy4 : MonoBehaviour // Laser Burst
         _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
         _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
+        //_thrusters.SetActive(false);
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 2.8f);

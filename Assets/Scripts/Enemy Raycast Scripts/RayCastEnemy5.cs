@@ -22,8 +22,8 @@ public class RayCastEnemy5 : MonoBehaviour
             if (hit.collider != null)
             {
                 Debug.Log(hit.collider.tag);
-                if (hit.collider.tag == "Player")
-                {
+                if (hit.collider.tag == "Player" && hit.distance <= _gameManager.currentEnemySensorRange)
+            {
                     RunRearLaserBurst();
                 }
             }

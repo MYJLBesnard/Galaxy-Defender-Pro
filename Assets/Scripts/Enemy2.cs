@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy2 : MonoBehaviour
+public class Enemy2 : MonoBehaviour // Dodging Enemy
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;

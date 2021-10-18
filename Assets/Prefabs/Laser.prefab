@@ -143,7 +143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d450d484f23c6468784ae940fb249b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _laserSpeed: 0.4
+  _laserSpeed: 8
+  _isPlayerLaser: 1
   _isEnemyLaser: 0
-  _playerLateralLaser: 0
-  _isRearShootingLaser: 0
+  _isPlayerLateralLaser: 0
+  _isEnemyRearShootingLaser: 0
+  _isEnemyArcLaser: 0

@@ -22,6 +22,11 @@ public class Enemy6 : MonoBehaviour // Arc Laser Burst
     private GameManager _gameManager; // *************
     private Enemy6Shield _enemy6Shield;
 
+    [SerializeField] private GameObject _enemyShield;
+    [SerializeField] private bool _isEnemyShieldActive = true;
+    [SerializeField] public int _shield6Hits = 0;
+    [SerializeField] private float _enemyShieldAlpha = 1.0f;
+
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
@@ -61,6 +66,33 @@ public class Enemy6 : MonoBehaviour // Arc Laser Burst
         CalculateMovement();
     }
 
+    public void Enemy6Damage()
+    {
+        if (_isEnemyShieldActive == true)
+        {
+            _shield6Hits++;
+
+            switch (_shield6Hits)
+            {
+                case 1:
+                    _enemyShieldAlpha = 0.75f;
+                    _enemyShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _enemyShieldAlpha);
+                    break;
+                case 2:
+                    _enemyShieldAlpha = 0.40f;
+                    _enemyShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _enemyShieldAlpha);
+                    break;
+                case 3:
+                    _isEnemyShieldActive = false;
+                    _enemyShield.SetActive(false);
+                    break;
+            }
+            return;
+        }
+
+        DestroyEnemyShip();
+    }
+
     void CalculateMovement()
     {
 
@@ -72,7 +104,7 @@ public class Enemy6 : MonoBehaviour // Arc Laser Burst
             z = transform.position.z;
 
             transform.position = new Vector3(_randomXStartPos, y, z);
-            transform.Translate(Vector3.right * _enemySpeed * Time.deltaTime);
+            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
             if (transform.position.y < -7.0f)
             {
@@ -95,9 +127,7 @@ public class Enemy6 : MonoBehaviour // Arc Laser Burst
             }
 
             _audioSource.Play();
-            _enemy6Shield.Enemy6Damage();
-
-            //DestroyEnemyShip();
+            Enemy6Damage();
         }
 
         if (other.tag == "LaserPlayer")
@@ -106,28 +136,24 @@ public class Enemy6 : MonoBehaviour // Arc Laser Burst
 
             if (_player != null)
             {
-                _player.AddScore(20);
+                _player.AddScore(60);
             }
 
             _audioSource.Play();
-            _enemy6Shield.Enemy6Damage();
-
-            //DestroyEnemyShip();
+            Enemy6Damage();
         }
 
         if (other.tag == "PlayerHomingMissile")
         {
             if (_player != null)
             {
-                _player.AddScore(10);
+                _player.AddScore(60);
             }
 
             Destroy(other.gameObject);
 
             _audioSource.Play();
-            _enemy6Shield.Enemy6Damage();
-
-            //DestroyEnemyShip();
+            Enemy6Damage();
         }
     }
 
