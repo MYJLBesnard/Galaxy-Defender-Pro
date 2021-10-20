@@ -71,7 +71,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private bool _isPlayerHomingMissilesActivate = false; 
     [SerializeField] private int _homingMissileCount = 0;
 
-    [SerializeField] private bool _isPlayerLateralLaserActive = false; 
+    [SerializeField] private bool _isPlayerLateralLaserActive = false;
+    [SerializeField] private bool _coreOnline = true;
 
     void Start()
     {
@@ -115,6 +116,11 @@ public class PlayerScript : MonoBehaviour
             CalculateMovement();
             CalculateThrustersScale();
             ThrusterCoreLogic();
+
+            if (_coreOnline == false)
+            {
+                StartCoroutine(LoseCore());
+            }
 
             if (Input.GetKeyDown(KeyCode.Space) && _hasPlayerLaserCooledDown)
             {
@@ -663,4 +669,101 @@ public class PlayerScript : MonoBehaviour
         PlayClip(_warningIncomingWave);
         _spawnManager.StartSpawning();
     }
-}
+
+    public void NegativePowerUpCollision()
+    {
+        Debug.Log("Something bad happens now...");
+        int _itemLost = Random.Range(0, 4);
+        //int _itemLost = 2;
+
+        switch (_itemLost)
+        {
+            case 0:
+                loseAmmo();
+                break;
+            case 1:
+                loseMissiles();
+                break;
+            case 2:
+                _coreOnline = false;
+                //StartCoroutine(LoseCore());
+                break;
+            case 3:
+                loseShields();
+                break;
+        }
+    }
+
+ //   private void newVector3(object v)
+ //   {
+ //       throw new System.NotImplementedException();
+ //   }
+
+    void loseAmmo()
+    {
+        _ammoCount -= (Random.Range(5, 10));
+
+        if (_ammoCount < 0)
+        {
+            _ammoCount = 0;
+        }
+        _uiManager.UpdateAmmoCount(_ammoCount);
+    }
+
+    void loseMissiles()
+    {
+        _homingMissileCount -= (Random.Range(1, 10));
+        if (_homingMissileCount < 0)
+        {
+            _homingMissileCount = 0;
+            _isPlayerHomingMissilesActivate = false;
+        }
+        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+    }
+
+    IEnumerator LoseCore()
+    {
+        transform.Rotate(Vector3.forward * -50f * Time.deltaTime);
+        _hasPlayerLaserCooledDown = false;
+        canPlayerUseThrusters = false;
+        _playerThrusterLeft.gameObject.SetActive(false);
+        _playerThrusterRight.gameObject.SetActive(false);
+        _speed = 0.15f;
+
+        yield return new WaitForSeconds(5.0f);
+
+        canPlayerUseThrusters = true;
+        _playerThrusterLeft.gameObject.SetActive(true);
+        _playerThrusterRight.gameObject.SetActive(true);
+        _speed = 5.0f;
+
+        if (transform.rotation.z != 0)
+        {
+            StartCoroutine(RotatePlayerUp(this.transform, Quaternion.identity, 1f));
+        }   
+
+        _coreOnline = true;
+    }
+
+    void loseShields()
+    {
+        _isPlayerShieldActive = false;
+        PlayClip(_playerShieldsDepletedAudioClip);
+        _playerShield.SetActive(false);
+    }
+
+        IEnumerator RotatePlayerUp(Transform target, Quaternion rot, float dur)
+        {
+            float t = 0f;
+            Quaternion start = target.rotation;
+            while (t < dur)
+            {
+                target.rotation = Quaternion.Slerp(start, rot, t / dur);
+                yield return null;
+                t += Time.deltaTime;
+            }
+            target.rotation = rot;
+
+            _hasPlayerLaserCooledDown = true;
+        }
+    }

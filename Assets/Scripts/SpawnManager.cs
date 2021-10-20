@@ -91,37 +91,40 @@ public class SpawnManager : MonoBehaviour
                 switch (_gameManager.currentAttackWave)
                 {
                     case 0:
-                        int type0 = 6;
+                        int type0 = 1;
                         _typeOfEnemy = _typesOfEnemy[type0];
                         enemyType = type0;
                         break;
 
                     case 1:
-                        int type1 = 1;
+                        int type1 = 2;
                         _typeOfEnemy = _typesOfEnemy[type1];
                         enemyType = type1;
                         break;
 
                     case 2:
-                        int type2 = 2;
+                        int type2 = 3;
                         _typeOfEnemy = _typesOfEnemy[type2];
                         enemyType = type2;
                         break;
 
                     case 3:
-                        int type3 = Random.Range(2, 4);
+                        // int type3 = Random.Range(2, 4);
+                        int type3 = 4;
                         _typeOfEnemy = _typesOfEnemy[type3];
                         enemyType = type3;
                         break;
 
                     case 4:
-                        int type4 = Random.Range(2, 5);
+                        int type4 = 5;
+                        //int type4 = Random.Range(2, 5);
                         _typeOfEnemy = _typesOfEnemy[type4];
                         enemyType = type4;
                         break;
 
                     case 5:
-                        int type5 = Random.Range(2, 6);
+                        int type5 = 6;
+                        //int type5 = Random.Range(2, 6);
                         _typeOfEnemy = _typesOfEnemy[type5];
                         enemyType = type5;
                         break;
@@ -164,7 +167,7 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            int randomPowerUp = Random.Range(0, 7);
+            int randomPowerUp = Random.Range(0, 8);
             Instantiate(_playerPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
             yield return new WaitForSeconds(Random.Range(2f, 6f));
         }

@@ -13042,40 +13042,40 @@ MonoBehaviour:
     EnemySpeed: 1
     EnemyLaserSpeed: 2
     EnemyRateOfSpawningd: 2
-    EnemyRateOfFire: 20
-    PowerUpRateOfSpawning: 3.5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 5
     EnemySensorRange: 1
   - Name: Wave 2
-    SizeOfWave: 5
-    EnemySpeed: 2
+    SizeOfWave: 3
+    EnemySpeed: 1
     EnemyLaserSpeed: 2
     EnemyRateOfSpawningd: 2
     EnemyRateOfFire: 8
-    PowerUpRateOfSpawning: 3.5
+    PowerUpRateOfSpawning: 5
     EnemySensorRange: 3
   - Name: Wave 3
-    SizeOfWave: 5
-    EnemySpeed: 3
+    SizeOfWave: 3
+    EnemySpeed: 1
     EnemyLaserSpeed: 2
     EnemyRateOfSpawningd: 2
-    EnemyRateOfFire: 6
-    PowerUpRateOfSpawning: 3.5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 5
     EnemySensorRange: 5
   - Name: Wave 4
-    SizeOfWave: 10
-    EnemySpeed: 4
+    SizeOfWave: 3
+    EnemySpeed: 1
     EnemyLaserSpeed: 2
     EnemyRateOfSpawningd: 2
-    EnemyRateOfFire: 4
-    PowerUpRateOfSpawning: 3.5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 5
     EnemySensorRange: 3.5
   - Name: Wave 5
-    SizeOfWave: 15
-    EnemySpeed: 4
+    SizeOfWave: 3
+    EnemySpeed: 1
     EnemyLaserSpeed: 2
     EnemyRateOfSpawningd: 2
-    EnemyRateOfFire: 4
-    PowerUpRateOfSpawning: 3.5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 5
     EnemySensorRange: 3.5
   currentAttackWave: 0
 --- !u!4 &1760255854
