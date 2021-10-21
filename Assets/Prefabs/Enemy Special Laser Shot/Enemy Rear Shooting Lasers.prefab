@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2527707534187248409}
   m_Layer: 0
   m_Name: Enemy Rear Shooting Lasers
-  m_TagString: LaserRearShotEnemy
+  m_TagString: EnemyLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   _isEnemyLaser: 0
   _isPlayerLateralLaser: 0
   _isEnemyRearShootingLaser: 1
+  _isEnemyArcLaser: 0
 --- !u!1 &2024674715103082915
 GameObject:
   m_ObjectHideFlags: 0

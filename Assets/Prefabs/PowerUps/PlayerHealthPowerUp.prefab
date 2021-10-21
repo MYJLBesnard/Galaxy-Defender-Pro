@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2830385947293627827}
   m_Layer: 0
   m_Name: PlayerHealthPowerUp
-  m_TagString: PlayerPowerUos
+  m_TagString: PlayerPowerUps
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,6 +137,8 @@ MonoBehaviour:
   _speedOfPowerUps: 2.5
   _powerUpID: 3
   _powerUpAudioClip: {fileID: 8300000, guid: 298f95d82338146038a47235268af0e6, type: 3}
+  _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
+    type: 3}
 --- !u!95 &2830385947293627827
 Animator:
   serializedVersion: 3

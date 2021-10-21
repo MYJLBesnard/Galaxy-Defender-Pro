@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 8905738446420623645}
   m_Layer: 0
   m_Name: PlayerAmmoPowerUp
-  m_TagString: PlayerPowerUos
+  m_TagString: PlayerPowerUps
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -144,6 +144,8 @@ MonoBehaviour:
   _speedOfPowerUps: 3
   _powerUpID: 4
   _powerUpAudioClip: {fileID: 8300000, guid: bef6a26d5b84d4971adffb4239081b36, type: 3}
+  _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
+    type: 3}
 --- !u!58 &8196018351677747963
 CircleCollider2D:
   m_ObjectHideFlags: 0

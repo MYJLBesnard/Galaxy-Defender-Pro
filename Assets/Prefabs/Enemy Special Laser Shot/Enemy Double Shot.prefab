@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2769002012241332286}
   m_Layer: 0
   m_Name: Enemy Double Shot
-  m_TagString: LaserDoubleShotEnemy
+  m_TagString: EnemyLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,9 +95,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _laserSpeed: 8
+  _isPlayerLaser: 0
   _isEnemyLaser: 1
-  _playerLateralLaser: 0
-  _isRearShootingLaser: 0
+  _isPlayerLateralLaser: 0
+  _isEnemyRearShootingLaser: 0
+  _isEnemyArcLaser: 0
 --- !u!1001 &2390432534481953710
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -22,11 +22,16 @@ public class RayCastEnemy4 : MonoBehaviour
             if (hit.collider != null)
             {
                 Debug.Log(hit.collider.tag);
-                if (hit.collider.tag == "Player")
+            if (hit.collider.tag == "Player")
                 {
                     RunLaserBurst();
                 }
+
+            if (hit.collider.tag == "PlayerPowerUps")
+            {
+                RunLaserBurst();
             }
+        }
 
             Debug.DrawRay(transform.position, Vector2.down * _gameManager.currentEnemySensorRange, Color.red);
     }

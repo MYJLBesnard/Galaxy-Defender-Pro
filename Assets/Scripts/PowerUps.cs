@@ -15,6 +15,7 @@ public class PowerUps : MonoBehaviour
                                               // 6 = Lateral Laser Canon,
                                               // 7 = Negative PowerUp,
     [SerializeField] private AudioClip _powerUpAudioClip = null;
+    [SerializeField] private GameObject _explosionPrefab;
 
     void Update()
     {
@@ -28,6 +29,15 @@ public class PowerUps : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.tag == "EnemyLaser")
+        {
+            if (_powerUpID != 7)
+            {
+                Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+                Destroy(this.gameObject);
+            }
+        }
+
         if (other.tag == "Player")
         {
             PlayerScript player = other.transform.GetComponent<PlayerScript>();

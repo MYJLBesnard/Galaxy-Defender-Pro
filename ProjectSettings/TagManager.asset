@@ -6,11 +6,11 @@ TagManager:
   tags:
   - Enemy
   - LaserPlayer
-  - LaserDoubleShotEnemy
   - PlayerHomingMissile
-  - PlayerPowerUos
   - NavPoint
-  - LaserRearShotEnemy
+  - NegativePowerUp
+  - EnemyLaser
+  - PlayerPowerUps
   layers:
   - Default
   - TransparentFX

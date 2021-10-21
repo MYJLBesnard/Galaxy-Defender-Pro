@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 553912836213239421}
   m_Layer: 0
   m_Name: LateralLaserPowerUp
-  m_TagString: PlayerPowerUos
+  m_TagString: PlayerPowerUps
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,6 +145,8 @@ MonoBehaviour:
   _speedOfPowerUps: 1.5
   _powerUpID: 6
   _powerUpAudioClip: {fileID: 8300000, guid: 9ed7ad09bdb2b4208b656ac854078d99, type: 3}
+  _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
+    type: 3}
 --- !u!58 &2190047131812064613
 CircleCollider2D:
   m_ObjectHideFlags: 0
