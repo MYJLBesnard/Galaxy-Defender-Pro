@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy4 : MonoBehaviour // Laser Burst
+public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Player Laser
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
@@ -10,7 +10,7 @@ public class Enemy4 : MonoBehaviour // Laser Burst
 
     [SerializeField] private GameObject _enemyPrefab;
     public float _enemySpeed;
-    private float y, z;
+    private float x, y, z;
     public float _randomXStartPos;
     [SerializeField] private bool _stopUpdating = false;
 
@@ -24,6 +24,8 @@ public class Enemy4 : MonoBehaviour // Laser Burst
     private float _enemyCanFire = -1.0f;
 
     private GameManager _gameManager; // *************
+
+    private bool _incomingPlayerLaser = false;
 
 
     void Start()
@@ -89,11 +91,21 @@ public class Enemy4 : MonoBehaviour // Laser Burst
 
         if (_stopUpdating == false)
         {
+            x = transform.position.x;
             y = transform.position.y;
             z = transform.position.z;
 
             transform.position = new Vector3(_randomXStartPos, y, z);
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+
+            if (_incomingPlayerLaser == true)
+            {
+                //transform.Rotate(0, 0, 35.0f);
+                transform.Translate (Vector3.left * 75f * Time.deltaTime);
+                transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+
+            }
+
 
             if (transform.position.y < -7.0f)
             {
@@ -172,6 +184,15 @@ public class Enemy4 : MonoBehaviour // Laser Burst
 
             yield return new WaitForSeconds(0.1f);
         }  
+    }
+
+    public IEnumerator DodgePlayerLaser()
+    {
+
+        _incomingPlayerLaser = true;
+        yield return new WaitForSeconds(2f);
+        _incomingPlayerLaser = false;
+
     }
 }
 

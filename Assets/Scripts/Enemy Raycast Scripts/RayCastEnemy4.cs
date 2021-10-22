@@ -31,6 +31,12 @@ public class RayCastEnemy4 : MonoBehaviour
             {
                 RunLaserBurst();
             }
+
+            if (hit.collider.tag == "LaserPlayer")
+            {
+                Debug.Log("Incoming Player Laser!");
+                RunEnemy4Dodge();
+            }
         }
 
             Debug.DrawRay(transform.position, Vector2.down * _gameManager.currentEnemySensorRange, Color.red);
@@ -39,5 +45,11 @@ public class RayCastEnemy4 : MonoBehaviour
     public void RunLaserBurst()
     {
         _enemy4Script.StartCoroutine(_enemy4Script.LaserBurst());
+    }
+
+    public void RunEnemy4Dodge()
+    {
+        _enemy4Script.StartCoroutine(_enemy4Script.DodgePlayerLaser());
+
     }
 }
