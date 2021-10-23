@@ -27,6 +27,9 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
 
     private bool _incomingPlayerLaser = false;
 
+    private int randomNumber;
+
+
 
     void Start()
     {
@@ -60,6 +63,9 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
         {
             Debug.LogError("The Game_Manager is null.");
         }
+
+        randomNumber = Random.Range(-10, 10);
+
     }
 
     void Update()
@@ -86,31 +92,42 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
 
     void CalculateMovement()
     {
-
         _enemySpeed = _gameManager.currentEnemySpeed;
 
         if (_stopUpdating == false)
         {
-            x = transform.position.x;
-            y = transform.position.y;
-            z = transform.position.z;
-
-            transform.position = new Vector3(_randomXStartPos, y, z);
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+
 
             if (_incomingPlayerLaser == true)
             {
-                //transform.Rotate(0, 0, 35.0f);
-                transform.Translate (Vector3.left * 75f * Time.deltaTime);
-                transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-
+                Debug.Log("Value of x equal" + randomNumber);
+                if (randomNumber > 0)
+                {
+                    transform.Translate(Vector3.left * 20f * Time.deltaTime);
+                    transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+                }
+                else if (randomNumber < 0)
+                {
+                    transform.Translate(Vector3.right * 20f * Time.deltaTime);
+                    transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+                }
             }
 
+            if (transform.position.x > 10.25f)
+            {
+                transform.position = new Vector3(-10.25f, transform.position.y, 0);
+            }
+            else if (transform.position.x < -10.25f)
+            {
+                transform.position = new Vector3(10.25f, transform.position.y, 0);
+            }
 
             if (transform.position.y < -7.0f)
             {
                 float randomX = Random.Range(-8f, 8f);
                 transform.position = new Vector3(randomX, 7.0f, 0);
+                randomNumber = Random.Range(-10, 10);
             }
         }
     }
@@ -190,7 +207,7 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
     {
 
         _incomingPlayerLaser = true;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.25f);
         _incomingPlayerLaser = false;
 
     }
