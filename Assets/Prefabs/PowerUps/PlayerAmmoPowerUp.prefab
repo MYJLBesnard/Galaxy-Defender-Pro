@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 5087452030651122739}
   - component: {fileID: 8196018351677747963}
   - component: {fileID: 8905738446420623645}
+  - component: {fileID: 5136295029813580111}
   m_Layer: 0
   m_Name: PlayerAmmoPowerUp
   m_TagString: PlayerPowerUps
@@ -183,3 +184,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5136295029813580111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5087452030651122738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5031651557148b98034399a54a1c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

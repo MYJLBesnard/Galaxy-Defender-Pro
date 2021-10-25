@@ -33,13 +33,18 @@ public class PlayerScript : MonoBehaviour
     private AudioSource _audioSource;
 
 
-    [SerializeField]
-    private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab, _playerMissilesDispersed;
+    [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab, _playerMissilesDispersed;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
     [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
     [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
     [SerializeField] private GameObject _bigExplosionPrefab;
     [SerializeField] private GameObject _lateralLaserCanonLeft, _lateralLaserCanonRight;
+
+    [Header("Tractor Beam Variables")]
+    [SerializeField] private GameObject _tractorBeam;
+    [SerializeField] private bool _isTractorBeamOn = false;
+    private Vector3 _scaleChange; // scale of Tractor Beam
+  
 
     [SerializeField] private GameObject _leftEngineDamage, _rightEngineDamage;
 
@@ -76,6 +81,7 @@ public class PlayerScript : MonoBehaviour
 
     void Start()
     {
+        _scaleChange = new Vector3(-0.25f, -0.25f, -0.25f);
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
@@ -136,10 +142,42 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            CollectPowerUps.isPwrUpTractorBeamActive = true;
+            _tractorBeam.SetActive(true);
+            //ActivateMagnet._tractorBeam.SetActive(true);
+            _isTractorBeamOn = true;
+            Debug.Log("Tractor Beam is ACTIVE!!!");
+            StartCoroutine(DeactivatePwrUpTractorBeam());
+        }
+
+        
+        if (_isTractorBeamOn == true)
+        {
+            _tractorBeam.transform.localScale += _scaleChange * 1f;
+
+            if (_tractorBeam.transform.localScale.y < 4.0f || _tractorBeam.transform.localScale.y > 40.0f)
+            {
+                _scaleChange = -_scaleChange * 1f;
+            }
+        }
+        
+
         if (_homingMissileCount == 0)
         {
             _isPlayerHomingMissilesActivate = false;
         }
+    }
+
+    IEnumerator DeactivatePwrUpTractorBeam()
+    {
+        yield return new WaitForSeconds(10.0f);
+        Debug.Log("Tractor beam disactivated");
+        CollectPowerUps.isPwrUpTractorBeamActive = false;
+        _tractorBeam.SetActive(false);
+        _isTractorBeamOn = false;
+
     }
 
     private void FireHomingMissile()

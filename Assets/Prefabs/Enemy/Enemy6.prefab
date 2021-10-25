@@ -436,14 +436,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7138134307e6144968c82aa0bc545bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 5731870614790523512}
-  _enemySpeed: 0
-  _randomXStartPos: 0
-  _stopUpdating: 0
   _explosionSoundEffect: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc,
     type: 3}
   _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,
     type: 3}
+  _enemyPrefab: {fileID: 5731870614790523512}
+  _thrusters: {fileID: 8471353474822670848}
   _enemyArcLaserPrefab: {fileID: 8349601684974646910}
   _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
@@ -451,6 +449,9 @@ MonoBehaviour:
   _isEnemyShieldActive: 1
   _shield6Hits: 0
   _enemyShieldAlpha: 1
+  _stopUpdating: 0
+  _enemySpeed: 0
+  _randomXStartPos: 0
 --- !u!82 &8349601686556850828
 AudioSource:
   m_ObjectHideFlags: 0

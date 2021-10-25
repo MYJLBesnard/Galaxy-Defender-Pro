@@ -6,41 +6,32 @@ public class Enemy2 : MonoBehaviour // Dodging Enemy
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
-    private SpawnManager _spawnManager;  //***********
-
-    [SerializeField] private GameObject _enemyPrefab;
-    //[SerializeField] private GameObject _dodgingEnemyPrefab;
+    private SpawnManager _spawnManager;
+    private GameManager _gameManager;
+    private AudioSource _audioSource;
+    [SerializeField] private AudioClip _explosionSoundEffect;
+    [SerializeField] private AudioClip _enemyLaserShotAudioClip;
+    [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
+    [SerializeField] private GameObject _thrusters;
     [SerializeField] private int _enemyType;
-    [SerializeField] public float _enemySpeed;
+    [SerializeField] private bool _stopUpdating = false;
+    //[SerializeField] private GameObject _enemyPrefab;
+
 
     [SerializeField] public float _dodgingEnemySpeed;
     [SerializeField] private float _dodgingAmplitude;
     [SerializeField] private float _dodgingFrequency = 0.5f;
     private float x, y, z;
+    private float _enemyRateOfFire = 3.0f;
+    private float _enemyCanFire = -1.0f;
+    public float _enemySpeed;
     public float _randomXStartPos = 0;
 
 
-    [SerializeField] private bool _stopUpdating = false;
-
-    [SerializeField] private AudioClip _explosionSoundEffect;
-    private AudioSource _audioSource;
-
-    [SerializeField] private AudioClip _enemyLaserShotAudioClip;
-    [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
-    private float _enemyRateOfFire = 3.0f;
-    private float _enemyCanFire = -1.0f;
-
-    private GameManager _gameManager; // *************
 
 
     void Start()
     {
-        //_enemySpeed = Random.Range(2.5f, 4.5f);
-       // _enemySpeed = _gameManager.currentEnemySpeed;
-
-        //_dodgingEnemySpeed = Random.Range(2.5f, 4.5f);
-       // _dodgingEnemySpeed = _gameManager.currentEnemySpeed;
-
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _animEnemyDestroyed = GetComponent<Animator>();
@@ -99,7 +90,7 @@ public class Enemy2 : MonoBehaviour // Dodging Enemy
     void CalculateMovement()
     {
 
-        _enemySpeed = _gameManager.currentEnemySpeed;
+        //_enemySpeed = _gameManager.currentEnemySpeed;
         _dodgingEnemySpeed = _gameManager.currentEnemySpeed;
 
 
@@ -174,6 +165,7 @@ public class Enemy2 : MonoBehaviour // Dodging Enemy
         _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
         _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
+        _thrusters.SetActive(false);
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 2.8f);

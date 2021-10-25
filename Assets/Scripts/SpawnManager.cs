@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-   // [SerializeField] private GameObject _enemy3Prefab, _enemyPrefab, _dodgingEnemyPrefab;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] public GameObject[] _playerPowerUps;
     [SerializeField] public GameObject[] _typesOfEnemy;
@@ -27,6 +26,7 @@ public class SpawnManager : MonoBehaviour
     private GameObject _typeOfEnemy;
 
     private float _xPos;
+    private float _yPos;
 
     private void Start()
     {
@@ -83,6 +83,7 @@ public class SpawnManager : MonoBehaviour
 
         {
             _xPos = Random.Range(-8.0f, 8.0f);
+            _yPos = Random.Range(-5.5f, 5.5f);
             Vector3 pxToSpawn = new Vector3(_xPos, 7, 0);
 
             if (_stopSpawningEnemies == false)
@@ -91,7 +92,7 @@ public class SpawnManager : MonoBehaviour
                 switch (_gameManager.currentAttackWave)
                 {
                     case 0:
-                        int type0 = 1;
+                        int type0 = 7;
                         _typeOfEnemy = _typesOfEnemy[type0];
                         enemyType = type0;
                         break;
@@ -133,9 +134,20 @@ public class SpawnManager : MonoBehaviour
                         break;
                 }
 
-                GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawn, Quaternion.identity);
-                newEnemy.transform.parent = _enemyContainer.transform;
-                _shipsInWave++;
+                if (enemyType == 7)
+                {
+                    Vector3 pxToSpawnEnemy7 = new Vector3(-13.0f, _yPos, 0);
+                    GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawnEnemy7, Quaternion.identity);
+                    newEnemy.transform.parent = _enemyContainer.transform;
+                    _shipsInWave++;
+                }
+                else
+                {
+                    GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawn, Quaternion.identity);
+                    newEnemy.transform.parent = _enemyContainer.transform;
+                    _shipsInWave++;
+                }
+
 
             }
 
@@ -167,7 +179,7 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            int randomPowerUp = Random.Range(0, 8);
+            int randomPowerUp = Random.Range(0, 7);
             Instantiate(_playerPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
             yield return new WaitForSeconds(Random.Range(2f, 6f));
         }

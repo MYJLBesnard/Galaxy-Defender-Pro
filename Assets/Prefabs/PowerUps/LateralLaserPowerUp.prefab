@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 7541097208444731739}
   - component: {fileID: 2190047131812064613}
   - component: {fileID: 553912836213239421}
+  - component: {fileID: 4137526615453658336}
   m_Layer: 0
   m_Name: LateralLaserPowerUp
   m_TagString: PlayerPowerUps
@@ -184,6 +185,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &4137526615453658336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075782326843701816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5031651557148b98034399a54a1c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2075782327112443892
 GameObject:
   m_ObjectHideFlags: 0

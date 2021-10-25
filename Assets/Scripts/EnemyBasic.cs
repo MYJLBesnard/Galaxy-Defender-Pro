@@ -6,26 +6,20 @@ public class EnemyBasic : MonoBehaviour
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
-    private SpawnManager _spawnManager;  //***********
-
-    [SerializeField] private int _enemyType;
-    [SerializeField] public float _enemySpeed;
-
-    private float x, y, z;
-    public float _randomXStartPos = 0;
-
-    [SerializeField] private bool _stopUpdating = false;
-
-    [SerializeField] private AudioClip _explosionSoundEffect;
+    private SpawnManager _spawnManager;
+    private GameManager _gameManager;
     private AudioSource _audioSource;
-
+    [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
+    [SerializeField] private GameObject _thrusters;
+    [SerializeField] private int _enemyType;
+    [SerializeField] private bool _stopUpdating = false;
+    //private float y, z;
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
-
-    private GameManager _gameManager; // *************
-
+    public float _enemySpeed;
+    public float _randomXStartPos;
 
     void Start()
     {
@@ -60,6 +54,10 @@ public class EnemyBasic : MonoBehaviour
         {
             Debug.LogError("The Game_Manager is null.");
         }
+
+
+       // y = transform.position.y;
+       // z = transform.position.z;
     }
 
     void Update()
@@ -88,20 +86,20 @@ public class EnemyBasic : MonoBehaviour
 
         _enemySpeed = _gameManager.currentEnemySpeed;
 
+
+
         if (_stopUpdating == false)
         {
-            y = transform.position.y;
-            z = transform.position.z;
-            x = transform.position.x;
+            transform.Translate(_enemySpeed * Time.deltaTime * Vector3.down);
 
-                transform.position = new Vector3(_randomXStartPos, y, z);
-                transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
-                if (transform.position.y < -7.0f)
-                {
-                    float randomX = Random.Range(-8f, 8f);
-                    transform.position = new Vector3(randomX, 7.0f, 0);
-                }
+            //transform.position = new Vector3(_randomXStartPos, y, z);
+
+            if (transform.position.y < -7.0f)
+            {
+                float randomX = Random.Range(-8f, 8f);
+                transform.position = new Vector3(randomX, 7.0f, 0);
+            }
         }
     }
 
@@ -159,6 +157,7 @@ public class EnemyBasic : MonoBehaviour
         _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
         _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
+        _thrusters.SetActive(false);
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 2.8f);

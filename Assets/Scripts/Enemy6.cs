@@ -5,27 +5,23 @@ using UnityEngine;
 public class Enemy6 : MonoBehaviour // Arc Laser Burst
 {
     private PlayerScript _player;
-    private SpawnManager _spawnManager;  //***********
-
-    [SerializeField] private GameObject _enemyPrefab;
-    public float _enemySpeed;
-    private float y, z;
-    public float _randomXStartPos;
-    [SerializeField] private bool _stopUpdating = false;
-
+    private SpawnManager _spawnManager;
+    private GameManager _gameManager;
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
+    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _thrusters;
     [SerializeField] private GameObject _enemyArcLaserPrefab;
     [SerializeField] private GameObject _explosionPrefab;
-
-    private GameManager _gameManager; // *************
-    private Enemy6Shield _enemy6Shield;
-
     [SerializeField] private GameObject _enemyShield;
     [SerializeField] private bool _isEnemyShieldActive = true;
     [SerializeField] public int _shield6Hits = 0;
     [SerializeField] private float _enemyShieldAlpha = 1.0f;
+    [SerializeField] private bool _stopUpdating = false;
+    private Enemy6Shield _enemy6Shield;
+    public float _enemySpeed;
+    public float _randomXStartPos;
 
     void Start()
     {
@@ -95,15 +91,10 @@ public class Enemy6 : MonoBehaviour // Arc Laser Burst
 
     void CalculateMovement()
     {
-
         _enemySpeed = _gameManager.currentEnemySpeed;
 
         if (_stopUpdating == false)
         {
-            y = transform.position.y;
-            z = transform.position.z;
-
-            transform.position = new Vector3(_randomXStartPos, y, z);
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
             if (transform.position.y < -7.0f)
@@ -111,7 +102,6 @@ public class Enemy6 : MonoBehaviour // Arc Laser Burst
                 float randomX = Random.Range(-8f, 8f);
                 transform.position = new Vector3(randomX, 7.0f, 0);
             }
-
         }
     }
 
@@ -164,6 +154,7 @@ public class Enemy6 : MonoBehaviour // Arc Laser Burst
 
         _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
+        _thrusters.SetActive(false);
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 0.5f);

@@ -6,27 +6,21 @@ public class Enemy3 : MonoBehaviour // Speed Burst
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
-    private SpawnManager _spawnManager;  //***********
-
-    [SerializeField] private GameObject _enemyPrefab;
-//    [SerializeField] private int _enemyValue;
-    public float _enemySpeed;
-
-    private float x, y, z;
-    public float _randomXStartPos;
-    [SerializeField] private bool _stopUpdating = false;
-    [SerializeField] public bool _speedBurstActive = false;
-
+    private SpawnManager _spawnManager;
+    private GameManager _gameManager;
     private AudioSource _audioSource;
+    [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
-
+    [SerializeField] private GameObject _thrusters;
+    [SerializeField] private int _enemyType;
+    [SerializeField] private bool _stopUpdating = false;
+    [SerializeField] public bool _speedBurstActive = false;
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
-
-    private GameManager _gameManager; // *************
-
+    public float _enemySpeed;
+    public float _randomXStartPos;
 
     void Start()
     {
@@ -91,10 +85,6 @@ public class Enemy3 : MonoBehaviour // Speed Burst
 
         if (_stopUpdating == false)
         {
-            y = transform.position.y;
-            z = transform.position.z;
-
-            transform.position = new Vector3(_randomXStartPos, y, z);
             transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
 
             if (transform.position.y < -7.0f)
@@ -102,7 +92,6 @@ public class Enemy3 : MonoBehaviour // Speed Burst
                 float randomX = Random.Range(-8f, 8f);
                 transform.position = new Vector3(randomX, 7.0f, 0);
             }
-
         }
     }
 
@@ -153,6 +142,7 @@ public class Enemy3 : MonoBehaviour // Speed Burst
         _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
         _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
+        _thrusters.SetActive(false);
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 2.8f);

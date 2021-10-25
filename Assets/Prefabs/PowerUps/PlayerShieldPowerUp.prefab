@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 193187172997958204}
   - component: {fileID: 2482647784369598023}
   - component: {fileID: 260296192}
+  - component: {fileID: 1869615265327756866}
   m_Layer: 0
   m_Name: PlayerShieldPowerUp
   m_TagString: PlayerPowerUps
@@ -158,3 +159,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1869615265327756866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4982035787275881898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5031651557148b98034399a54a1c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

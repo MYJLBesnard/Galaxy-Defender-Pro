@@ -6,30 +6,21 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
 {
     private PlayerScript _player;
     private Animator _animEnemyDestroyed;
-    private SpawnManager _spawnManager;  //***********
-
-    [SerializeField] private GameObject _enemyPrefab;
-    public float _enemySpeed;
-    private float x, y, z;
-    public float _randomXStartPos;
-    [SerializeField] private bool _stopUpdating = false;
-
+    private SpawnManager _spawnManager;
+    private GameManager _gameManager;
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
+    [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
-   // [SerializeField] private GameObject _thrusters;
-    
+    [SerializeField] private GameObject _thrusters;
+    [SerializeField] private bool _stopUpdating = false;
+    private bool _incomingPlayerLaser = false;
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
-
-    private GameManager _gameManager; // *************
-
-    private bool _incomingPlayerLaser = false;
-
+    public float _enemySpeed;
+    public float _randomXStartPos;
     private int randomNumber;
-
-
 
     void Start()
     {
@@ -65,12 +56,10 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
         }
 
         randomNumber = Random.Range(-10, 10);
-
     }
 
     void Update()
     {
-
         CalculateMovement();
 
         if (Time.time > _enemyCanFire && _stopUpdating == false)
@@ -96,21 +85,20 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
 
         if (_stopUpdating == false)
         {
-            transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
-
+            transform.Translate(_enemySpeed * Time.deltaTime * Vector3.down);
 
             if (_incomingPlayerLaser == true)
             {
                 Debug.Log("Value of x equal" + randomNumber);
                 if (randomNumber > 0)
                 {
-                    transform.Translate(Vector3.left * 20f * Time.deltaTime);
-                    transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+                    transform.Translate(20f * Time.deltaTime * Vector3.left);
+                    transform.Translate(_enemySpeed * Time.deltaTime * Vector3.down);
                 }
                 else if (randomNumber < 0)
                 {
-                    transform.Translate(Vector3.right * 20f * Time.deltaTime);
-                    transform.Translate(Vector3.down * _enemySpeed * Time.deltaTime);
+                    transform.Translate(20f * Time.deltaTime * Vector3.right);
+                    transform.Translate(_enemySpeed * Time.deltaTime * Vector3.down);
                 }
             }
 
@@ -179,7 +167,7 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
         _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
         _animEnemyDestroyed.SetTrigger("OnEnemyDeath");
-        //_thrusters.SetActive(false);
+        _thrusters.SetActive(false);
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 2.8f);

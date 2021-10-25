@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7296990993007212476}
   - component: {fileID: 3715282670460491679}
   - component: {fileID: 1356493866}
+  - component: {fileID: 3458625781925248569}
   m_Layer: 0
   m_Name: PlayerSpeedPowerUp
   m_TagString: PlayerPowerUps
@@ -158,3 +159,15 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3458625781925248569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5295262556367448058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5031651557148b98034399a54a1c28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

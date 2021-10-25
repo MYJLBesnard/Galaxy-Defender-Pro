@@ -362,10 +362,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65bf8906fc6cb412fa1616204221bef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPrefab: {fileID: 1434017195234341779}
-  _enemySpeed: 0
-  _randomXStartPos: 0
-  _stopUpdating: 0
   _explosionSoundEffect: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc,
     type: 3}
   _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,
@@ -374,10 +370,15 @@ MonoBehaviour:
     type: 3}
   _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
+  _enemyPrefab: {fileID: 1434017195234341779}
+  _thrusters: {fileID: 7357843353659500593}
   _enemyShield: {fileID: 1444427775}
   _isEnemyShieldActive: 1
   _shield5Hits: 0
   _enemyShieldAlpha: 1
+  _stopUpdating: 0
+  _enemySpeed: 0
+  _randomXStartPos: 0
 --- !u!1 &1434017196458128148
 GameObject:
   m_ObjectHideFlags: 0

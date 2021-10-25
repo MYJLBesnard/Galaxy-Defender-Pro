@@ -2,35 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy5 : MonoBehaviour // Rear Burst
+public class Enemy7 : MonoBehaviour // Mine Layer
 {
     private PlayerScript _player;
     private SpawnManager _spawnManager;
     private GameManager _gameManager;
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;
-    [SerializeField] private AudioClip _enemyLaserShotAudioClip;
-    [SerializeField] private GameObject _enemyRearShotLaserPrefab;
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _thrusters;
-    [SerializeField] private GameObject _enemyShield;
-    [SerializeField] private bool _isEnemyShieldActive = true;
-    [SerializeField] public int _shield5Hits = 0;
-    [SerializeField] private float _enemyShieldAlpha = 1.0f;
     [SerializeField] private bool _stopUpdating = false;
-    private Enemy5Shield _enemy5Shield;
+    [SerializeField] private bool _noSound = false;
+   // private float x, z;
     public float _enemySpeed;
-    public float _randomXStartPos;
+   // public float _randomYStartPos;
 
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
-        _randomXStartPos = Random.Range(-8.0f, 8.0f);
+      //  _randomYStartPos = Random.Range(-5.5f, 5.5f);
         _audioSource = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-        _enemy5Shield = GameObject.Find("Enemy5Shield").GetComponent<Enemy5Shield>();
 
         if (_player == null)
         {
@@ -50,11 +44,6 @@ public class Enemy5 : MonoBehaviour // Rear Burst
         {
             Debug.LogError("The Game_Manager is null.");
         }
-
-        if (_enemy5Shield == null)
-        {
-            Debug.LogError("The Enemy5Shield script is null.");
-        }
     }
 
     void Update()
@@ -62,46 +51,27 @@ public class Enemy5 : MonoBehaviour // Rear Burst
         CalculateMovement();
     }
 
-    void Enemy5Damage()
+    void Enemy7Damage()
     {
-        if (_isEnemyShieldActive == true)
-        {
-            _shield5Hits++;
-
-            switch (_shield5Hits)
-            {
-                case 1:
-                    _enemyShieldAlpha = 0.75f;
-                    _enemyShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _enemyShieldAlpha);
-                    break;
-                case 2:
-                    _enemyShieldAlpha = 0.40f;
-                    _enemyShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _enemyShieldAlpha);
-                    break;
-                case 3:
-                    _isEnemyShieldActive = false;
-                    _enemyShield.SetActive(false);
-                    break;
-            }
-            return;
-        }
-
         DestroyEnemyShip();
     }
 
     void CalculateMovement()
     {
-
         _enemySpeed = _gameManager.currentEnemySpeed;
 
         if (_stopUpdating == false)
         {
-            transform.Translate(_enemySpeed * Time.deltaTime * Vector3.down);
+          //  x = transform.position.x;
+          //  z = transform.position.z;
 
-            if (transform.position.y < -7.0f)
+          //  transform.position = new Vector3(x, _randomYStartPos, z);
+            transform.Translate(_enemySpeed * Time.deltaTime * Vector3.right);
+
+            if (transform.position.x > 13.5f)
             {
-                float randomX = Random.Range(-8f, 8f);
-                transform.position = new Vector3(randomX, 7.0f, 0);
+                _noSound = true;
+                DestroyEnemyShip();
             }
         }
     }
@@ -118,7 +88,7 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             }
 
             _audioSource.Play();
-            Enemy5Damage();
+            Enemy7Damage();
         }
 
         if (other.tag == "LaserPlayer")
@@ -131,7 +101,7 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             }
 
             _audioSource.Play();
-            Enemy5Damage();
+            Enemy7Damage();
         }
 
         if (other.tag == "PlayerHomingMissile")
@@ -144,13 +114,16 @@ public class Enemy5 : MonoBehaviour // Rear Burst
             Destroy(other.gameObject);
 
             _audioSource.Play();
-            Enemy5Damage();
+            Enemy7Damage();
         }
     }
 
     public void DestroyEnemyShip()
     {
-        Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        if (_noSound == false)
+        {
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        }
 
         _spawnManager.EnemyShipsDestroyedCounter();
         _stopUpdating = true;
@@ -160,23 +133,6 @@ public class Enemy5 : MonoBehaviour // Rear Burst
         Destroy(this.gameObject, 0.5f);
     }
 
-    public IEnumerator RearLaserBurst()
-    {
-        if (_stopUpdating == false)
-        {
-            Debug.Log("Running Rear Laser Burst");
-            Vector3 position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
-            GameObject enemyLaser = Instantiate(_enemyRearShotLaserPrefab, position, Quaternion.identity);
-            Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
-
-            for (int i = 0; i < lasers.Length; i++)
-            {
-                lasers[i].AssignEnemyLaser();
-            }
-
-            yield return new WaitForSeconds(0.1f);
-        }  
-    }
 }
 
 
