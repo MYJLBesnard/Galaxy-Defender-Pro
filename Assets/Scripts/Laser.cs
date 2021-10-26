@@ -81,10 +81,24 @@ public class Laser : MonoBehaviour
     void LaserMoveLateral()
     {
         transform.Translate(Vector3.left * _laserSpeed * Time.deltaTime);
-        transform.Translate(Vector3.right * _laserSpeed * Time.deltaTime);
-        if (transform.position.x < -12.0f || transform.position.x > 12.0f)
-        {
+
+        if (transform.position.x <= -13.0f)
+        { 
+            Debug.Log("Left lateral off screen.");
             if(transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
+            }
+
+            Destroy(this.gameObject);
+        }
+
+        transform.Translate(Vector3.right * _laserSpeed * Time.deltaTime);
+
+        if (transform.position.x >= 13.0f)
+        {
+            Debug.Log("Right lateral off screen.");
+            if (transform.parent != null)
             {
                 Destroy(transform.parent.gameObject);
             }

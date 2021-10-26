@@ -732,11 +732,6 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
- //   private void newVector3(object v)
- //   {
- //       throw new System.NotImplementedException();
- //   }
-
     void loseAmmo()
     {
         _ammoCount -= (Random.Range(5, 10));

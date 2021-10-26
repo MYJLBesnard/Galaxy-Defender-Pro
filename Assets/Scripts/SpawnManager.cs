@@ -11,6 +11,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private PlayerScript _playerScript;
 
+    public Transform[] enemyWaypoints;
+
     private int _shipsInWave = 0;
     public int totalEnemyShipsDestroyed = 0;
     public int waveCurrent = 0;

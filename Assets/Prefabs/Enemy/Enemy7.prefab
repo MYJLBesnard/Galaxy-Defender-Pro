@@ -239,10 +239,11 @@ MonoBehaviour:
     type: 3}
   _enemyPrefab: {fileID: 3731919677935117065}
   _thrusters: {fileID: 3731919677338329234}
+  _enemyRoamingSpaceMines: {fileID: 6755284499738916650, guid: 41a0c03774f1046509b73b677c126fb7,
+    type: 3}
   _stopUpdating: 0
   _noSound: 0
   _enemySpeed: 0
-  _randomYStartPos: 0
 --- !u!82 &-8202999573936587093
 AudioSource:
   m_ObjectHideFlags: 0

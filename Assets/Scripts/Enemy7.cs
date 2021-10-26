@@ -12,10 +12,13 @@ public class Enemy7 : MonoBehaviour // Mine Layer
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _thrusters;
+    [SerializeField] private GameObject _enemyRoamingSpaceMines;
     [SerializeField] private bool _stopUpdating = false;
     [SerializeField] private bool _noSound = false;
    // private float x, z;
-    public float _enemySpeed;
+    public float enemySpeed;
+    [SerializeField] public float releasePoint;
+    [SerializeField] private bool _isMineLayerArmed = true;
    // public float _randomYStartPos;
 
     void Start()
@@ -44,11 +47,25 @@ public class Enemy7 : MonoBehaviour // Mine Layer
         {
             Debug.LogError("The Game_Manager is null.");
         }
+
+        releasePoint = Random.Range(-12.0f, 12.0f);
     }
 
     void Update()
     {
         CalculateMovement();
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            DeployMines();
+        }
+    }
+
+    void DeployMines()
+    {
+
+        Instantiate(_enemyRoamingSpaceMines, new Vector3(transform.position.x - 0.88f, transform.position.y, transform.position.z), Quaternion.identity);
+
     }
 
     void Enemy7Damage()
@@ -58,7 +75,7 @@ public class Enemy7 : MonoBehaviour // Mine Layer
 
     void CalculateMovement()
     {
-        _enemySpeed = _gameManager.currentEnemySpeed;
+        enemySpeed = _gameManager.currentEnemySpeed;
 
         if (_stopUpdating == false)
         {
@@ -66,7 +83,15 @@ public class Enemy7 : MonoBehaviour // Mine Layer
           //  z = transform.position.z;
 
           //  transform.position = new Vector3(x, _randomYStartPos, z);
-            transform.Translate(_enemySpeed * Time.deltaTime * Vector3.right);
+            transform.Translate(enemySpeed * Time.deltaTime * Vector3.right);
+            Debug.Log(transform.position.x);
+
+            if (transform.position.x >= releasePoint && _isMineLayerArmed == true)
+            {
+                Debug.Log("Release the mines!...");
+                DeployMines();
+                _isMineLayerArmed = false;
+            }
 
             if (transform.position.x > 13.5f)
             {

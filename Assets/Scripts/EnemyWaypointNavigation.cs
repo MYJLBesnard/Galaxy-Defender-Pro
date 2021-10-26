@@ -5,21 +5,12 @@ using UnityEngine;
 public class EnemyWaypointNavigation : MonoBehaviour
 {
     private PlayerScript _player;
-   //private SpawnManager _spawnManager;  //***********
-
-    //[SerializeField] private int _enemyType;
-    [SerializeField] public float _enemySpeed;
-    //[SerializeField] private bool _stopUpdating = false;
-    [SerializeField] private AudioClip _explosionSoundEffect;
-
-
+    private SpawnManager _spawnManager;
     private GameManager _gameManager;
-
+    [SerializeField] public float _enemySpeed;
+    [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private GameObject _explosionPrefab;
-
     public float startWaitTime;
-    public Transform[] enemyWaypoints;
-
     private float waitTime;
     private int randomSpot;
 
@@ -27,9 +18,9 @@ public class EnemyWaypointNavigation : MonoBehaviour
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
-        //_spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
-        randomSpot = Random.Range(0, enemyWaypoints.Length);
+        randomSpot = Random.Range(0, _spawnManager.enemyWaypoints.Length);
         waitTime = startWaitTime;
 
         if (_player == null)
@@ -41,20 +32,26 @@ public class EnemyWaypointNavigation : MonoBehaviour
         {
             Debug.LogError("The Game_Manager is null.");
         }
-        
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("The Spawn Manageris null.");
+        }
+
     }
 
     void Update()
     {
-        _enemySpeed = _gameManager.currentEnemySpeed;
+        //_enemySpeed = _gameManager.currentEnemySpeed;
+        _enemySpeed = 1.5f;
 
-        transform.position = Vector2.MoveTowards(transform.position, enemyWaypoints[randomSpot].position, _enemySpeed * Time.deltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, _spawnManager.enemyWaypoints[randomSpot].position, _enemySpeed * Time.deltaTime);
 
-        if (Vector2.Distance(transform.position, enemyWaypoints[randomSpot].position) < 0.2f)
+        if (Vector2.Distance(transform.position, _spawnManager.enemyWaypoints[randomSpot].position) < 0.2f)
         {
             if (waitTime <= 0)
             {
-                randomSpot = Random.Range(0, enemyWaypoints.Length);
+                randomSpot = Random.Range(0, _spawnManager.enemyWaypoints.Length);
                 waitTime = startWaitTime;
             }
             else
@@ -74,7 +71,6 @@ public class EnemyWaypointNavigation : MonoBehaviour
             {
                 player.Damage();
             }
-
             _player.PlayClip(_explosionSoundEffect);
             DestroyEnemyShip();
         }
@@ -82,21 +78,7 @@ public class EnemyWaypointNavigation : MonoBehaviour
         if (other.tag == "LaserPlayer")
         {
             Destroy(other.gameObject);
-
-            /*
-            if (_player != null)
-            {
-                if(_enemyType == 1)
-                {
-                    _player.AddScore(10);
-                }
-                else if (_enemyType == 2)
-                {
-                    _player.AddScore(15);
-                }
-            }
-            */
-
+            _player.AddScore(5);
             _player.PlayClip(_explosionSoundEffect);
             DestroyEnemyShip();
         }
@@ -109,10 +91,10 @@ public class EnemyWaypointNavigation : MonoBehaviour
             }
 
             Destroy(other.gameObject);
-
             _player.PlayClip(_explosionSoundEffect);
             DestroyEnemyShip();
         }
+
     }
 
     public void DestroyEnemyShip()

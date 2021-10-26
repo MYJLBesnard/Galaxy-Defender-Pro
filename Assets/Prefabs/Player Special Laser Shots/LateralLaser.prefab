@@ -146,6 +146,6 @@ MonoBehaviour:
   _laserSpeed: 8
   _isPlayerLaser: 1
   _isEnemyLaser: 0
-  _isPlayerLateralLaser: 0
+  _isPlayerLateralLaser: 1
   _isEnemyRearShootingLaser: 0
   _isEnemyArcLaser: 0
