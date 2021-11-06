@@ -75,7 +75,10 @@ public class PowerUps : MonoBehaviour
             }
 
             AudioSource.PlayClipAtPoint(_powerUpAudioClip, transform.position);
-            Destroy(this.gameObject);
+            if (_powerUpID != 7)
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 }

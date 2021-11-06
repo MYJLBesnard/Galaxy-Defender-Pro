@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
         _pressToRestart.gameObject.SetActive(false);
         _pressForMainMenu.gameObject.SetActive(false);
         _pressEscapeToQuit.gameObject.SetActive(false);
-        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _playerBoxCollider2D = GameObject.Find("Player").GetComponent<BoxCollider2D>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();

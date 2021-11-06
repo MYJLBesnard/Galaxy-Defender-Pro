@@ -70,9 +70,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
-  m_SortingOrder: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 2e2c864d67fd446029c428ff9fdd31e7, type: 3}
-  m_Color: {r: 1, g: 0.060310125, b: 0, a: 0.62352943}
+  m_Color: {r: 0.9056604, g: 0.45322737, b: 0.20932718, a: 0.7019608}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -185,6 +185,7 @@ MonoBehaviour:
   _powerUpAudioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
+  _doNotDestroyPowerUpOnCollision: 0
 --- !u!1 &7320073279371689580
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,9 +256,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 7a19cf7dded3c495aabcd4ee2bdc494c, type: 3}
-  m_Color: {r: 0.19428623, g: 0.6981132, b: 0.25845838, a: 0.90588236}
+  m_Color: {r: 1, g: 0.9543792, b: 0.08018869, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -352,7 +353,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 4b8d082e1b53c47e1b753903cbd4aa28, type: 3}
-  m_Color: {r: 0.69803923, g: 0.5614772, b: 0.19607843, a: 0.90588236}
+  m_Color: {r: 0.33962262, g: 0.08190731, b: 0, a: 0.7921569}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0

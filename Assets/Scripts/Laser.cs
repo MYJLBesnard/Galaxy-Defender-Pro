@@ -7,7 +7,6 @@ public class Laser : MonoBehaviour
     [SerializeField] private float _laserSpeed = 8.0f;
     [SerializeField] private bool _isPlayerLaser = false, _isEnemyLaser = false, _isPlayerLateralLaser = false, _isEnemyRearShootingLaser = false, _isEnemyArcLaser = false;
 
-
     void Update()
     {
         if (_isPlayerLaser == true)
@@ -84,7 +83,6 @@ public class Laser : MonoBehaviour
 
         if (transform.position.x <= -13.0f)
         { 
-            Debug.Log("Left lateral off screen.");
             if(transform.parent != null)
             {
                 Destroy(transform.parent.gameObject);
@@ -97,7 +95,6 @@ public class Laser : MonoBehaviour
 
         if (transform.position.x >= 13.0f)
         {
-            Debug.Log("Right lateral off screen.");
             if (transform.parent != null)
             {
                 Destroy(transform.parent.gameObject);
@@ -107,7 +104,6 @@ public class Laser : MonoBehaviour
         }
     }
 
-
     public void AssignEnemyLaser()
     {
         _isEnemyLaser = true;
@@ -115,7 +111,6 @@ public class Laser : MonoBehaviour
         if (_isEnemyRearShootingLaser == true)
         {
             _isEnemyLaser = false;
-
         }
     }
 

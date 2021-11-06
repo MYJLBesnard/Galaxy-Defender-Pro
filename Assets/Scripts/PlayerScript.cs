@@ -6,6 +6,8 @@ public class PlayerScript : MonoBehaviour
 {
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private SpawnManager _spawnManager;
+    [SerializeField] private GameManager _gameManager;
+    private AudioSource _audioSource;
 
     [SerializeField] private int _numberOfProjectiles = 3;
     [Range(0, 360)][SerializeField] private float _spreadAngle = 30;
@@ -13,7 +15,6 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float _speed = 5.0f;
     private float _speedMultiplier = 1.75f;
 
-    [SerializeField] private int _lives = 3;
     [SerializeField] private int _score;
     [SerializeField] private int _ammoCount =20;
 
@@ -30,8 +31,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioClip _playerShieldsDepletedAudioClip;
     [SerializeField] private AudioClip _shipRepairsUnderwayAudioClip;
     [SerializeField] private AudioClip _explosionSoundEffect;
-    private AudioSource _audioSource;
-
+    
 
     [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab, _playerMissilesDispersed;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
@@ -39,17 +39,17 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
     [SerializeField] private GameObject _bigExplosionPrefab;
     [SerializeField] private GameObject _lateralLaserCanonLeft, _lateralLaserCanonRight;
+   // [SerializeField] private GameObject _leftEngineDamage, _rightEngineDamage;
+
 
     [Header("Tractor Beam Variables")]
     [SerializeField] private GameObject _tractorBeam;
+    [SerializeField] private bool _canPlayerUseTractorBeam;
     [SerializeField] private bool _isTractorBeamOn = false;
     private Vector3 _scaleChange; // scale of Tractor Beam
   
 
-    [SerializeField] private GameObject _leftEngineDamage, _rightEngineDamage;
-
     [SerializeField] private bool _hasPlayerLaserCooledDown = false;
-    
     [SerializeField] private bool _gameFirstStart = true;
     [SerializeField] private bool _asteroidDestroyed = false;
     [SerializeField] private bool _isPlayerTripleShotActive = false, _isPlayerShieldActive = false, _isPlayerSpeedBoostActive = false;
@@ -60,7 +60,7 @@ public class PlayerScript : MonoBehaviour
     private CameraShaker _camera;
 
     [Header("Thruster Core Variables")]
-    [SerializeField] private int coreTempDecrease;
+    [SerializeField] private int _coreTempDecrease;
     [SerializeField] private bool _coreTempCooledDown = true;
     [SerializeField] private bool _hasPlayerThrustersCooledDown = true;
     public ThrustersCoreTemp thrustersCoreTemp;
@@ -87,10 +87,12 @@ public class PlayerScript : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         _camera = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
         currentCoreTemp = 0;
         thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
         canPlayerUseThrusters = false;
+        _canPlayerUseTractorBeam = false;
 
         if (_spawnManager == null)
         {
@@ -112,7 +114,12 @@ public class PlayerScript : MonoBehaviour
             Debug.LogError("The CameraShaker on the Main Camera is null.");
         }
 
-    StartCoroutine(ResetPlayerPosition());
+        if (_gameManager == null)
+        {
+            Debug.Log("Game Manager is NULL.");
+        }
+
+        StartCoroutine(ResetPlayerPosition());
     }
 
     void Update()
@@ -144,12 +151,13 @@ public class PlayerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.T))
         {
-            CollectPowerUps.isPwrUpTractorBeamActive = true;
-            _tractorBeam.SetActive(true);
-            //ActivateMagnet._tractorBeam.SetActive(true);
-            _isTractorBeamOn = true;
-            Debug.Log("Tractor Beam is ACTIVE!!!");
-            StartCoroutine(DeactivatePwrUpTractorBeam());
+            if (_canPlayerUseTractorBeam == true)
+            {
+                CollectPowerUps.isPwrUpTractorBeamActive = true;
+                _tractorBeam.SetActive(true);
+                _isTractorBeamOn = true;
+                StartCoroutine(DeactivatePwrUpTractorBeam());
+            }
         }
 
         
@@ -173,7 +181,6 @@ public class PlayerScript : MonoBehaviour
     IEnumerator DeactivatePwrUpTractorBeam()
     {
         yield return new WaitForSeconds(10.0f);
-        Debug.Log("Tractor beam disactivated");
         CollectPowerUps.isPwrUpTractorBeamActive = false;
         _tractorBeam.SetActive(false);
         _isTractorBeamOn = false;
@@ -205,7 +212,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (currentCoreTemp > 0 && _coreTempCooledDown == true && canPlayerUseThrusters == true)
         {
-            currentCoreTemp -= coreTempDecrease;
+            currentCoreTemp -= _coreTempDecrease;
             thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
         }
 
@@ -237,7 +244,7 @@ public class PlayerScript : MonoBehaviour
 
         if (currentCoreTemp > 250 && _coreTempCooledDown == false)
         {
-            currentCoreTemp -= coreTempDecrease;
+            currentCoreTemp -= _coreTempDecrease;
             thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
 
             PlayerCoreTempExceededDrifting();
@@ -248,7 +255,7 @@ public class PlayerScript : MonoBehaviour
             _coreTempCooledDown = true;
             canPlayerUseThrusters = true;
             _uiManager.CoreShutdown(false);
-            currentCoreTemp -= coreTempDecrease;
+            currentCoreTemp -= _coreTempDecrease;
             thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
 
             _playerThrusterLeft.gameObject.SetActive(true);
@@ -333,7 +340,7 @@ public class PlayerScript : MonoBehaviour
             _speed *= _speedMultiplier;
         }
     }
-
+     
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -431,7 +438,6 @@ public class PlayerScript : MonoBehaviour
         _audioSource.PlayOneShot(soundEffectClip);
     }
 
-
     IEnumerator PlayerLaserCoolDownTimer()
     {
         yield return new WaitForSeconds(_playerRateOfFire);
@@ -443,8 +449,6 @@ public class PlayerScript : MonoBehaviour
         _score += points;
         _uiManager.UpdateScore(_score); // communicate with the UI to update the score
     }
-
-   
 
     // Damage() using the Lists and random damage locations
     public void Damage()
@@ -488,12 +492,12 @@ public class PlayerScript : MonoBehaviour
 
         if (poolDamageAnimations.Count == 0)
         {
-            _lives--;
-            _uiManager.UpdateLives(_lives);
+            _gameManager.DecreaseLives();
+            _uiManager.UpdateLives(_gameManager.lives);
             _camera.StartDamageCameraShake(0.2f, 0.35f);
             Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
 
-            if (_lives != 0)
+            if (_gameManager.lives != 0)
             {
                 ResetDamageAnimationList();
                 ResetStateOfCore();
@@ -507,7 +511,7 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if (_lives < 1)
+        if (_gameManager.lives < 1)
         {
             ResetStateOfCore();
             _spawnManager.OnPlayerDeath();
@@ -522,6 +526,7 @@ public class PlayerScript : MonoBehaviour
         _speed = 0;
         _hasPlayerLaserCooledDown = false;
         canPlayerUseThrusters = false;
+        _canPlayerUseTractorBeam = false;
 
         _uiManager.ReadySetGo();
         yield return new WaitForSeconds(0.8f);
@@ -532,6 +537,7 @@ public class PlayerScript : MonoBehaviour
         {
             _hasPlayerLaserCooledDown = true;
             canPlayerUseThrusters = true;
+            _canPlayerUseTractorBeam = true;
         }
 
         GetComponent<BoxCollider2D>().enabled = true;
@@ -595,8 +601,8 @@ public class PlayerScript : MonoBehaviour
         yield return new WaitForSeconds(5.0f);
         _hasPlayerLaserCooledDown = true;
         canPlayerUseThrusters = true;
+        _canPlayerUseTractorBeam = true;
     }
-
 
     public void TripleShotActivate()
     {
@@ -710,29 +716,27 @@ public class PlayerScript : MonoBehaviour
 
     public void NegativePowerUpCollision()
     {
-        Debug.Log("Something bad happens now...");
         int _itemLost = Random.Range(0, 4);
-        //int _itemLost = 2;
 
         switch (_itemLost)
         {
             case 0:
-                loseAmmo();
+                LoseAmmo();
                 break;
             case 1:
-                loseMissiles();
+                LoseMissiles();
                 break;
             case 2:
                 _coreOnline = false;
-                //StartCoroutine(LoseCore());
+                StartCoroutine(LoseCore());
                 break;
             case 3:
-                loseShields();
+                LoseShields();
                 break;
         }
     }
 
-    void loseAmmo()
+    void LoseAmmo()
     {
         _ammoCount -= (Random.Range(5, 10));
 
@@ -743,7 +747,7 @@ public class PlayerScript : MonoBehaviour
         _uiManager.UpdateAmmoCount(_ammoCount);
     }
 
-    void loseMissiles()
+    void LoseMissiles()
     {
         _homingMissileCount -= (Random.Range(1, 10));
         if (_homingMissileCount < 0)
@@ -778,7 +782,7 @@ public class PlayerScript : MonoBehaviour
         _coreOnline = true;
     }
 
-    void loseShields()
+    void LoseShields()
     {
         _isPlayerShieldActive = false;
         PlayClip(_playerShieldsDepletedAudioClip);

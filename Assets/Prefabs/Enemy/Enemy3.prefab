@@ -552,6 +552,8 @@ MonoBehaviour:
     type: 3}
   _enemyDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: 96b51ad5e8dc0492baf64f9be40d2bb0,
     type: 3}
+  _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
+    type: 3}
   _thrusters: {fileID: 2536265741832632996}
   _enemyType: 0
   _stopUpdating: 0

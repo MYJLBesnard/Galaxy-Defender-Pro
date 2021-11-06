@@ -11,6 +11,8 @@ TagManager:
   - NegativePowerUp
   - EnemyLaser
   - PlayerPowerUps
+  - LaserDoubleShotEnemy
+  - PlayerLaserDetectable
   layers:
   - Default
   - TransparentFX

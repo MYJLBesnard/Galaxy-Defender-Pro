@@ -327,7 +327,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1711311076662056672}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.03, y: 1.37, z: 0}
+  m_LocalPosition: {x: 0.03, y: 0.87, z: 0}
   m_LocalScale: {x: 0.428, y: 0.312, z: 2}
   m_Children:
   - {fileID: 6432292728187904171}
@@ -349,7 +349,6 @@ GameObject:
   - component: {fileID: 1890976018491554550}
   - component: {fileID: 5866150816719639248}
   - component: {fileID: 3495851661207778834}
-  - component: {fileID: 3961438793415551184}
   - component: {fileID: 327051933580180043}
   - component: {fileID: -1123748778842209572}
   m_Layer: 0
@@ -413,7 +412,7 @@ SpriteRenderer:
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 3154912113cbb4a498df6f571c74e18c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fd0618e1e310847758351e7bc4e1662e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -437,18 +436,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.006802082, y: -0.000000059604645}
+  m_Offset: {x: 0.0187459, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 5.12}
+    oldSize: {x: 1.72, y: 3.02}
     newSize: {x: 5.12, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.2496586, y: 2.8171816}
+  m_Size: {x: 1.413621, y: 2.8171816}
   m_EdgeRadius: 0
 --- !u!50 &3495851661207778834
 Rigidbody2D:
@@ -471,25 +470,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!95 &3961438793415551184
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3852028416767491656}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8f266237cd4114114b59d2db02280ef9, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!82 &327051933580180043
 AudioSource:
   m_ObjectHideFlags: 0
@@ -603,6 +583,8 @@ MonoBehaviour:
   _enemyLaserShotAudioClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc,
     type: 3}
   _enemyDoubleShotLaserPrefab: {fileID: 21412029935016340, guid: 96b51ad5e8dc0492baf64f9be40d2bb0,
+    type: 3}
+  _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
   _thrusters: {fileID: 1711311076662056672}
   _enemyType: 0
