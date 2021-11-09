@@ -117,28 +117,28 @@ public class SpawnManager : MonoBehaviour
 
                     case 3: // spawn dodging and speed burst Enemy
                         int type3 = 3;
-                        // int type3 = Random.Range(2, 4);
+                        //int type3 = Random.Range(2, 4);
                         _typeOfEnemy = _typesOfEnemy[type3];
                         enemyType = type3;
                         break;
 
                     case 4: // spawn dodging, speed burst Enemy and laser burst / Player Laser avoidance Enemy
-                        //int type4 = 4;
-                        int type4 = Random.Range(2, 5);
+                        int type4 = 4;
+                        //int type4 = Random.Range(2, 5);
                         _typeOfEnemy = _typesOfEnemy[type4];
                         enemyType = type4;
                         break;
 
                     case 5: // spawn all from case 4 plus rear shooting Enemy
-                        //int type5 = 5; 
-                        int type5 = Random.Range(3, 6);
+                        int type5 = 5; 
+                        //int type5 = Random.Range(3, 6);
                         _typeOfEnemy = _typesOfEnemy[type5];
                         enemyType = type5;
                         break;
 
                     case 6: // spawn all from case 5 plus arc laser Enemy
-                        //int type6 = 6; 
-                        int type6 = Random.Range(4, 7);
+                        int type6 = 6; 
+                        //int type6 = Random.Range(4, 7);
                         _typeOfEnemy = _typesOfEnemy[type6];
                         enemyType = type6;
                         break;

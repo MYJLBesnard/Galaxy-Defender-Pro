@@ -10,11 +10,12 @@ public class SceneManager_Bootstrapper : MonoBehaviour
     [SerializeField] private TMP_Text _introText2;
     [SerializeField] private TMP_Text _introText3;
 
+
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(FadeInOutIntroText());
-        Invoke("LoadMainMenu", 8.0f);
+        Invoke("LoadMainMenu", 10.0f);
 
         if (GameManager.instance) GameManager.instance.PlayMusic(3, 2.5f);
     }
@@ -26,6 +27,8 @@ public class SceneManager_Bootstrapper : MonoBehaviour
 
     IEnumerator FadeInOutIntroText()
     {
+        var pause = new WaitForSeconds(1.75f);
+
         float duration = 4.0f; //4.0 secs
         float currentTime = 0f;
         while (currentTime < duration)
@@ -42,6 +45,8 @@ public class SceneManager_Bootstrapper : MonoBehaviour
             currentTime += Time.deltaTime;
             yield return null;
         }
+
+        yield return pause;
 
         duration = 4.0f; //4.0 secs
         currentTime = 0f;
