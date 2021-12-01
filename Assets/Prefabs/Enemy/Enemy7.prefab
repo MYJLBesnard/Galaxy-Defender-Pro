@@ -243,7 +243,9 @@ MonoBehaviour:
     type: 3}
   _stopUpdating: 0
   _noSound: 0
-  _enemySpeed: 0
+  _isMineLayerArmed: 1
+  releasePoint: 0
+  enemySpeed: 0
 --- !u!82 &-8202999573936587093
 AudioSource:
   m_ObjectHideFlags: 0
@@ -253,7 +255,8 @@ AudioSource:
   m_GameObject: {fileID: 3731919677935117065}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 3206506425634432959, guid: e0f15b8043cfa471fbc1bf0bc927f9d0,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1

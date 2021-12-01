@@ -55,7 +55,28 @@ public class Enemy7 : MonoBehaviour // Mine Layer
 
     void DeployMines()
     {
-        Instantiate(_enemyRoamingSpaceMines, new Vector3(transform.position.x - 0.88f, transform.position.y, transform.position.z), Quaternion.identity);
+        float minesSpawnPoint = 0.88f;
+        int totalMines = 0;
+        int mineQty = 2 + _gameManager.currentLevelNumber + _gameManager.difficultyLevel;   // L1 D1 = 4, L7 D1 = 10
+                                                                                            // L1 D2 = 5, L7 D2 = 11
+                                                                                            // L1 D3 = 6, L7 D3 = 12
+                                                                                            // L1 D4 = 7, L7 D4 = 13
+
+        while (totalMines <= mineQty)
+        {
+            if (_gameManager.enemyMineLayerDirectionRight == true)
+            {
+                Instantiate(_enemyRoamingSpaceMines, new Vector3(transform.position.x - minesSpawnPoint,
+                    transform.position.y, transform.position.z), Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(_enemyRoamingSpaceMines, new Vector3(transform.position.x + minesSpawnPoint,
+                    transform.position.y, transform.position.z), Quaternion.identity);
+            }
+
+            totalMines++;
+        }
     }
 
     void Enemy7Damage()
@@ -69,18 +90,38 @@ public class Enemy7 : MonoBehaviour // Mine Layer
 
         if (_stopUpdating == false)
         {
-            transform.Translate(enemySpeed * Time.deltaTime * Vector3.right);
-
-            if (transform.position.x >= releasePoint && _isMineLayerArmed == true)
+            if (_gameManager.enemyMineLayerDirectionRight == true)
             {
-                DeployMines();
-                _isMineLayerArmed = false;
+                transform.Translate(enemySpeed * Time.deltaTime * Vector3.right);
+
+                if (transform.position.x >= releasePoint && _isMineLayerArmed == true)
+                {
+                    DeployMines();
+                    _isMineLayerArmed = false;
+                }
+
+                if (transform.position.x > 13.5f)
+                { 
+                    _noSound = true;
+                    DestroyEnemyShip();
+                }
             }
 
-            if (transform.position.x > 13.5f)
+            if (_gameManager.enemyMineLayerDirectionRight == false)
             {
-                _noSound = true;
-                DestroyEnemyShip();
+                transform.Translate(enemySpeed * Time.deltaTime * Vector3.right);
+
+                if (transform.position.x <= releasePoint && _isMineLayerArmed == true)
+                {
+                    DeployMines();
+                    _isMineLayerArmed = false;
+                }
+
+            if (transform.position.x < -13.5f)
+                {
+                    _noSound = true;
+                    DestroyEnemyShip();
+                }
             }
         }
     }

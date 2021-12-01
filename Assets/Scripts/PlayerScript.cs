@@ -120,6 +120,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         StartCoroutine(ResetPlayerPosition());
+        //_uiManager.UpdateLevelInfo();
     }
 
     void Update()
@@ -359,13 +360,13 @@ public class PlayerScript : MonoBehaviour
             transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 3.0f), 0);
         }
 
-        if (transform.position.x > 10.25f)
+        if (transform.position.x > 11.85f)
         {
-            transform.position = new Vector3(-10.25f, transform.position.y, 0);
+            transform.position = new Vector3(-11.85f, transform.position.y, 0);
         }
-        else if (transform.position.x < -10.25f)
+        else if (transform.position.x < -11.85f)
         {
-            transform.position = new Vector3(10.25f, transform.position.y, 0);
+            transform.position = new Vector3(11.85f, transform.position.y, 0);
         }
     }
 

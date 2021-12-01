@@ -991,70 +991,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb22edae0dcf4eb4bc7762b9befa071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  difficultyLevel: 1
   _isGameOver: 0
+  enemyMineLayerDirectionRight: 1
   Waves:
-  - Name: Wave 1
-    SizeOfWave: 1
+  - LevelNumber: 1
+    Name: Wave 1
+    SizeOfWave: 2
     EnemySpeed: 1
     EnemyLaserSpeed: 6
-    EnemyRateOfSpawningd: 5
+    EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
-    EnemySensorRange: 5
-    EnemyMineLayerChance: 101
-  - Name: Wave 2
-    SizeOfWave: 1
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 95
+  - LevelNumber: 2
+    Name: Wave 2
+    SizeOfWave: 2
+    EnemySpeed: 1.5
+    EnemyLaserSpeed: 6
+    EnemyRateOfSpawning: 5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 3
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 95
+  - LevelNumber: 3
+    Name: Wave 3
+    SizeOfWave: 2
     EnemySpeed: 2
     EnemyLaserSpeed: 6
-    EnemyRateOfSpawningd: 5
+    EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
-    EnemySensorRange: 5
-    EnemyMineLayerChance: 101
-  - Name: Wave 3
-    SizeOfWave: 1
-    EnemySpeed: 3
-    EnemyLaserSpeed: 6
-    EnemyRateOfSpawningd: 5
-    EnemyRateOfFire: 8
-    PowerUpRateOfSpawning: 3
-    EnemySensorRange: 5
-    EnemyMineLayerChance: 101
-  - Name: Wave 4
-    SizeOfWave: 1
-    EnemySpeed: 3.5
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 95
+  - LevelNumber: 4
+    Name: Wave 4
+    SizeOfWave: 2
+    EnemySpeed: 2.5
     EnemyLaserSpeed: 6.5
-    EnemyRateOfSpawningd: 5
+    EnemyRateOfSpawning: 5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 3
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 100
+  - LevelNumber: 5
+    Name: Wave 5
+    SizeOfWave: 2
+    EnemySpeed: 3
+    EnemyLaserSpeed: 7
+    EnemyRateOfSpawning: 5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 3
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 95
+  - LevelNumber: 6
+    Name: Wave 6
+    SizeOfWave: 2
+    EnemySpeed: 3.5
+    EnemyLaserSpeed: 7.5
+    EnemyRateOfSpawning: 5
     EnemyRateOfFire: 7
     PowerUpRateOfSpawning: 3
-    EnemySensorRange: 5
-    EnemyMineLayerChance: 101
-  - Name: Wave 5
-    SizeOfWave: 1
-    EnemySpeed: 4
-    EnemyLaserSpeed: 7
-    EnemyRateOfSpawningd: 4
-    EnemyRateOfFire: 6
-    PowerUpRateOfSpawning: 3
-    EnemySensorRange: 5
-    EnemyMineLayerChance: 95
-  - Name: Wave 6
-    SizeOfWave: 1
-    EnemySpeed: 4.5
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 93
+  - LevelNumber: 7
+    Name: Wave 7
+    SizeOfWave: 2
+    EnemySpeed: 3.5
     EnemyLaserSpeed: 7.5
-    EnemyRateOfSpawningd: 4
+    EnemyRateOfSpawning: 5
     EnemyRateOfFire: 6
     PowerUpRateOfSpawning: 3
-    EnemySensorRange: 5
-    EnemyMineLayerChance: 90
-  - Name: Wave 7
-    SizeOfWave: 1
-    EnemySpeed: 4.5
-    EnemyLaserSpeed: 7.5
-    EnemyRateOfSpawningd: 4
-    EnemyRateOfFire: 6
-    PowerUpRateOfSpawning: 3
-    EnemySensorRange: 5
+    EnemySensorRange: 4
     EnemyMineLayerChance: 90
   MusicClips:
   - {fileID: 8300000, guid: 5b17a0088dcdf924fa92da5af1e1be07, type: 3}
@@ -1084,7 +1093,8 @@ AudioSource:
   m_GameObject: {fileID: 1943936133}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -4003036020014572780, guid: e0f15b8043cfa471fbc1bf0bc927f9d0,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1

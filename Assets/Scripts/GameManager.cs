@@ -16,11 +16,12 @@ using System;
 [Serializable]
 public class LevelInfo
 {
+    public int LevelNumber = 1;  // Number of Level
     public string Name = null;  // Name of the Level
     public int SizeOfWave = 10;  // How many enemy ships in the wave
     public float EnemySpeed = 5.0f;    // Default speed of Enemy ships(seconds)
     public float EnemyLaserSpeed = 8.0f;     // Default speed of Enemy laser(seconds)
-    public float EnemyRateOfSpawningd = 5.0f;   // How often Enemy spawns (seconds)
+    public float EnemyRateOfSpawning = 5.0f;   // How often Enemy spawns (seconds)
     public float EnemyRateOfFire = 2.5f; // How often Enemy ships fire (seconds)
     public float PowerUpRateOfSpawning = 3.5f; // How often Power-Up spawns (seconds)
     public float EnemySensorRange = 3.0f; // How far the RayCast can sense a hit
@@ -41,28 +42,37 @@ public class LevelInfo
 // ---------------------------------------------------------------------------------
 public class GameManager : MonoBehaviour
 {
+    public int difficultyLevel = 1; // default difficulty level if not modified in Options Scene
+    public int graphicQualityLevel = 1; // default graphic quality set to Low
+    public float musicVolume = 0f;
+    public float SFXVolume = 0f;
     [SerializeField] private bool _isGameOver = false;
+    public bool enemyMineLayerDirectionRight = true;
+
 
     // A list of all the levels in the game (Inspector Assigned)
     [SerializeField]
     private List<LevelInfo> Waves = new List<LevelInfo>();
 
-    // A list of properties allowing external objects access to all the properties of the current level
+    // A list of properties allowing external objects access to all the properties of the current level.
+    // These are modified by the difficulty level selected.
     public int howManyLevels {  get { return Waves.Count; } }
+    public int currentLevelNumber { get { return Waves[_currentWave].LevelNumber; } }
     public string currentLevelName { get { return Waves[_currentWave].Name; } }
-    public int currentSizeOfWave { get { return Waves[_currentWave].SizeOfWave; } }
-    public float currentEnemySpeed { get { return Waves[_currentWave].EnemySpeed; } }
-    public float currentEnemyLaserSpeed { get { return Waves[_currentWave].EnemyLaserSpeed; } }
-    public float currentEnemyRateOfSpawning { get { return Waves[_currentWave].EnemyRateOfSpawningd; } }
-    public float currentEnemyRateOfFire { get { return Waves[_currentWave].EnemyRateOfFire; } }
-    public float currentPowerUpRateOfSpawning { get { return Waves[_currentWave].PowerUpRateOfSpawning; } }
-    public float currentEnemySensorRange {  get { return Waves[_currentWave].EnemySensorRange; } }
-    public float currentEnemyMineLayerChance { get { return Waves[_currentWave].EnemyMineLayerChance; } }
+    public int currentSizeOfWave { get { return Waves[_currentWave].SizeOfWave + (difficultyLevel * 2); } }
+    public float currentEnemySpeed { get { return Waves[_currentWave].EnemySpeed + difficultyLevel; } }
+    public float currentEnemyLaserSpeed { get { return Waves[_currentWave].EnemyLaserSpeed + difficultyLevel; } }
+    public float currentEnemyRateOfSpawning { get { return Waves[_currentWave].EnemyRateOfSpawning - difficultyLevel; } }
+    public float currentEnemyRateOfFire { get { return Waves[_currentWave].EnemyRateOfFire - difficultyLevel; } }
+    public float currentPowerUpRateOfSpawning { get { return Waves[_currentWave].PowerUpRateOfSpawning + difficultyLevel; } }
+    public float currentEnemySensorRange {  get { return Waves[_currentWave].EnemySensorRange + difficultyLevel; } }
+    public float currentEnemyMineLayerChance { get { return Waves[_currentWave].EnemyMineLayerChance - (currentLevelNumber * difficultyLevel); } }
 
 
-    // A list of AudioClips that can be played (such as varioius music tracks) which we
-    // can instruct the GameManager to play by index
-    [SerializeField]
+
+   // A list of AudioClips that can be played (such as varioius music tracks) which we
+   // can instruct the GameManager to play by index
+   [SerializeField]
     private List<AudioClip> MusicClips = new List<AudioClip>();
 
     // Used to cache AudioSource component
@@ -297,6 +307,7 @@ public class GameManager : MonoBehaviour
     {
             if (_currentWave < Waves.Count - 1)
                 _currentWave++;
+
     }
 
     // -------------------------------------------------------------------------------
@@ -318,7 +329,6 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Credits");
     }
-
 
 
     void Update()

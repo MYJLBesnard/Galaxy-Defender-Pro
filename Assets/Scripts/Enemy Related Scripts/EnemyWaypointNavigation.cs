@@ -7,7 +7,7 @@ public class EnemyWaypointNavigation : MonoBehaviour
     private PlayerScript _player;
     private SpawnManager _spawnManager;
     private GameManager _gameManager;
-    [SerializeField] public float _enemySpeed;
+    public float _enemySpeed;
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private GameObject _explosionPrefab;
     public float startWaitTime;

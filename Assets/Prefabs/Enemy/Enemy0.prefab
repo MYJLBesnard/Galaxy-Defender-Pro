@@ -378,7 +378,8 @@ AudioSource:
   m_GameObject: {fileID: 4590086578092343861}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 3206506425634432959, guid: e0f15b8043cfa471fbc1bf0bc927f9d0,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -486,7 +487,6 @@ MonoBehaviour:
   _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
   _thrusters: {fileID: 2320835120769483017}
-  _enemyType: 0
   _stopUpdating: 0
   _enemySpeed: 0
   _randomXStartPos: 0

@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private GameManager _gameManager;
+    [SerializeField] private UIManager _uiManager;
     [SerializeField] private PlayerScript _playerScript;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] public GameObject[] _playerPowerUps;
@@ -27,11 +28,17 @@ public class SpawnManager : MonoBehaviour
     private void Start()
     {
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
 
         if (_gameManager == null)
         {
             Debug.LogError("The Game Manager is null.");
+        }
+
+        if (_uiManager == null)
+        {
+            Debug.LogError("The UI Manager on the Canvas is null.");
         }
 
         if (_playerScript == null)
@@ -40,7 +47,6 @@ public class SpawnManager : MonoBehaviour
         }
 
         waveCurrent = _gameManager.currentWave;
-        //Debug.Log(_typesOfEnemy.Length);
     }
 
     public void EnemyShipsDestroyedCounter()
@@ -147,13 +153,29 @@ public class SpawnManager : MonoBehaviour
                         break;
                 }
 
+                // Mine Layer 
                 if (_triggerMineLayer >= _gameManager.currentEnemyMineLayerChance && _isMineLayerDeployed == false)
                 {
                     int type7 = 7;
                     _typeOfEnemy = _typesOfEnemy[type7];
-                    Vector3 pxToSpawnEnemy7 = new Vector3(-13.0f, _yPos, 0);
-                    GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawnEnemy7, Quaternion.identity);
-                    newEnemy.transform.parent = _enemyContainer.transform;
+                    int enemyDirection = Random.Range(0, 100);
+
+                    if (enemyDirection <= 50) // Mine Layer travels Left to Right
+                    {
+                        Vector3 pxToSpawnEnemy7 = new Vector3(-13.0f, _yPos, 0);
+                        GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawnEnemy7, Quaternion.identity);
+                        newEnemy.transform.parent = _enemyContainer.transform;
+                        _gameManager.enemyMineLayerDirectionRight = true;
+                    }
+                    else if (enemyDirection > 51) // Mine Layer travels Right to Left
+                    {
+                        Vector3 pxToSpawnEnemy7 = new Vector3(13.0f, _yPos, 0);
+                        GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawnEnemy7, Quaternion.identity);
+                        newEnemy.transform.Rotate(0, 0, 180);
+                        newEnemy.transform.parent = _enemyContainer.transform;
+                        _gameManager.enemyMineLayerDirectionRight = false;
+                    }
+
                     _isMineLayerDeployed = true;
 
                 }
@@ -185,6 +207,7 @@ public class SpawnManager : MonoBehaviour
         _stopSpawningEnemies = false;
         OnPlayerReady();
         StartSpawning();
+        _uiManager.UpdateLevelInfo();
     }
 
     IEnumerator SpawnPowerUps()
@@ -193,7 +216,7 @@ public class SpawnManager : MonoBehaviour
         while (_stopSpawning == false)
         {
             Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            int randomPowerUp = Random.Range(0, 8); // spawn Power Ups Elements 0 to 7
+            int randomPowerUp = Random.Range(0, _playerPowerUps.Length); // spawn Power Ups Elements 0 to Length of Array
             Instantiate(_playerPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
             yield return new WaitForSeconds(Random.Range(2f, 6f));
         }

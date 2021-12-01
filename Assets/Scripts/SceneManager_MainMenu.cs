@@ -11,6 +11,11 @@ public class SceneManager_MainMenu : MonoBehaviour
         if (GameManager.instance) GameManager.instance.PlayMusic(2, 5.0f);
     }
 
+    public void LoadOptions()
+    {
+        SceneManager.LoadScene("Options"); // Options Scene
+    }
+
     public void QuitGame()
     {
         Application.Quit();

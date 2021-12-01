@@ -30,6 +30,18 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _coreShutdownText;
     [SerializeField] private TMP_Text _coreTempStableText;
 
+    [SerializeField] private TMP_Text _TotalLevels;
+    [SerializeField] private TMP_Text _LevelNumber;
+    [SerializeField] private TMP_Text _LevelName;
+    [SerializeField] private TMP_Text _SizeOfWave;
+    [SerializeField] private TMP_Text _EnemySpeed;
+    [SerializeField] private TMP_Text _EnemyLaserSpeed;
+    [SerializeField] private TMP_Text _EnemyROS;
+    [SerializeField] private TMP_Text _EnemyROF;
+    [SerializeField] private TMP_Text _PowerUpROS;
+    [SerializeField] private TMP_Text _EnemySensorRng;
+    [SerializeField] private TMP_Text _EnemyMineLayerProb;
+
     [Header("Game Over Display")]
     [SerializeField] private TMP_Text _gameOverText;
     [SerializeField] private float _letterDisplayDelay;
@@ -67,6 +79,23 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("The Spawn Manager is null.");
         }
+
+        UpdateLevelInfo();
+    }
+
+    public void UpdateLevelInfo()
+    {
+        _TotalLevels.text = "Levels: " + _gameManager.howManyLevels.ToString(); 
+        _LevelNumber.text = "Current Level: " + _gameManager.currentLevelNumber.ToString();
+        _LevelName.text = "Level Name: " + _gameManager.currentLevelName.ToString();
+        _SizeOfWave.text = "Size of Wave: " + _gameManager.currentSizeOfWave.ToString();
+        _EnemySpeed.text = "Enemy Speed: " + _gameManager.currentEnemySpeed.ToString();
+        _EnemyLaserSpeed.text = "Enemy Laser Speed: " + _gameManager.currentEnemyLaserSpeed.ToString();
+        _EnemyROS.text = "Enemy ROS: " + _gameManager.currentEnemyRateOfSpawning.ToString();
+        _EnemyROF.text = "Enemy ROF: " + _gameManager.currentEnemyRateOfFire.ToString();
+        _PowerUpROS.text = "PU ROS: " + _gameManager.currentPowerUpRateOfSpawning.ToString();
+        _EnemySensorRng.text = "Enemy Sensor Rng: " + _gameManager.currentEnemySensorRange.ToString();
+        _EnemyMineLayerProb.text = "Mine Layer Prob: " + _gameManager.currentEnemyMineLayerChance.ToString();
     }
 
     public void ReadySetGo()
