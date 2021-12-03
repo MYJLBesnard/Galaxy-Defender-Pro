@@ -13,6 +13,7 @@ TagManager:
   - PlayerPowerUps
   - LaserDoubleShotEnemy
   - PlayerLaserDetectable
+  - BossLaserTurretShot
   layers:
   - Default
   - TransparentFX
