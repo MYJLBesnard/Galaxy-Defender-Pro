@@ -9,25 +9,31 @@ public class FireBossTurretLaser : MonoBehaviour
     public GameObject ExplosionEffect;
     public GameObject _turretLaserPrefab;
     [SerializeField] private bool _stopUpdating = false;
+    [SerializeField] private bool _bossStartShooting = false;
+
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
 
     void Start()
     {
+
+        StartCoroutine(BossStartShooting());
+
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
         if (_gameManager == null)
         {
             Debug.LogError("The Game Manager is null.");
         }
+
     }
 
     private void Update()
     {
-        if (Time.time > _enemyCanFire && _stopUpdating == false)
+        if (Time.time > _enemyCanFire && _stopUpdating == false && _bossStartShooting == true)
         {
             //_enemyRateOfFire = _gameManager.currentEnemyRateOfFire;
-            _enemyRateOfFire = 1.0f;
+            _enemyRateOfFire = 1.5f;
 
             _enemyCanFire = Time.time + _enemyRateOfFire;
 
@@ -42,6 +48,12 @@ public class FireBossTurretLaser : MonoBehaviour
 
             //PlayClip(_enemyLaserShotAudioClip);
         }
+    }
+
+    IEnumerator BossStartShooting()
+    {
+        yield return new WaitForSeconds(7.0f);
+        _bossStartShooting = true;
     }
 
     public void TurretLaserShot()

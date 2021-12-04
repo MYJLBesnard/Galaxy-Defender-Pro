@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerTransform: {fileID: 0}
-  speed: 5
+  speed: 12
 --- !u!1 &1345858882212011839
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerTransform: {fileID: 0}
-  speed: 5
+  speed: 12
 --- !u!1 &2147372738703332579
 GameObject:
   m_ObjectHideFlags: 0

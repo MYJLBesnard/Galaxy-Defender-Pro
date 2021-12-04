@@ -15,6 +15,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private AudioClip _warningIncomingWave;
     [SerializeField] private AudioClip _attackWaveRepelled;
     public Transform[] enemyWaypoints;
+    public Transform[] bossWaypoints;
     private GameObject _typeOfEnemy;
     private int _shipsInWave = 0;
     public int totalEnemyShipsDestroyed = 0;

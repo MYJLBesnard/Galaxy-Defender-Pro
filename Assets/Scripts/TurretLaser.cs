@@ -7,7 +7,7 @@ public class TurretLaser : MonoBehaviour
     
     private Vector3 normalizeDirection;
     public Transform _playerTransform;
-    public float speed = 5f;
+    public float speed = 12f;
 
     void Start()
     {
