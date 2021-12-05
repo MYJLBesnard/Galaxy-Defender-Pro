@@ -7,7 +7,7 @@ public class TrackPlayerGameObject : MonoBehaviour
 {
     private Rigidbody2D _rb;
     [SerializeField] private GameObject _playerGameObject;
-    [SerializeField] private float _rotateSpeed = 350f;
+    [SerializeField] private float _rotateSpeed = 500f;
 
     private void Start()
     {

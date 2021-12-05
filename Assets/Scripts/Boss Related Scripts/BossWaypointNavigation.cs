@@ -7,8 +7,8 @@ public class BossWaypointNavigation : MonoBehaviour
     private SpawnManager _spawnManager;
     private GameManager _gameManager;
     public float _enemySpeed;
-    [SerializeField] private AudioClip _explosionSoundEffect;
-    [SerializeField] private GameObject _explosionPrefab;
+ //   [SerializeField] private AudioClip _explosionSoundEffect;
+ //   [SerializeField] private GameObject _explosionPrefab;
     public float startWaitTime;
     private float waitTime;
     private int randomSpot;

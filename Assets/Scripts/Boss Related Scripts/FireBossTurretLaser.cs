@@ -33,7 +33,8 @@ public class FireBossTurretLaser : MonoBehaviour
         if (Time.time > _enemyCanFire && _stopUpdating == false && _bossStartShooting == true)
         {
             //_enemyRateOfFire = _gameManager.currentEnemyRateOfFire;
-            _enemyRateOfFire = 1.5f;
+            //_enemyRateOfFire = 1.5f;
+            _enemyRateOfFire = Random.Range(0.5f, 1.5f);
 
             _enemyCanFire = Time.time + _enemyRateOfFire;
 
@@ -52,7 +53,7 @@ public class FireBossTurretLaser : MonoBehaviour
 
     IEnumerator BossStartShooting()
     {
-        yield return new WaitForSeconds(7.0f);
+        yield return new WaitForSeconds(6.0f);
         _bossStartShooting = true;
     }
 

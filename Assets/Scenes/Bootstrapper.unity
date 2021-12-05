@@ -992,12 +992,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   difficultyLevel: 1
+  graphicQualityLevel: 1
+  musicVolume: 0
+  SFXVolume: 0
   _isGameOver: 0
   enemyMineLayerDirectionRight: 1
   Waves:
   - LevelNumber: 1
     Name: Wave 1
-    SizeOfWave: 2
+    SizeOfWave: 1
     EnemySpeed: 1
     EnemyLaserSpeed: 6
     EnemyRateOfSpawning: 5

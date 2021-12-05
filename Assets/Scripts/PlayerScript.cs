@@ -79,6 +79,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private bool _isPlayerLateralLaserActive = false;
     [SerializeField] private bool _coreOnline = true;
 
+    [SerializeField] public GameObject _enemyBoss;
+
     void Start()
     {
         _scaleChange = new Vector3(-0.25f, -0.25f, -0.25f);
@@ -93,6 +95,8 @@ public class PlayerScript : MonoBehaviour
         thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
         canPlayerUseThrusters = false;
         _canPlayerUseTractorBeam = false;
+
+        _enemyBoss.SetActive(false);
 
         if (_spawnManager == null)
         {

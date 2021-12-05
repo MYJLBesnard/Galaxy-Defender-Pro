@@ -19,6 +19,7 @@ public class SpawnManager : MonoBehaviour
     private GameObject _typeOfEnemy;
     private int _shipsInWave = 0;
     public int totalEnemyShipsDestroyed = 0;
+    public int bossTurretsDestroyed = 0;
     public int waveCurrent = 0;
     public int enemyType = 0;
     private float _xPos;
@@ -75,6 +76,20 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    public void BossTurretDestroyedCounter()
+    {
+        bossTurretsDestroyed++;
+
+        if (bossTurretsDestroyed == 3)
+        {
+            if (waveCurrent == _gameManager.howManyLevels - 1)
+
+            {
+                Debug.Log("Boss has no more turrets!");
+            }
+        }
+    }
+
     public void StartSpawning()
     {
         StartCoroutine(SpawnEnemyRoutine());
@@ -104,10 +119,16 @@ public class SpawnManager : MonoBehaviour
 
                 switch (_gameManager.currentWave)
                 {
+                    /*
                     case 0: // spawn basic Enenmy
                         int type0 = 0;
                         _typeOfEnemy = _typesOfEnemy[type0];
                         enemyType = type0;
+                        break;
+                    */
+
+                    case 0: // test activate Boss
+                        _playerScript._enemyBoss.SetActive(true);
                         break;
 
                     case 1: // spawn basic Enemy
