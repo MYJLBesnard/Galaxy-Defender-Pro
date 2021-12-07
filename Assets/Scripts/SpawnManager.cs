@@ -7,6 +7,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private PlayerScript _playerScript;
+    [SerializeField] private EnemyBoss _enemyBoss;
+    [SerializeField] public FireBossTurretLaser _fireBossTurretLaser;
     [SerializeField] private GameObject _enemyContainer;
     [SerializeField] public GameObject[] _playerPowerUps;
     [SerializeField] public GameObject[] _typesOfEnemy;
@@ -20,18 +22,26 @@ public class SpawnManager : MonoBehaviour
     private int _shipsInWave = 0;
     public int totalEnemyShipsDestroyed = 0;
     public int bossTurretsDestroyed = 0;
+    public int bossMiniGunsDestroyed = 0;
+    public int bossCanonsDestroyed = 0;
     public int waveCurrent = 0;
     public int enemyType = 0;
     private float _xPos;
     private float _yPos;
     private float _triggerMineLayer = 0f;
     [SerializeField] public bool _isMineLayerDeployed = false;
+    [SerializeField] private bool _bossTurretsDestroyed = false;
+    [SerializeField] private bool _bossMiniGunsDestroyed = false;
+    [SerializeField] private bool _bossCanonsDestroyed = false;
 
     private void Start()
     {
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
+        _enemyBoss = GameObject.Find("EnemyBoss").GetComponent<EnemyBoss>();
+        _fireBossTurretLaser = GameObject.Find("FireBossTurretLaser").GetComponent<FireBossTurretLaser>();
+
 
         if (_gameManager == null)
         {
@@ -48,7 +58,22 @@ public class SpawnManager : MonoBehaviour
             Debug.LogError("The PlayerScript is null.");
         }
 
+        if (_enemyBoss == null)
+        {
+            Debug.LogError("The Enemy Boss script is null.");
+        }
+
+        
+        if (_fireBossTurretLaser == null)
+        {
+            Debug.LogError("The FireBossTurretLaser script is null.");
+        }
+        
+
         waveCurrent = _gameManager.currentWave;
+
+        _fireBossTurretLaser.CountdownActiveTurrets();
+        Debug.Log("running script FireBossTurretLaser in Start method of SpawnManager");
     }
 
     public void EnemyShipsDestroyedCounter()
@@ -82,11 +107,46 @@ public class SpawnManager : MonoBehaviour
 
         if (bossTurretsDestroyed == 3)
         {
-            if (waveCurrent == _gameManager.howManyLevels - 1)
+            _bossTurretsDestroyed = true;
+            Debug.Log("Boss has no more turrets!");
+            BossWeaponsDestroyedCheck();
+        }
+    }
 
-            {
-                Debug.Log("Boss has no more turrets!");
-            }
+    public void BossMiniGunsDestroyedCounter()
+    {
+        bossMiniGunsDestroyed++;
+
+        if (bossMiniGunsDestroyed == 2)
+        {
+            _bossMiniGunsDestroyed = true;
+            Debug.Log("Boss has no more miniguns!");
+            BossWeaponsDestroyedCheck();
+        }
+    }
+
+    public void BossCanonsDestroyedCounter()
+    {
+        bossCanonsDestroyed++;
+
+        if (bossCanonsDestroyed == 2)
+        {
+            _bossCanonsDestroyed = true;
+            Debug.Log("Boss has no more canons!");
+            BossWeaponsDestroyedCheck();
+        }
+    }
+
+    public void BossWeaponsDestroyedCheck()
+    {
+        if (_bossTurretsDestroyed == true && _bossMiniGunsDestroyed == true && _bossCanonsDestroyed == true)
+        {
+            _enemyBoss.GetComponent<PolygonCollider2D>().enabled = true;
+            Debug.Log("Boss has no more weapons!");
+        }
+        else
+        {
+            Debug.Log("Boss is still armed!!!");
         }
     }
 
@@ -129,6 +189,8 @@ public class SpawnManager : MonoBehaviour
 
                     case 0: // test activate Boss
                         _playerScript._enemyBoss.SetActive(true);
+                        _enemyBoss.isEnemyBossActive = true;
+                        _fireBossTurretLaser.CountdownActiveTurrets();
                         break;
 
                     case 1: // spawn basic Enemy
@@ -203,9 +265,13 @@ public class SpawnManager : MonoBehaviour
                 }
                 else
                 {
-                    GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawn, Quaternion.identity);
-                    newEnemy.transform.parent = _enemyContainer.transform;
-                    _shipsInWave++;
+                    if(_enemyBoss.isEnemyBossActive != true)
+                    {
+                        GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawn, Quaternion.identity);
+                        newEnemy.transform.parent = _enemyContainer.transform;
+                        _shipsInWave++;
+                    }
+
                 }
             }
 

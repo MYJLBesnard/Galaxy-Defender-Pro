@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player and PowerUps)
 {
-    //private GameManager _gameManager;
+    private GameManager _gameManager;
     public EnemyBoss _enemyBossScript;
     public GameObject EnemyBoss;
     [SerializeField] private GameObject _enemyBossFixedWpnLaser;
@@ -13,13 +13,13 @@ public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player 
 
     private void Start()
     {
-        //_gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _enemyBossScript = EnemyBoss.GetComponent<EnemyBoss>();
     }
 
     void FixedUpdate()
     {
-           // RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, _gameManager.currentEnemySensorRange);
+           //RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, _gameManager.currentEnemySensorRange);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 5);
 
 
@@ -40,7 +40,7 @@ public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player 
             }
         }
 
-           // Debug.DrawRay(transform.position, Vector2.down * _gameManager.currentEnemySensorRange, Color.red);
+           //Debug.DrawRay(transform.position, Vector2.down * _gameManager.currentEnemySensorRange, Color.red);
         Debug.DrawRay(transform.position, Vector2.down * 5, Color.red);
 
     }

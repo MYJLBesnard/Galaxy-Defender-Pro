@@ -28,7 +28,7 @@ public class LeftTurretDamage : MonoBehaviour
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _audioSource = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        _leftTurretDamage = GameObject.Find("TurretShield").GetComponent<LeftTurretDamage>();
+        _leftTurretDamage = GameObject.Find("LeftTurret").GetComponent<LeftTurretDamage>();
 
         _craterPrefab.gameObject.SetActive(false);
 
@@ -97,7 +97,7 @@ public class LeftTurretDamage : MonoBehaviour
                 player.Damage();
             }
 
-            //_audioSource.Play();
+            _audioSource.Play();
             TurretDamage();
         }
 
@@ -110,7 +110,7 @@ public class LeftTurretDamage : MonoBehaviour
                 _player.AddScore(50);
             }
 
-            //_audioSource.Play();
+            _audioSource.Play();
             TurretDamage();
         }
 
@@ -123,7 +123,7 @@ public class LeftTurretDamage : MonoBehaviour
 
             Destroy(other.gameObject);
 
-            //_audioSource.Play();
+            _audioSource.Play();
             TurretDamage();
         }
     }
@@ -132,9 +132,9 @@ public class LeftTurretDamage : MonoBehaviour
     {
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
         _spawnManager.BossTurretDestroyedCounter();
-        //Destroy(this.gameObject, 0.1f);
+        Destroy(this.gameObject, 0.1f);
 
-        _leftTurretPrefab.gameObject.SetActive(false);
+        //_leftTurretPrefab.gameObject.SetActive(false);
         _craterPrefab.gameObject.SetActive(true);
 
         StartCoroutine(CraterDelay());

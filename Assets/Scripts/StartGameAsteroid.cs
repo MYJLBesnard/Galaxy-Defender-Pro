@@ -10,14 +10,16 @@ public class StartGameAsteroid : MonoBehaviour
     [SerializeField] private AudioClip _explosionSoundEffect;
     private SpawnManager _spawnManager;
     private PlayerScript _playerScript;
+    //[SerializeField] private EnemyBoss _enemyBoss;
+
 
     private void Start()
     {
         _asteroidSpeed = 2.0f;
 
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
-
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
+       // _enemyBoss = GameObject.Find("EnemyBoss").GetComponent<EnemyBoss>();
 
         if (_spawnManager == null)
         {
@@ -28,6 +30,13 @@ public class StartGameAsteroid : MonoBehaviour
         {
             Debug.Log("The PlayerScript is null.");
         }
+
+        /*
+        if (_enemyBoss == null)
+        {
+            Debug.LogError("The Enemy Boss script is null.");
+        }
+        */
     }
 
     void Update()
@@ -61,6 +70,7 @@ public class StartGameAsteroid : MonoBehaviour
             Destroy(other.gameObject);
             Destroy(this.gameObject, 0.5f);
             _playerScript.AsteroidDestroyed();
+            //_enemyBoss.isEnemyBossActive = true;
         }
     }
 }

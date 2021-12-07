@@ -5,17 +5,19 @@ using UnityEngine;
 public class EnemyBoss : MonoBehaviour
 {
     private PlayerScript _player;
-    private SpawnManager _spawnManager;
+   // private SpawnManager _spawnManager;
     private GameManager _gameManager;
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private AudioClip _enemyLaserShotAudioClip;
     [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private GameObject _explosionPrefab;
+    public bool isEnemyBossActive = true;
 
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
-        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+      //  _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _audioSource = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
@@ -42,6 +44,7 @@ public class EnemyBoss : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        /*
         if (other.tag == "Player")
         {
             PlayerScript player = other.transform.GetComponent<PlayerScript>();
@@ -51,9 +54,10 @@ public class EnemyBoss : MonoBehaviour
                 player.Damage();
             }
 
-            //_audioSource.Play();
-            DestroyEnemyShip();
+            _audioSource.Play();
+            DestroyEnemyBossShip();
         }
+        */
 
         if (other.tag == "LaserPlayer")
         {
@@ -64,8 +68,8 @@ public class EnemyBoss : MonoBehaviour
                 _player.AddScore(40);
             }
 
-            //_audioSource.Play();
-            DestroyEnemyShip();
+            _audioSource.Play();
+            DestroyEnemyBossShip();
         }
 
         if (other.tag == "PlayerHomingMissile")
@@ -77,17 +81,18 @@ public class EnemyBoss : MonoBehaviour
 
             Destroy(other.gameObject);
 
-            //_audioSource.Play();
-            DestroyEnemyShip();
+            _audioSource.Play();
+            DestroyEnemyBossShip();
         }
     }
 
-    private void DestroyEnemyShip()
+    private void DestroyEnemyBossShip()
     {
-        _spawnManager.EnemyShipsDestroyedCounter();
-        Destroy(GetComponent<Rigidbody2D>());
-        Destroy(GetComponent<BoxCollider2D>());
-        Destroy(this.gameObject, 2.8f);
+        Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+
+        Debug.Log("Boss has yaken a hit!!!");
+
+        //Destroy(this.gameObject, 2.8f);
     }
 }
 

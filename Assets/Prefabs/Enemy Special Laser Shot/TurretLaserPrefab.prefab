@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5765558027010481758}
   m_Layer: 0
   m_Name: TurretLaserLeft
-  m_TagString: BossLaserTurretShot
+  m_TagString: EnemyLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 4819709725445777471}
   m_Layer: 0
   m_Name: TurretLaserRight
-  m_TagString: BossLaserTurretShot
+  m_TagString: EnemyLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 1539109894552335175}
   m_Layer: 0
   m_Name: TurretLaserPrefab
-  m_TagString: BossLaserTurretShot
+  m_TagString: EnemyLaser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

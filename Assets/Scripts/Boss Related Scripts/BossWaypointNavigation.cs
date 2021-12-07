@@ -6,6 +6,7 @@ public class BossWaypointNavigation : MonoBehaviour
 {
     private SpawnManager _spawnManager;
     private GameManager _gameManager;
+    private EnemyBoss _enemyBoss;
     public float _enemySpeed;
  //   [SerializeField] private AudioClip _explosionSoundEffect;
  //   [SerializeField] private GameObject _explosionPrefab;
@@ -17,6 +18,8 @@ public class BossWaypointNavigation : MonoBehaviour
     {
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _enemyBoss = GameObject.Find("EnemyBoss").GetComponent<EnemyBoss>();
+
         randomSpot = Random.Range(0, _spawnManager.bossWaypoints.Length);
         waitTime = startWaitTime;
        
@@ -29,13 +32,23 @@ public class BossWaypointNavigation : MonoBehaviour
         {
             Debug.LogError("The Spawn Manageris null.");
         }
+
+        if (_enemyBoss == null)
+        {
+            Debug.LogError("The Enemy Boss script is null.");
+        }
+
+       // _enemyBoss.isEnemyBossActive = true; //******************************************************************
+
     }
 
     void Update()
     {
+        //_enemySpeed = _gameManager.currentBossEnemySpeed;
         _enemySpeed = 1.5f;
 
         transform.position = Vector2.MoveTowards(transform.position, _spawnManager.bossWaypoints[randomSpot].position, _enemySpeed * Time.deltaTime);
+
 
         if (Vector2.Distance(transform.position, _spawnManager.bossWaypoints[randomSpot].position) < 0.2f)
         {

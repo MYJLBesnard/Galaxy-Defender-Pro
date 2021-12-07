@@ -67,8 +67,6 @@ public class FrontalShieldDamage : MonoBehaviour
                 case 3:
                     _isFrontalShieldActive = false;
                     _frontalShield.SetActive(false);
-                   // _minigunLeftPrefab.GetComponent<BoxCollider2D>().enabled = true;
-                   // _minigunRightPrefab.GetComponent<BoxCollider2D>().enabled = true;
                     break;
             }
             return;
@@ -86,7 +84,7 @@ public class FrontalShieldDamage : MonoBehaviour
                 player.Damage();
             }
 
-            //_audioSource.Play();
+            _audioSource.Play();
             FrontalShield();
         }
 
@@ -99,7 +97,7 @@ public class FrontalShieldDamage : MonoBehaviour
                 _player.AddScore(50);
             }
 
-            //_audioSource.Play();
+            _audioSource.Play();
             FrontalShield();
         }
 
@@ -112,7 +110,7 @@ public class FrontalShieldDamage : MonoBehaviour
 
             Destroy(other.gameObject);
 
-            //_audioSource.Play();
+            _audioSource.Play();
             FrontalShield();
         }
     }

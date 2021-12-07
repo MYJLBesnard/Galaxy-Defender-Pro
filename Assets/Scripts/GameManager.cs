@@ -26,6 +26,8 @@ public class LevelInfo
     public float PowerUpRateOfSpawning = 3.5f; // How often Power-Up spawns (seconds)
     public float EnemySensorRange = 3.0f; // How far the RayCast can sense a hit
     public float EnemyMineLayerChance = 5.0f; // % (out of 100) that a Enemy Mine Layer will spawn
+    public float BossEnemySpeed = 1.5f;    // Default speed of Boss Enemy ships(seconds)
+
 }
 
 // ---------------------------------------------------------------------------------
@@ -67,12 +69,13 @@ public class GameManager : MonoBehaviour
     public float currentPowerUpRateOfSpawning { get { return Waves[_currentWave].PowerUpRateOfSpawning + difficultyLevel; } }
     public float currentEnemySensorRange {  get { return Waves[_currentWave].EnemySensorRange + difficultyLevel; } }
     public float currentEnemyMineLayerChance { get { return Waves[_currentWave].EnemyMineLayerChance - (currentLevelNumber * difficultyLevel); } }
+    public float currentBossEnemySpeed { get { return Waves[_currentWave].BossEnemySpeed + difficultyLevel; } }
 
 
 
-   // A list of AudioClips that can be played (such as varioius music tracks) which we
-   // can instruct the GameManager to play by index
-   [SerializeField]
+    // A list of AudioClips that can be played (such as varioius music tracks) which we
+    // can instruct the GameManager to play by index
+    [SerializeField]
     private List<AudioClip> MusicClips = new List<AudioClip>();
 
     // Used to cache AudioSource component

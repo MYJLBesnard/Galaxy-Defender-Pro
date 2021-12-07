@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemyBossCanons : MonoBehaviour
 {
     private PlayerScript _player;
+    private SpawnManager _spawnManager;
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private GameObject _explosionPrefab;
@@ -12,11 +13,17 @@ public class EnemyBossCanons : MonoBehaviour
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _audioSource = GetComponent<AudioSource>();
 
         if (_player == null)
         {
             Debug.Log("The PlayerScript is null.");
+        }
+
+        if (_spawnManager == null)
+        {
+            Debug.Log("The SpawnManager is null.");
         }
 
         if (_audioSource == null)
@@ -74,6 +81,7 @@ public class EnemyBossCanons : MonoBehaviour
     private void DestroyCanon()
     {
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        _spawnManager.BossCanonsDestroyedCounter();
         Destroy(GetComponent<Rigidbody2D>());
         Destroy(GetComponent<BoxCollider2D>());
         Destroy(this.gameObject, 0.5f);

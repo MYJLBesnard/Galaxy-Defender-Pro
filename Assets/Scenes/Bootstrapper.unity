@@ -1008,6 +1008,7 @@ MonoBehaviour:
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
     EnemyMineLayerChance: 95
+    BossEnemySpeed: 1.5
   - LevelNumber: 2
     Name: Wave 2
     SizeOfWave: 2
@@ -1018,6 +1019,7 @@ MonoBehaviour:
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
     EnemyMineLayerChance: 95
+    BossEnemySpeed: 1.5
   - LevelNumber: 3
     Name: Wave 3
     SizeOfWave: 2
@@ -1028,6 +1030,7 @@ MonoBehaviour:
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
     EnemyMineLayerChance: 95
+    BossEnemySpeed: 1.5
   - LevelNumber: 4
     Name: Wave 4
     SizeOfWave: 2
@@ -1038,6 +1041,7 @@ MonoBehaviour:
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
     EnemyMineLayerChance: 100
+    BossEnemySpeed: 1.5
   - LevelNumber: 5
     Name: Wave 5
     SizeOfWave: 2
@@ -1048,6 +1052,7 @@ MonoBehaviour:
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
     EnemyMineLayerChance: 95
+    BossEnemySpeed: 1.5
   - LevelNumber: 6
     Name: Wave 6
     SizeOfWave: 2
@@ -1058,6 +1063,7 @@ MonoBehaviour:
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
     EnemyMineLayerChance: 93
+    BossEnemySpeed: 1.5
   - LevelNumber: 7
     Name: Wave 7
     SizeOfWave: 2
@@ -1068,6 +1074,7 @@ MonoBehaviour:
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
     EnemyMineLayerChance: 90
+    BossEnemySpeed: 1.5
   MusicClips:
   - {fileID: 8300000, guid: 5b17a0088dcdf924fa92da5af1e1be07, type: 3}
   - {fileID: 8300000, guid: d8b4c3ae028624f3c8880ee1f8c3dcdc, type: 3}
