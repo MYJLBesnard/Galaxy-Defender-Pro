@@ -14,7 +14,7 @@ public class CollectPowerUps : MonoBehaviour
 
     void Update()
     {
-        if (isPwrUpTractorBeamActive)
+        if (isPwrUpTractorBeamActive && _player != null)
         {
             MoveTowardsPlayer();
         }

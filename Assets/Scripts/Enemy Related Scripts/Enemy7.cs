@@ -175,8 +175,7 @@ public class Enemy7 : MonoBehaviour // Mine Layer
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
         }
 
-        _spawnManager._isMineLayerDeployed = false;
-        //_spawnManager.EnemyShipsDestroyedCounter();
+        _spawnManager.isMineLayerDeployed = false;
         _stopUpdating = true;
         _thrusters.SetActive(false);
         Destroy(GetComponent<Rigidbody2D>());

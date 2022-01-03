@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
@@ -9,25 +10,21 @@ using TMPro;
 public class SceneManager_Options : MonoBehaviour
 {
     private GameManager _gameManager;
+    private FadeEffect _fadeEffect;
     public AudioMixer audioMixer;
     public TMP_Dropdown difficultyDropdown;
-    public TMP_Dropdown graphicsDropdown;
-    public TMP_Dropdown resolutionDropdown;
     public Slider musicSlider;
-    public Slider SFXSlider;
     public AudioSource audioSource;
-    public AudioClip testSFXAudioClip;
-
-    Resolution[] resolutions;
 
     private void Start()
     {
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _fadeEffect = GameObject.Find("CanvasFader").GetComponent<FadeEffect>();
         audioSource = GetComponent<AudioSource>();
 
         if (_gameManager == null)
         {
-            Debug.Log("Game Manager is NULL.");
+            Debug.Log("Game Manager is NULL (Options).");
         }
 
         if (audioSource == null)
@@ -35,45 +32,73 @@ public class SceneManager_Options : MonoBehaviour
             Debug.LogError("The audio source is null.");
         }
 
-        int CurrentResolutionIndex = 0;
-        resolutions = Screen.resolutions;
-        resolutionDropdown.ClearOptions();
-        List<string> options = new List<string>();
-
-        for (int i = 0; i < resolutions.Length; i++)
-        {
-            string option = resolutions[i].width + " x " + resolutions[i].height + " @ " + resolutions[i].refreshRate + " Hz";
-            options.Add(option);
-
-            if (resolutions[i].width == Screen.currentResolution.width &&
-            resolutions[i].height == Screen.currentResolution.height)
-            {
-                CurrentResolutionIndex = i;
-            }
-        }
-
-        resolutionDropdown.AddOptions(options);
-        resolutionDropdown.value = CurrentResolutionIndex;
-        resolutionDropdown.RefreshShownValue();
-
         SetDifficulty(_gameManager.difficultyLevel - 1);
         difficultyDropdown.SetValueWithoutNotify(_gameManager.difficultyLevel - 1);
 
-        SetGraphicsQuality(_gameManager.graphicQualityLevel - 1);
-        graphicsDropdown.SetValueWithoutNotify(_gameManager.graphicQualityLevel - 1);
-
         musicSlider.value = _gameManager.musicVolume;
-        SFXSlider.value = _gameManager.SFXVolume;
 
+        _fadeEffect.FadeIn();
     }
 
-    public void SetResolution(int ResolutionIndex)
+    private void Update()
     {
-        Resolution resolution = resolutions[ResolutionIndex];
-        Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+        // Looks for key inputs to set the difficulty level.  Default is Rookie.
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        { 
+            difficultyDropdown.value = 0; // Rookie
+            SetDifficulty(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            difficultyDropdown.value = 1; // Space Cadet
+            SetDifficulty(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            difficultyDropdown.value = 2; // Space Captain
+            SetDifficulty(2);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            difficultyDropdown.value = 3; // Galaxy Defender
+            SetDifficulty(3);
+        }
+
+        if (Input.GetKey(KeyCode.Alpha6)) // Music Volume Increase
+        {
+            float musVolInc = 0.2f;
+            float newVol = _gameManager.musicVolume + musVolInc;
+            if (newVol > 0)
+            {
+                _gameManager.musicVolume = 0;
+            }
+            SetMusicVolume(_gameManager.musicVolume + musVolInc);
+            musicSlider.value = _gameManager.musicVolume;
+        }
+
+        if (Input.GetKey(KeyCode.Alpha5)) // Music Volume Decrease
+        {
+            float musVolDec = -0.2f;
+            float newVol = _gameManager.musicVolume + musVolDec;
+            if (newVol < -20)
+            {
+                _gameManager.musicVolume = -20;
+            }
+            SetMusicVolume(_gameManager.musicVolume + musVolDec);
+            musicSlider.value = _gameManager.musicVolume;
+        }
+
+        if (Input.GetKeyDown(KeyCode.B)) // returns to Main Menu scene
+        {
+            _fadeEffect.FadeOut();
+            StartCoroutine(BackToMainMenuDelay());
+        }
     }
 
-    public void SetDifficulty(int val)
+    public void SetDifficulty(int val) // Sets difficulty level when dropdown manipulated
     {
             switch (val)
             {
@@ -92,39 +117,29 @@ public class SceneManager_Options : MonoBehaviour
             }
     }
 
-    public void SetGraphicsQuality(int qualityIndex)
-    {
-        QualitySettings.SetQualityLevel(qualityIndex);
-        _gameManager.graphicQualityLevel = qualityIndex + 1;
-    }
-
-    public void SetFullScreen(bool isFullScreen)
-    {
-        Screen.fullScreen = isFullScreen;
-    }
-
-    public void SetMusicVolume(float volumeMusic)
+    public void SetMusicVolume(float volumeMusic) // Sets Music volume when volume slider manipulated.
+                                                  // See the SceneManager_Options_SFXVol and SceneManager_Options_DialogueVol
+                                                  // scripts to make changes to the SFX or Dialogue volume management.
     {
         audioMixer.SetFloat("Music", volumeMusic);
         _gameManager.musicVolume = volumeMusic;
     }
 
-    public void SetSFXVolume(float volumeSFX)
+    public void FadeBackToMainMenu()
     {
-        audioMixer.SetFloat("SFX", volumeSFX);
-        _gameManager.SFXVolume = volumeSFX;
-        audioSource.PlayOneShot(testSFXAudioClip);
+        _fadeEffect.FadeOut();
+        StartCoroutine(BackToMainMenuDelay());
     }
 
-    public void LoadGame()
+    IEnumerator BackToMainMenuDelay() // Loads a new game
     {
-        SceneManager.LoadScene("Game"); // Game Scene
-        if (GameManager.instance) GameManager.instance.PlayMusic(2, 5.0f);
+        yield return new WaitForSeconds(2.0f);
+        BackToMainMenu();
     }
 
-    public void Back()
+    public void BackToMainMenu() // Returns to the Main Menu scene
     {
-        SceneManager.LoadScene("Main Menu"); // Game Scene
-        if (GameManager.instance) GameManager.instance.PlayMusic(3, 5.0f);
+        _gameManager.comingFromInstructionsScene = false;
+        SceneManager.LoadScene("Main Menu");
     }
 }

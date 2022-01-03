@@ -48,8 +48,6 @@ public class FrontalShieldDamage : MonoBehaviour
 
     void FrontalShield()
     {
-        Debug.Log("Running LTD on LeftTurret script");
-
         if (_isFrontalShieldActive == true)
         {
             _frontalShieldHits++;

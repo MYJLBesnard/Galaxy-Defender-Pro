@@ -8,18 +8,25 @@ public class StartGameAsteroid : MonoBehaviour
     [SerializeField] private bool _startOfGame = true;
     [SerializeField] private GameObject _explosionPrefab;
     [SerializeField] private AudioClip _explosionSoundEffect;
+    private GameManager _gameManager;
     private SpawnManager _spawnManager;
     private PlayerScript _playerScript;
-    //[SerializeField] private EnemyBoss _enemyBoss;
+    //private EndOfLevelDialogue _endOfLevelDialogue;
 
 
     private void Start()
     {
         _asteroidSpeed = 2.0f;
 
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
-       // _enemyBoss = GameObject.Find("EnemyBoss").GetComponent<EnemyBoss>();
+        //_endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();  //************************************
+
+        if (_gameManager == null)
+        {
+            Debug.Log("The GameManager is null.");
+        }
 
         if (_spawnManager == null)
         {
@@ -32,11 +39,13 @@ public class StartGameAsteroid : MonoBehaviour
         }
 
         /*
-        if (_enemyBoss == null)
+        if (_endOfLevelDialogue == null)
         {
-            Debug.LogError("The Enemy Boss script is null.");
+            Debug.Log("Dialogue Player is NULL.");
         }
         */
+
+        _gameManager.CachePlayerScript();
     }
 
     void Update()
@@ -65,12 +74,10 @@ public class StartGameAsteroid : MonoBehaviour
         if (other.tag == "LaserPlayer" || other.tag == "PlayerHomingMissile")
         {
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
-
             _playerScript.PlayClip(_explosionSoundEffect);
             Destroy(other.gameObject);
             Destroy(this.gameObject, 0.5f);
             _playerScript.AsteroidDestroyed();
-            //_enemyBoss.isEnemyBossActive = true;
         }
     }
 }

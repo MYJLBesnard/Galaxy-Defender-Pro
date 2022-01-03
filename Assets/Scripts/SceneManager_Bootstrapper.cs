@@ -1,19 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using TMPro;
 
 public class SceneManager_Bootstrapper : MonoBehaviour
 {
+    private GameManager _gameManager;
+
     [SerializeField] private TMP_Text _introText1;
     [SerializeField] private TMP_Text _introText2;
     [SerializeField] private TMP_Text _introText3;
 
-
     // Start is called before the first frame update
     void Start()
     {
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+
+        if (_gameManager == null)
+        {
+            Debug.Log("Game Manager is NULL (Bootstrapper).");
+        }
+
         StartCoroutine(FadeInOutIntroText());
         Invoke("LoadMainMenu", 10.0f);
 

@@ -59,8 +59,6 @@ public class LeftTurretDamage : MonoBehaviour
 
     void TurretDamage()
     {
-        Debug.Log("Running LTD on LeftTurret script");
-
         if (_isLeftTurretShieldActive == true)
         {
             _leftTurretShieldHits++;
@@ -97,7 +95,7 @@ public class LeftTurretDamage : MonoBehaviour
                 player.Damage();
             }
 
-            _audioSource.Play();
+ //           _audioSource.Play();
             TurretDamage();
         }
 
@@ -110,7 +108,7 @@ public class LeftTurretDamage : MonoBehaviour
                 _player.AddScore(50);
             }
 
-            _audioSource.Play();
+ //           _audioSource.Play();
             TurretDamage();
         }
 
@@ -123,7 +121,7 @@ public class LeftTurretDamage : MonoBehaviour
 
             Destroy(other.gameObject);
 
-            _audioSource.Play();
+ //           _audioSource.Play();
             TurretDamage();
         }
     }
@@ -131,10 +129,9 @@ public class LeftTurretDamage : MonoBehaviour
     public void DestroyLeftTurret()
     {
         Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+        _audioSource.Play(); //**************************************************************
         _spawnManager.BossTurretDestroyedCounter();
         Destroy(this.gameObject, 0.1f);
-
-        //_leftTurretPrefab.gameObject.SetActive(false);
         _craterPrefab.gameObject.SetActive(true);
 
         StartCoroutine(CraterDelay());

@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PowerUps : MonoBehaviour
 {
-    [SerializeField] private float _speedOfPowerUps = .5f;
+    [SerializeField] private GameManager _gameManager;
+    [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
+  //  [SerializeField] private float _speedOfPowerUps = .5f;
     [SerializeField] private int _powerUpID;  // ID for PwrUp:
                                               // 0 = Triple Shot,
                                               // 1 = Speed Boost,
@@ -19,11 +21,27 @@ public class PowerUps : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector3.down * _speedOfPowerUps * Time.deltaTime);
+        transform.Translate(Vector3.down * _gameManager.currentPowerUpSpeed * Time.deltaTime);
 
-        if (transform.position.y < -7.0f)
+        if (transform.position.y < -9.0f)
         {
             Destroy(this.gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();  //************************************
+
+        if (_gameManager == null)
+        {
+            Debug.Log("Game Manager Player is NULL.");
+        }
+
+        if (_endOfLevelDialogue == null)
+        {
+            Debug.Log("Dialogue Player is NULL.");
         }
     }
 
@@ -44,7 +62,11 @@ public class PowerUps : MonoBehaviour
 
             if (player != null)
             {
-                player.PlayClip(_powerUpAudioClip);
+                if (_endOfLevelDialogue.powerUpAudioIsBossDefeated == false)
+                {
+                    _endOfLevelDialogue.PlayPowerUpDialogue(_powerUpAudioClip);
+                }
+
                 switch (_powerUpID)
                 {
                     case 0:
@@ -75,6 +97,7 @@ public class PowerUps : MonoBehaviour
             }
 
             AudioSource.PlayClipAtPoint(_powerUpAudioClip, transform.position);
+
             if (_powerUpID != 7)
             {
                 Destroy(this.gameObject);

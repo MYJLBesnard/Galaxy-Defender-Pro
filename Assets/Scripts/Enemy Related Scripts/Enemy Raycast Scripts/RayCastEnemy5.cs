@@ -21,7 +21,6 @@ public class RayCastEnemy5 : MonoBehaviour // Fires Rear Burst
 
             if (hit.collider != null)
             {
-                //Debug.Log(hit.collider.tag);
                 if (hit.collider.tag == "Player" && hit.distance <= _gameManager.currentEnemySensorRange)
             {
                     RunRearLaserBurst();

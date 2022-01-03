@@ -143,7 +143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec64c6fb7d7c463d97b7ec39da6c78a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerTransform: {fileID: 0}
+  _playerTransform: {fileID: 2782251405102421824, guid: a0882e4187fae4bb0ace22fcc1c1a8e2,
+    type: 3}
+  _enemyBossDefaultAimPoint: {fileID: 0}
   speed: 12
 --- !u!1 &1345858882212011839
 GameObject:
@@ -288,7 +290,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec64c6fb7d7c463d97b7ec39da6c78a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerTransform: {fileID: 0}
+  _playerTransform: {fileID: 2782251405102421824, guid: a0882e4187fae4bb0ace22fcc1c1a8e2,
+    type: 3}
+  _enemyBossDefaultAimPoint: {fileID: 0}
   speed: 12
 --- !u!1 &2147372738703332579
 GameObject:

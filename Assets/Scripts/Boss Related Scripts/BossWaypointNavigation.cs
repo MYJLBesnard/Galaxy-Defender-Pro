@@ -18,7 +18,7 @@ public class BossWaypointNavigation : MonoBehaviour
     {
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        _enemyBoss = GameObject.Find("EnemyBoss").GetComponent<EnemyBoss>();
+        _enemyBoss = GameObject.Find("EnemyBoss(Clone)").GetComponent<EnemyBoss>();
 
         randomSpot = Random.Range(0, _spawnManager.bossWaypoints.Length);
         waitTime = startWaitTime;
@@ -44,8 +44,7 @@ public class BossWaypointNavigation : MonoBehaviour
 
     void Update()
     {
-        //_enemySpeed = _gameManager.currentBossEnemySpeed;
-        _enemySpeed = 1.5f;
+        _enemySpeed = _gameManager.currentBossEnemySpeed;
 
         transform.position = Vector2.MoveTowards(transform.position, _spawnManager.bossWaypoints[randomSpot].position, _enemySpeed * Time.deltaTime);
 

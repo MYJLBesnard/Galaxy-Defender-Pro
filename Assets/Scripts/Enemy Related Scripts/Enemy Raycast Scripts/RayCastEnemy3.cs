@@ -22,7 +22,6 @@ public class RayCastEnemy3 : MonoBehaviour // Speed Burst
 
             if (hit.collider != null)
             {
-                //Debug.Log(hit.collider.tag);
                 if (hit.collider.tag == "Player")
                 {
                     RunSpeedBurst();

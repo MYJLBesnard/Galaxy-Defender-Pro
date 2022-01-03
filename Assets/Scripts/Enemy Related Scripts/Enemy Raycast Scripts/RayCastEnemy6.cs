@@ -20,7 +20,6 @@ public class RayCastEnemy6 : MonoBehaviour // Fires Arc Laser
 
             if (hit.collider != null)
             {
-                //Debug.Log(hit.collider.tag);
                 if (hit.collider.tag == "Player" && hit.distance <= _gameManager.currentEnemySensorRange)
                 {
                     RunArcLaserBurst();

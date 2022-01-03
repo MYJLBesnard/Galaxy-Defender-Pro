@@ -6,16 +6,11 @@ public class IncomingPlayerLaserDetection : MonoBehaviour // Laser Burst (target
 {
     [SerializeField] public int randomNumber;
 
-
-    //private GameManager _gameManager;
     public Enemy4 _enemy4Script;
     public GameObject Enemy4;
-    //public GameObject PlayerLaserDetector;
-    //[SerializeField] private GameObject _enemyDoubleShotLaserPrefab;
 
     private void Start()
     {
-        //_gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
         _enemy4Script = Enemy4.GetComponent<Enemy4>();
     }
     
@@ -23,8 +18,6 @@ public class IncomingPlayerLaserDetection : MonoBehaviour // Laser Burst (target
     {
         if (other.tag == "PlayerLaserDetectable")
         {
-                Debug.Log("Incoming Player Laser!");
-
             RunEnemy4Dodge();
         }
     }

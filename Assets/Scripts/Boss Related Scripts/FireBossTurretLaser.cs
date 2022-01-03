@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//[RequireComponent(typeof(Rigidbody2D))]
 public class FireBossTurretLaser : MonoBehaviour
 {
     private GameManager _gameManager;
+    private SpawnManager _spawnManager;
     [SerializeField] private EnemyBoss _enemyBoss;
     public GameObject explosionEffect;
     public GameObject turretLaserPrefab;
@@ -20,16 +20,21 @@ public class FireBossTurretLaser : MonoBehaviour
     {
         if (_enemyBoss.isEnemyBossActive == true)
         {
-            Debug.Log("going to coroutine now...");
             StartCoroutine(BossStartShooting());
         }
 
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        _enemyBoss = GameObject.Find("EnemyBoss").GetComponent<EnemyBoss>();
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        _enemyBoss = GameObject.Find("EnemyBoss(Clone)").GetComponent<EnemyBoss>();
 
         if (_gameManager == null)
         {
             Debug.LogError("The Game Manager is null.");
+        }
+
+        if (_spawnManager == null)
+        {
+            Debug.LogError("The Spawn Manager is null.");
         }
 
         if (_enemyBoss == null)
@@ -40,38 +45,41 @@ public class FireBossTurretLaser : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time > _enemyCanFire && bossStartShooting == true) /*_stopUpdating == false && */ 
+        if (_spawnManager.isPlayerDestroyed == false)
         {
+            if (Time.time > _enemyCanFire && bossStartShooting == true && _enemyBoss.isEnemyBossActive == true)
 
-            _enemyRateOfFire = Random.Range(0.5f, 1.5f);
-            _enemyCanFire = Time.time + _enemyRateOfFire;
-
-            TurretLaserShot();
-
-            Laser[] lasers = turretLaserPrefab.GetComponentsInChildren<Laser>();
-
-            for (int i = 0; i < lasers.Length; i++)
             {
-                lasers[i].AssignEnemyLaser();
-            }
+                _enemyRateOfFire = Random.Range(1.5f, 3.5f);
+                _enemyCanFire = Time.time + _enemyRateOfFire;
 
-            //PlayClip(_enemyLaserShotAudioClip);
+                if (_gameManager.currentEnemyRateOfFire != 0)
+                {
+                    if (_spawnManager.isPlayerDestroyed == false)
+                    {
+                        GameObject bossTurretLaser = Instantiate(turretLaserPrefab, transform.position, transform.rotation);
+                        bossTurretLaser.transform.parent = _spawnManager._enemyContainer.transform;
+                    }
+                }
+
+                //PlayClip(_enemyLaserShotAudioClip);
+            }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
 
-            if (other.tag == "Player")
-            {
-                PlayerScript player = other.GetComponent<PlayerScript>();
+        if (other.tag == "Player")
+        {
+            PlayerScript player = other.GetComponent<PlayerScript>();
 
-                if (player != null)
-                {
-                    player.Damage();
-                    Destroy(this.gameObject);
-                }
+            if (player != null)
+            {
+                player.Damage();
+                Destroy(this.gameObject);
             }
+        }
 
             //_audioSource.Play();
     }
@@ -83,15 +91,8 @@ public class FireBossTurretLaser : MonoBehaviour
 
     IEnumerator BossStartShooting()
     {
-        Debug.Log("counting 6 seconds");
-        yield return new WaitForSeconds(6.0f);
+        yield return new WaitForSeconds(600.0f); // sets the delay before the Boss starts firing from his main turrets
         bossStartShooting = true;
-        Debug.Log("finished counting.  bool now: " + bossStartShooting);
-    }
-
-    public void TurretLaserShot()
-    {
-        Instantiate(turretLaserPrefab, transform.position, transform.rotation);
     }
 }
 

@@ -3,15 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TurretLaser : MonoBehaviour    // moves the Boss turret laser shots towards the position of Player at that moment in time
-                                            // Shot fired doesn't track player.
+                                            // Shot fired doesn't track player, they are only aligned to the line of sight between turret and Player
+                                            // posiiton at time shot fired.
 {
+    private GameManager _gameManager;
+    private SpawnManager _spawnManager;
     private Vector3 normalizeDirection;
     public Transform _playerTransform;
     public float speed = 12f;
 
     void Start()
     {
-        if (!_playerTransform) _playerTransform = GameObject.Find("Player").transform;
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        if (_gameManager == null)
+        {
+            Debug.LogError("The Game Manager is null.");
+        }
+
+        _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
+        if (_spawnManager == null)
+        {
+            Debug.LogError("The Spawn Manager is null.");
+        }
+
+        if (!_playerTransform && _spawnManager.isPlayerDestroyed == false) _playerTransform = GameObject.Find("Player").transform; // turrets track Player transform
 
         normalizeDirection = (_playerTransform.position - transform.position).normalized;
     }
@@ -42,6 +57,11 @@ public class TurretLaser : MonoBehaviour    // moves the Boss turret laser shots
             {
                 player.Damage();
                 Destroy(this.gameObject);
+
+                if (transform.parent != null)
+                {
+                    Destroy(transform.parent.gameObject);
+                }
             }
         }
 

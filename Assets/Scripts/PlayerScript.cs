@@ -1,22 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.IO;
 
 public class PlayerScript : MonoBehaviour
 {
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private SpawnManager _spawnManager;
     [SerializeField] private GameManager _gameManager;
-    private AudioSource _audioSource;
+    private FadeEffect _fadeEffect;
+    [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
+    public AudioSource audioSource;
 
     [SerializeField] private int _numberOfProjectiles = 3;
-    [Range(0, 360)][SerializeField] private float _spreadAngle = 30;
+    [Range(0, 360)] [SerializeField] private float _spreadAngle = 30;
     [SerializeField] private float _playerRateOfFire = 0.15f;
     [SerializeField] private float _speed = 5.0f;
     private float _speedMultiplier = 1.75f;
 
     [SerializeField] private int _score;
-    [SerializeField] private int _ammoCount =20;
+    [SerializeField] private int _ammoCount = 20;
 
     [SerializeField] private AudioClip _powerupAudioClip;
     [SerializeField] private AudioClip _asteroidBlockingSensors;
@@ -31,26 +35,29 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioClip _playerShieldsDepletedAudioClip;
     [SerializeField] private AudioClip _shipRepairsUnderwayAudioClip;
     [SerializeField] private AudioClip _explosionSoundEffect;
-    
 
+    [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab, _playerMissilesDispersed;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
     [SerializeField] private GameObject _playerThrusterLeft, _playerThrusterRight;
     [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
     [SerializeField] private GameObject _bigExplosionPrefab;
     [SerializeField] private GameObject _lateralLaserCanonLeft, _lateralLaserCanonRight;
-   // [SerializeField] private GameObject _leftEngineDamage, _rightEngineDamage;
-
 
     [Header("Tractor Beam Variables")]
     [SerializeField] private GameObject _tractorBeam;
+    public TractorBeam tractorBeam;
+    public int minTractorBeam = 0;
+    public int maxTractorBeam = 1000;
+    public int currentTractorBeam = 1000;
     [SerializeField] private bool _canPlayerUseTractorBeam;
     [SerializeField] private bool _isTractorBeamOn = false;
     private Vector3 _scaleChange; // scale of Tractor Beam
-  
+
 
     [SerializeField] private bool _hasPlayerLaserCooledDown = false;
     [SerializeField] private bool _gameFirstStart = true;
+    [SerializeField] private bool _isPlayerInPosition = false;
     [SerializeField] private bool _asteroidDestroyed = false;
     [SerializeField] private bool _isPlayerTripleShotActive = false, _isPlayerShieldActive = false, _isPlayerSpeedBoostActive = false;
 
@@ -73,30 +80,33 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private float _playerShieldAlpha = 1.0f;
 
     [SerializeField] private GameObject _playerHomingMissilePrefab;
-    [SerializeField] private bool _isPlayerHomingMissilesActivate = false; 
-    [SerializeField] private int _homingMissileCount = 0;
+    [SerializeField] private bool _isPlayerHomingMissilesActivate = false;
+    [SerializeField] private int _homingMissileCount = 20;
 
     [SerializeField] private bool _isPlayerLateralLaserActive = false;
     [SerializeField] private bool _coreOnline = true;
 
-    [SerializeField] public GameObject _enemyBoss;
+    public GameObject enemyBoss;
 
     void Start()
     {
         _scaleChange = new Vector3(-0.25f, -0.25f, -0.25f);
-        transform.position = new Vector3(0, 0, 0);
+        transform.position = new Vector3(0, -12, 0);
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        _audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         _camera = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _fadeEffect = GameObject.Find("CanvasFader").GetComponent<FadeEffect>();
+        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();
+
+        currentTractorBeam = 1000;
+        tractorBeam.SetTractorBeam(currentTractorBeam);
+        _canPlayerUseTractorBeam = false;
 
         currentCoreTemp = 0;
         thrustersCoreTemp.SetCoreTemp(currentCoreTemp);
         canPlayerUseThrusters = false;
-        _canPlayerUseTractorBeam = false;
-
-        _enemyBoss.SetActive(false);
 
         if (_spawnManager == null)
         {
@@ -108,7 +118,7 @@ public class PlayerScript : MonoBehaviour
             Debug.LogError("The UI Manager on the Canvas is null.");
         }
 
-        if (_audioSource == null)
+        if (audioSource == null)
         {
             Debug.LogError("The audio source is null.");
         }
@@ -123,16 +133,46 @@ public class PlayerScript : MonoBehaviour
             Debug.Log("Game Manager is NULL.");
         }
 
-        StartCoroutine(ResetPlayerPosition());
-        //_uiManager.UpdateLevelInfo();
+        if (_endOfLevelDialogue == null)
+        {
+            Debug.Log("Dialogue Player is NULL.");
+        }
+
+        _gameManager.PlayMusic(1, 5.0f);
+        _fadeEffect.FadeIn();
     }
 
     void Update()
     {
+        // Moves the Player from off screen into start position at -4.5f on the Y-axis
+        if (_isPlayerInPosition == false)
+        {
+            transform.Translate(1.25f * Time.deltaTime * Vector3.up);
+
+            if (transform.position.y >= -4.5f)
+            {
+                transform.position = new Vector3(transform.position.x, -4.5f, 0);
+                _isPlayerInPosition = true;
+            }
+
+            if (_isPlayerInPosition == true)
+            {
+                StartCoroutine(ResetPlayerPosition());
+            }
+        }
+
+        if (_gameManager.continueToNextDifficultyLevel == true)
+        {
+            _spawnManager.AdvanceToNextLevel();
+            _gameManager.continueToNextDifficultyLevel = false;
+        }
+
         if (_gameFirstStart == false)
         {
             CalculateMovement();
             CalculateThrustersScale();
+            ActivateTractorBeam();
+            DeactivateTractorBeam(2);
             ThrusterCoreLogic();
 
             if (_coreOnline == false)
@@ -154,42 +194,24 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (_canPlayerUseTractorBeam == true)
-            {
-                CollectPowerUps.isPwrUpTractorBeamActive = true;
-                _tractorBeam.SetActive(true);
-                _isTractorBeamOn = true;
-                StartCoroutine(DeactivatePwrUpTractorBeam());
-            }
-        }
-
-        
-        if (_isTractorBeamOn == true)
-        {
-            _tractorBeam.transform.localScale += _scaleChange * 1f;
-
-            if (_tractorBeam.transform.localScale.y < 4.0f || _tractorBeam.transform.localScale.y > 40.0f)
-            {
-                _scaleChange = -_scaleChange * 1f;
-            }
-        }
-        
-
         if (_homingMissileCount == 0)
         {
             _isPlayerHomingMissilesActivate = false;
         }
     }
 
-    IEnumerator DeactivatePwrUpTractorBeam()
+    public void ContinueOptionTxt()
     {
-        yield return new WaitForSeconds(10.0f);
-        CollectPowerUps.isPwrUpTractorBeamActive = false;
-        _tractorBeam.SetActive(false);
-        _isTractorBeamOn = false;
+        _uiManager.continueOptionTxt.gameObject.SetActive(true);
+        _uiManager.playerDecidesYes.gameObject.SetActive(true);
+        _uiManager.playerDecidesNo.gameObject.SetActive(true);
+    }
 
+    public void TurnOffContinueOptionText()
+    {
+        _uiManager.continueOptionTxt.gameObject.SetActive(false);
+        _uiManager.playerDecidesYes.gameObject.SetActive(false);
+        _uiManager.playerDecidesNo.gameObject.SetActive(false);
     }
 
     private void FireHomingMissile()
@@ -197,7 +219,60 @@ public class PlayerScript : MonoBehaviour
         Instantiate(_playerHomingMissilePrefab, transform.position + new Vector3(0, -0.141f, 0), Quaternion.identity);
         _homingMissileCount--;
         _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+    }
 
+    void ActivateTractorBeam()
+    {
+        if (Input.GetKey(KeyCode.T)) // Turns on the Tractor Beam
+        {
+            if (_canPlayerUseTractorBeam == true && currentTractorBeam > minTractorBeam)
+            {
+                CollectPowerUps.isPwrUpTractorBeamActive = true;
+                _tractorBeam.SetActive(true);
+                _isTractorBeamOn = true;
+                PlayerTractorBeamActivate(5);
+            }
+        }
+
+        void PlayerTractorBeamActivate(int tractorBeamDecrease)
+        {
+            currentTractorBeam -= tractorBeamDecrease;
+            tractorBeam.SetTractorBeam(currentTractorBeam);
+            if (currentTractorBeam < 0)
+            {
+                currentTractorBeam = 0;
+
+                CollectPowerUps.isPwrUpTractorBeamActive = false;
+                _tractorBeam.SetActive(false);
+                _isTractorBeamOn = false;
+            }
+
+            if (_isTractorBeamOn == true)
+            {
+                _tractorBeam.transform.localScale += _scaleChange * 1f;
+
+                if (_tractorBeam.transform.localScale.y < 4.0f || _tractorBeam.transform.localScale.y > 40.0f)
+                {
+                    _scaleChange = -_scaleChange * 1f;
+                }
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.T)) // Turns off the Tractor Beam
+        {
+            CollectPowerUps.isPwrUpTractorBeamActive = false;
+            _tractorBeam.SetActive(false);
+            _isTractorBeamOn = false;
+        }
+    }
+
+    void DeactivateTractorBeam(int tractorBeamIncrease) // replenish TB when T released
+    {
+        if (currentTractorBeam < maxTractorBeam)
+        {
+            currentTractorBeam += tractorBeamIncrease;
+            tractorBeam.SetTractorBeam(currentTractorBeam);
+        }
     }
 
     void CalculateThrustersScale()
@@ -278,16 +353,16 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator PlayWarningCoreTempCritical()
     {
-        _audioSource.PlayOneShot(_warningCoreTempCritical);
+        _endOfLevelDialogue.PlayDialogueClip(_warningCoreTempCritical);
         yield return new WaitForSeconds(3.0f);
         resetExceededCoreTempWarning = false;
-
     }
 
     IEnumerator PlayWarningCoreTempExceeded()
     {
-        _audioSource.Stop();
-        _audioSource.PlayOneShot(_warningCoreTempExceeded);
+        _endOfLevelDialogue.StopDialogueAudio();
+        _endOfLevelDialogue.PlayDialogueClip(_warningCoreTempExceeded);
+
         yield return new WaitForSeconds(5.0f);
     }
 
@@ -299,7 +374,7 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator AnimateRotationTowards(Transform target, Quaternion rot, float dur)
     {
-        PlayClip(_coreTempNominal); //************
+        _endOfLevelDialogue.PlayDialogueClip(_coreTempNominal);
 
         float t = 0f;
         Quaternion start = target.rotation;
@@ -321,7 +396,7 @@ public class PlayerScript : MonoBehaviour
         _playerThrusterRight.gameObject.SetActive(false);
         _hasPlayerLaserCooledDown = false;
         _speed = 0.25f;
-        transform.Rotate(Vector3.forward * -50f * Time.deltaTime);
+        transform.Rotate(-50f * Time.deltaTime * Vector3.forward);
     }
 
     void PlayerThrustersActivate(int coreTempIncrease)
@@ -345,7 +420,7 @@ public class PlayerScript : MonoBehaviour
             _speed *= _speedMultiplier;
         }
     }
-     
+
     void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -364,13 +439,13 @@ public class PlayerScript : MonoBehaviour
             transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 3.0f), 0);
         }
 
-        if (transform.position.x > 11.85f)
+        if (transform.position.x > 13.2f)
         {
-            transform.position = new Vector3(-11.85f, transform.position.y, 0);
+            transform.position = new Vector3(-13.2f, transform.position.y, 0);
         }
-        else if (transform.position.x < -11.85f)
+        else if (transform.position.x < -13.2f)
         {
-            transform.position = new Vector3(11.85f, transform.position.y, 0);
+            transform.position = new Vector3(13.2f, transform.position.y, 0);
         }
     }
 
@@ -440,7 +515,10 @@ public class PlayerScript : MonoBehaviour
 
     public void PlayClip(AudioClip soundEffectClip)
     {
-        _audioSource.PlayOneShot(soundEffectClip);
+        if (soundEffectClip != null)
+        {
+            audioSource.PlayOneShot(soundEffectClip);
+        }
     }
 
     IEnumerator PlayerLaserCoolDownTimer()
@@ -466,17 +544,17 @@ public class PlayerScript : MonoBehaviour
             {
                 case 1:
                     _playerShieldAlpha = 0.75f;
-                    PlayClip(_playerShields65AudioClip);
+                    _endOfLevelDialogue.PlayPowerUpDialogue(_playerShields65AudioClip);
                     _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
                     break;
                 case 2:
                     _playerShieldAlpha = 0.40f;
-                    PlayClip(_playerShields35AudioClip);
+                    _endOfLevelDialogue.PlayPowerUpDialogue(_playerShields35AudioClip);
                     _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
                     break;
                 case 3:
                     _isPlayerShieldActive = false;
-                    PlayClip(_playerShieldsDepletedAudioClip);
+                    _endOfLevelDialogue.PlayPowerUpDialogue(_playerShieldsDepletedAudioClip);
                     _playerShield.SetActive(false);
                     break;
             }
@@ -504,7 +582,7 @@ public class PlayerScript : MonoBehaviour
 
             if (_gameManager.lives != 0)
             {
-                ResetDamageAnimationList();
+                //ResetDamageAnimationList();
                 ResetStateOfCore();
                 StartCoroutine(DisperseHomingMissiles());
 
@@ -527,15 +605,23 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator ResetPlayerPosition()
     {
+        if (_gameFirstStart == false)
+        {
+            GetComponent<SpriteRenderer>().enabled = false;
+        }
         GetComponent<BoxCollider2D>().enabled = false;
         _speed = 0;
         _hasPlayerLaserCooledDown = false;
         canPlayerUseThrusters = false;
         _canPlayerUseTractorBeam = false;
+        _gameManager.isPlayerDestroyed = true;
+        ResetDamageAnimationList();
 
         _uiManager.ReadySetGo();
         yield return new WaitForSeconds(0.8f);
-        transform.position = new Vector3(0, 0, 0);
+        transform.position = new Vector3(0, -4.5f, 0); // Player returns to default start position
+        GetComponent<SpriteRenderer>().enabled = true;
+
         yield return new WaitForSeconds(3.2f);
 
         if (_asteroidDestroyed == true)
@@ -577,7 +663,7 @@ public class PlayerScript : MonoBehaviour
 
     public void ResetStateOfCore()
     {
-        _audioSource.Stop();
+        _endOfLevelDialogue.StopDialogueAudio();
         transform.rotation = Quaternion.identity;
         _uiManager.CoreTempStable(false);
         _uiManager.CoreTempWarning(false);
@@ -595,9 +681,15 @@ public class PlayerScript : MonoBehaviour
         StartCoroutine(WarningIncomingWave(3.0f));
     }
 
+    public void BossDefeatedRestartNextDifficultyLevel()
+    {
+        _spawnManager.SetupBossAlien(); // sets up Boss Alien (or resets SpawnManager when Player defeats Boss and continues at higher Difficulty Level) 
+        StartCoroutine(WarningIncomingWave(3.0f));
+    }
+
     public void AsteroidBlockingSensors()
     {
-        PlayClip(_asteroidBlockingSensors);
+        _endOfLevelDialogue.PlayDialogueClip(_asteroidBlockingSensors);
         StartCoroutine(WeaponsFree());
     }
 
@@ -647,7 +739,7 @@ public class PlayerScript : MonoBehaviour
             poolDamageAnimations.Add(temp);
             temp.SetActive(false);
             activatedDamageAnimations.Remove(temp);
-            PlayClip(_shipRepairsUnderwayAudioClip);
+            _endOfLevelDialogue.PlayPowerUpDialogue(_shipRepairsUnderwayAudioClip);
         }
     }
 
@@ -655,7 +747,7 @@ public class PlayerScript : MonoBehaviour
     {
         _isPlayerShieldActive = true;
         _playerShield.SetActive(true);
-        PlayClip(_playerShields100AudioClip);
+        _endOfLevelDialogue.PlayPowerUpDialogue(_playerShields100AudioClip);
         _shieldHits = 0;
         _playerShieldAlpha = 1.0f;
         _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
@@ -703,6 +795,19 @@ public class PlayerScript : MonoBehaviour
         _isPlayerLateralLaserActive = false;
         _lateralLaserCanonLeft.SetActive(false);
         _lateralLaserCanonRight.SetActive(false);
+
+        Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
+        Instantiate(_spawnManager.depletedLateralLaserCanons, transform.position, Quaternion.identity);
+        
+        transform.Translate(Vector3.down * _gameManager.currentPowerUpSpeed * Time.deltaTime);
+
+        if (transform.position.y < -9.0f)
+        {
+            Destroy(this.gameObject);
+        }
+
+        _lateralLaserCanonLeft.SetActive(false);
+        _lateralLaserCanonRight.SetActive(false);
     }
 
     IEnumerator SpeedBoostPowerDownTimer()
@@ -715,7 +820,7 @@ public class PlayerScript : MonoBehaviour
     IEnumerator WarningIncomingWave(float time)
     {
         yield return new WaitForSeconds(time);
-        PlayClip(_warningIncomingWave);
+        _endOfLevelDialogue.PlayDialogueClip(_warningIncomingWave);
         _spawnManager.StartSpawning();
     }
 
@@ -790,11 +895,11 @@ public class PlayerScript : MonoBehaviour
     void LoseShields()
     {
         _isPlayerShieldActive = false;
-        PlayClip(_playerShieldsDepletedAudioClip);
+        _endOfLevelDialogue.PlayPowerUpDialogue(_playerShieldsDepletedAudioClip);
         _playerShield.SetActive(false);
     }
 
-        IEnumerator RotatePlayerUp(Transform target, Quaternion rot, float dur)
+    IEnumerator RotatePlayerUp(Transform target, Quaternion rot, float dur)
         {
             float t = 0f;
             Quaternion start = target.rotation;

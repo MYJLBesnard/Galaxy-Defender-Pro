@@ -20,25 +20,21 @@ public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player 
     void FixedUpdate()
     {
            //RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, _gameManager.currentEnemySensorRange);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 5);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1); // was 5
 
 
         if (hit.collider != null)
             {
-                if (hit.collider.tag == "Player")
+                if (hit.collider.tag == "Player" && _enemyBossScript.isEnemyBossActive == true) // stops miniguns from firing on Player when he is respawning and powerless
                 {
-                Debug.Log("Raycast from Boss hit Player");
-
                     RunLaserBurst();
                 }
 
                 if (hit.collider.tag == "PlayerPowerUps")
                 {
-                Debug.Log("Raycast from Boss hit PowerUp");
-
                     RunLaserBurst();
+                }
             }
-        }
 
            //Debug.DrawRay(transform.position, Vector2.down * _gameManager.currentEnemySensorRange, Color.red);
         Debug.DrawRay(transform.position, Vector2.down * 5, Color.red);
@@ -47,9 +43,7 @@ public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player 
 
     public void RunLaserBurst()
     {
-        Debug.Log("Firing Boss laser weapons straight down");
         StartCoroutine(LaserBurst());
-
     }
 
     public IEnumerator LaserBurst()

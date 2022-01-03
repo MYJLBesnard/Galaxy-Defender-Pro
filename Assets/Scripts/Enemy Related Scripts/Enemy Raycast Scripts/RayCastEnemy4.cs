@@ -33,7 +33,6 @@ public class RayCastEnemy4 : MonoBehaviour // Laser Burst (targets Player and Po
 
                 if (hit.collider.tag == "LaserPlayer")
                 {
-                    Debug.Log("Incoming Player Laser! - RayCast 4");
                     RunEnemy4Dodge();
                 }
             }

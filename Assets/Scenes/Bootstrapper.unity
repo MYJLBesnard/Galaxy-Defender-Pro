@@ -702,6 +702,72 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &721257957
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 721257960}
+  - component: {fileID: 721257959}
+  - component: {fileID: 721257958}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &721257958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721257957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &721257959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721257957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &721257960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721257957}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1139660012
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,40 +1057,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb22edae0dcf4eb4bc7762b9befa071, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerScript: {fileID: 0}
+  _endOfLevelDialogue: {fileID: 0}
   difficultyLevel: 1
   graphicQualityLevel: 1
   musicVolume: 0
   SFXVolume: 0
-  _isGameOver: 0
+  dialogueVolume: 0
+  isPlayerDestroyed: 0
+  isBossDefeated: 0
   enemyMineLayerDirectionRight: 1
+  continueToNextDifficultyLevel: 0
+  readyToLoadNextScene: 0
+  comingFromInstructionsScene: 0
   Waves:
   - LevelNumber: 1
     Name: Wave 1
     SizeOfWave: 1
     EnemySpeed: 1
     EnemyLaserSpeed: 6
+    PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
-    EnemyMineLayerChance: 95
+    EnemyMineLayerChance: 200
     BossEnemySpeed: 1.5
   - LevelNumber: 2
     Name: Wave 2
-    SizeOfWave: 2
+    SizeOfWave: 1
     EnemySpeed: 1.5
     EnemyLaserSpeed: 6
+    PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
-    EnemyMineLayerChance: 95
+    EnemyMineLayerChance: 100
     BossEnemySpeed: 1.5
   - LevelNumber: 3
-    Name: Wave 3
-    SizeOfWave: 2
+    Name: Wave 3 - Dodge
+    SizeOfWave: 1
     EnemySpeed: 2
     EnemyLaserSpeed: 6
+    PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
@@ -1032,10 +1108,11 @@ MonoBehaviour:
     EnemyMineLayerChance: 95
     BossEnemySpeed: 1.5
   - LevelNumber: 4
-    Name: Wave 4
-    SizeOfWave: 2
+    Name: Wave 4 - Ram
+    SizeOfWave: 1
     EnemySpeed: 2.5
     EnemyLaserSpeed: 6.5
+    PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
@@ -1043,10 +1120,11 @@ MonoBehaviour:
     EnemyMineLayerChance: 100
     BossEnemySpeed: 1.5
   - LevelNumber: 5
-    Name: Wave 5
-    SizeOfWave: 2
+    Name: Wave 5 - Smart
+    SizeOfWave: 1
     EnemySpeed: 3
     EnemyLaserSpeed: 7
+    PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
@@ -1054,10 +1132,11 @@ MonoBehaviour:
     EnemyMineLayerChance: 95
     BossEnemySpeed: 1.5
   - LevelNumber: 6
-    Name: Wave 6
-    SizeOfWave: 2
+    Name: Wave 6 - Rear
+    SizeOfWave: 1
     EnemySpeed: 3.5
     EnemyLaserSpeed: 7.5
+    PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 7
     PowerUpRateOfSpawning: 3
@@ -1065,21 +1144,35 @@ MonoBehaviour:
     EnemyMineLayerChance: 93
     BossEnemySpeed: 1.5
   - LevelNumber: 7
-    Name: Wave 7
-    SizeOfWave: 2
+    Name: Wave 7 - Arc
+    SizeOfWave: 1
     EnemySpeed: 3.5
     EnemyLaserSpeed: 7.5
+    PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 6
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
     EnemyMineLayerChance: 90
     BossEnemySpeed: 1.5
+  - LevelNumber: 8
+    Name: Wave 8 - Boss
+    SizeOfWave: 0
+    EnemySpeed: 3.5
+    EnemyLaserSpeed: 7.5
+    PowerUpSpeed: 0.5
+    EnemyRateOfSpawning: 5
+    EnemyRateOfFire: 6
+    PowerUpRateOfSpawning: 3
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 96
+    BossEnemySpeed: 1.5
   MusicClips:
-  - {fileID: 8300000, guid: 5b17a0088dcdf924fa92da5af1e1be07, type: 3}
+  - {fileID: 8300000, guid: a3ed9afa1a4004621ba5ad95f988ad70, type: 3}
   - {fileID: 8300000, guid: d8b4c3ae028624f3c8880ee1f8c3dcdc, type: 3}
   - {fileID: 8300000, guid: cd3257708dc68432cb363b3e69901db4, type: 3}
   - {fileID: 8300000, guid: d290636de93f54a669ba0894632fbd0f, type: 3}
+  - {fileID: 8300000, guid: faa142fc1f8db4b3298c688b3504576a, type: 3}
 --- !u!4 &1943936135
 Transform:
   m_ObjectHideFlags: 0

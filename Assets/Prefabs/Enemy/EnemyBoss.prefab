@@ -167,8 +167,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1651907423
-  m_SortingLayer: 0
+  m_SortingLayerID: 47817825
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300004, guid: 23a10fa0df1140746adb7bda3d420aba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 3984421345171511184}
   m_Layer: 0
   m_Name: BossShield
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -393,7 +393,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 3d23249d5b22642c893254e4a6ce275f, type: 3}
   m_Color: {r: 0.06338553, g: 0.9622642, b: 0, a: 1}
   m_FlipX: 0
@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 3984421345171511194}
   m_Layer: 0
   m_Name: LeftTurret
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -743,7 +743,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1398b665fda044d0d9c3f4b5de2bd40b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerGameObject: {fileID: 0}
+  _playerGameObject: {fileID: 2782251405102421827, guid: a0882e4187fae4bb0ace22fcc1c1a8e2,
+    type: 3}
+  _enemyBossDefaultAimPoint: {fileID: 0}
   _rotateSpeed: 350
 --- !u!114 &3984421343874742948
 MonoBehaviour:
@@ -757,12 +759,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae61e6429043548988269885772eb62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
+  _enemyBoss: {fileID: 3984421344871241969}
+  explosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
-  _turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
+  turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
     type: 3}
-  _stopUpdating: 0
-  _bossStartShooting: 0
+  bossStartShooting: 0
 --- !u!114 &3984421343874742946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -952,7 +954,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
-  m_SortingOrder: 5
+  m_SortingOrder: 7
   m_Sprite: {fileID: 21300000, guid: 5b1d0ebaa67474116a77324ed6485c5e, type: 3}
   m_Color: {r: 0, g: 1, b: 0.06818819, a: 1}
   m_FlipX: 0
@@ -1001,7 +1003,7 @@ GameObject:
   - component: {fileID: 3984421345171511192}
   m_Layer: 0
   m_Name: RightTurret
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1131,7 +1133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1398b665fda044d0d9c3f4b5de2bd40b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerGameObject: {fileID: 0}
+  _playerGameObject: {fileID: 2782251405102421827, guid: a0882e4187fae4bb0ace22fcc1c1a8e2,
+    type: 3}
+  _enemyBossDefaultAimPoint: {fileID: 0}
   _rotateSpeed: 350
 --- !u!114 &3984421344192874088
 MonoBehaviour:
@@ -1145,12 +1149,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae61e6429043548988269885772eb62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
+  _enemyBoss: {fileID: 3984421344871241969}
+  explosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
-  _turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
+  turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
     type: 3}
-  _stopUpdating: 0
-  _bossStartShooting: 0
+  bossStartShooting: 0
 --- !u!114 &3984421344192874089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1343,7 +1347,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300002, guid: 23a10fa0df1140746adb7bda3d420aba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1365,7 +1369,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1567,7 +1571,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300002, guid: 23a10fa0df1140746adb7bda3d420aba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1589,7 +1593,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.07202828}
@@ -1788,7 +1792,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
-  m_SortingOrder: 5
+  m_SortingOrder: 7
   m_Sprite: {fileID: 21300000, guid: 5b1d0ebaa67474116a77324ed6485c5e, type: 3}
   m_Color: {r: 0, g: 1, b: 0.06818819, a: 1}
   m_FlipX: 0
@@ -1964,7 +1968,7 @@ GameObject:
   - component: {fileID: 3984421344871241971}
   m_Layer: 0
   m_Name: EnemyBoss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2047,7 +2051,7 @@ PolygonCollider2D:
   m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -2278,6 +2282,9 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 3984421344871241981}
   _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
+  _bigExplosionPrefab: {fileID: 1266054117162253859, guid: 527a5f1a35e304e14af8851039ab39e5,
+    type: 3}
+  isEnemyBossActive: 1
 --- !u!82 &6463307010700989562
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2459,7 +2466,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 47817825
   m_SortingLayer: 2
-  m_SortingOrder: 5
+  m_SortingOrder: 7
   m_Sprite: {fileID: 21300000, guid: 5b1d0ebaa67474116a77324ed6485c5e, type: 3}
   m_Color: {r: 0, g: 1, b: 0.06818819, a: 1}
   m_FlipX: 0
@@ -2704,8 +2711,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1651907423
-  m_SortingLayer: 0
+  m_SortingLayerID: 47817825
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300004, guid: 23a10fa0df1140746adb7bda3d420aba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2728,7 +2735,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -2875,7 +2882,7 @@ GameObject:
   - component: {fileID: 3984421345171511193}
   m_Layer: 0
   m_Name: CenterTurret
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3005,7 +3012,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1398b665fda044d0d9c3f4b5de2bd40b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerGameObject: {fileID: 0}
+  _playerGameObject: {fileID: 2782251405102421827, guid: a0882e4187fae4bb0ace22fcc1c1a8e2,
+    type: 3}
+  _enemyBossDefaultAimPoint: {fileID: 0}
   _rotateSpeed: 350
 --- !u!114 &3984421345336328046
 MonoBehaviour:
@@ -3019,12 +3028,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae61e6429043548988269885772eb62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExplosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
+  _enemyBoss: {fileID: 3984421344871241969}
+  explosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
-  _turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
+  turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
     type: 3}
-  _stopUpdating: 0
-  _bossStartShooting: 0
+  bossStartShooting: 0
 --- !u!114 &3984421345336328037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3817,6 +3826,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8243040054077136539, guid: 7618490e490164d898c858f9f8511874,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7618490e490164d898c858f9f8511874, type: 3}
 --- !u!4 &4985110246223304999 stripped
@@ -3921,7 +3935,7 @@ PrefabInstance:
     - target: {fileID: 8243040054077136539, guid: 7618490e490164d898c858f9f8511874,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8244715144605321958, guid: 7618490e490164d898c858f9f8511874,
         type: 3}
@@ -4037,7 +4051,7 @@ PrefabInstance:
     - target: {fileID: 8243040054077136539, guid: 7618490e490164d898c858f9f8511874,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8244715144605321958, guid: 7618490e490164d898c858f9f8511874,
         type: 3}

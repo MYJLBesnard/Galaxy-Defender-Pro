@@ -1,98 +1,81 @@
-﻿// ------------------------------------------------------------------------
-// FILE	:	GameManager.cs
-// DESC	:	Contains the Game Manager class and support classes
-// ------------------------------------------------------------------------
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System;
 
-// ------------------------------------------------------------------------
-// Class	:	LevelInfo
-// Desc		:	Contains the game settings for a given level of the game
-// ------------------------------------------------------------------------
-[Serializable]
-public class LevelInfo
+[Serializable] public class LevelInfo // Contains the game settings for a given level of the game
 {
     public int LevelNumber = 1;  // Number of Level
     public string Name = null;  // Name of the Level
     public int SizeOfWave = 10;  // How many enemy ships in the wave
     public float EnemySpeed = 5.0f;    // Default speed of Enemy ships(seconds)
     public float EnemyLaserSpeed = 8.0f;     // Default speed of Enemy laser(seconds)
+    public float PowerUpSpeed = 0.5f; // Default speed of Power Ups
     public float EnemyRateOfSpawning = 5.0f;   // How often Enemy spawns (seconds)
     public float EnemyRateOfFire = 2.5f; // How often Enemy ships fire (seconds)
     public float PowerUpRateOfSpawning = 3.5f; // How often Power-Up spawns (seconds)
     public float EnemySensorRange = 3.0f; // How far the RayCast can sense a hit
     public float EnemyMineLayerChance = 5.0f; // % (out of 100) that a Enemy Mine Layer will spawn
     public float BossEnemySpeed = 1.5f;    // Default speed of Boss Enemy ships(seconds)
-
 }
 
-// ---------------------------------------------------------------------------------
-// Class	:	GameManager
-// Desc		:	The GameManager is game global meaning that it is loaded once
-//				at game startup and stays alive across all scene loads. It 
-//				should contains information about all the levels of the game as
-//				well as manages the player's current status - lives left,
-//				current level and score. It also manages loading/saving
-//				the highscore table to disk.
-//				The GameManager game object should also have an Audio source
-//				attached which it will use to manage the playback and fades
-//				of game music.
-// ---------------------------------------------------------------------------------
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private PlayerScript _playerScript;
+    [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
+
+
     public int difficultyLevel = 1; // default difficulty level if not modified in Options Scene
     public int graphicQualityLevel = 1; // default graphic quality set to Low
     public float musicVolume = 0f;
     public float SFXVolume = 0f;
-    [SerializeField] private bool _isGameOver = false;
+    public float dialogueVolume = 0f;
+    public bool isPlayerDestroyed = false;
+    public bool isBossDefeated = false;
     public bool enemyMineLayerDirectionRight = true;
-
+    public bool continueToNextDifficultyLevel = false;
+    public bool readyToLoadNextScene = false;
+    public bool comingFromInstructionsScene = false;
 
     // A list of all the levels in the game (Inspector Assigned)
-    [SerializeField]
-    private List<LevelInfo> Waves = new List<LevelInfo>();
+    [SerializeField] private List<LevelInfo> Waves = new List<LevelInfo>();
 
     // A list of properties allowing external objects access to all the properties of the current level.
     // These are modified by the difficulty level selected.
-    public int howManyLevels {  get { return Waves.Count; } }
+    public int howManyLevels { get { return Waves.Count; } }
     public int currentLevelNumber { get { return Waves[_currentWave].LevelNumber; } }
     public string currentLevelName { get { return Waves[_currentWave].Name; } }
-    public int currentSizeOfWave { get { return Waves[_currentWave].SizeOfWave + (difficultyLevel * 2); } }
+    public int currentSizeOfWave { get { return Waves[_currentWave].SizeOfWave + difficultyLevel; } }
     public float currentEnemySpeed { get { return Waves[_currentWave].EnemySpeed + difficultyLevel; } }
     public float currentEnemyLaserSpeed { get { return Waves[_currentWave].EnemyLaserSpeed + difficultyLevel; } }
     public float currentEnemyRateOfSpawning { get { return Waves[_currentWave].EnemyRateOfSpawning - difficultyLevel; } }
     public float currentEnemyRateOfFire { get { return Waves[_currentWave].EnemyRateOfFire - difficultyLevel; } }
+    public float currentPowerUpSpeed { get { return Waves[_currentWave].PowerUpSpeed + (difficultyLevel / 2); } }
     public float currentPowerUpRateOfSpawning { get { return Waves[_currentWave].PowerUpRateOfSpawning + difficultyLevel; } }
-    public float currentEnemySensorRange {  get { return Waves[_currentWave].EnemySensorRange + difficultyLevel; } }
+    public float currentEnemySensorRange { get { return Waves[_currentWave].EnemySensorRange + difficultyLevel; } }
     public float currentEnemyMineLayerChance { get { return Waves[_currentWave].EnemyMineLayerChance - (currentLevelNumber * difficultyLevel); } }
-    public float currentBossEnemySpeed { get { return Waves[_currentWave].BossEnemySpeed + difficultyLevel; } }
+    public float currentBossEnemySpeed { get { return Waves[_currentWave].BossEnemySpeed + (difficultyLevel / 2); } }
 
-
-
-    // A list of AudioClips that can be played (such as varioius music tracks) which we
-    // can instruct the GameManager to play by index
-    [SerializeField]
-    private List<AudioClip> MusicClips = new List<AudioClip>();
+    // A list of AudioClips that can be played
+    [SerializeField] private List<AudioClip> MusicClips = new List<AudioClip>();
 
     // Used to cache AudioSource component
     private AudioSource _music = null;
 
-    // Current music clip in the above list that is currently playing
+    // Music clip from the above list that is currently playing
     private int _currentClip = -1;
 
     // Number of lives remaining
     private int _lives = 3;
     public int lives { get { return _lives; } }
 
-    // Play's current score
+    // Player's current score
     private int _currentScore = 0;
     public int currentScore { get { return _currentScore; } }
 
-    // Current level the player is on
+    // Player's current level
     private int _currentWave = 0;
     public int currentWave { get { return _currentWave; } }
 
@@ -110,12 +93,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // Name	:	Awake
-    // Desc	:	Initialize the Game Manager state and loading
-    //			previous scores from disk
-    // -----------------------------------------------------------------------------
-    private void Awake()
+    private void Awake() // Initialize the Game Manager state 
     {
         // Init Game State
         _lives = 3;
@@ -127,13 +105,12 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // ----------------------------------------------------------------------------
-    // Name	:	Start
-    // Desc	:	Cache audio component reference and make sure at startup that all
-    //			music is turned off.
-    // ----------------------------------------------------------------------------
     void Start()
     {
+        musicVolume = -10f;
+        SFXVolume = -13f;
+        //dialogueVolume = 0f;
+
         // Cache AudioSource component is available
         _music = GetComponent<AudioSource>();
 
@@ -144,15 +121,10 @@ public class GameManager : MonoBehaviour
             // zero, set to loop, and that the source is not playing.
             _music.playOnAwake = false;
             _music.loop = true;
-            _music.volume = 0;
+            _music.volume = 0f;
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // Name	:	PlayMusic
-    // Desc	:	Plays an audio clip from the MusicClips list at the passed index
-    //			and fades the music in over the specified duration.
-    // -----------------------------------------------------------------------------
     public void PlayMusic(int clip, float fade)
     {
         // If no audio source component is attached to this game object then return.
@@ -184,11 +156,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeInMusic(clip, fade));
     }
 
-    // -------------------------------------------------------------------------------
-    // Name	:	StopMusic
-    // Desc	:	Stop any music that is playing by fading it out over the specified
-    //			fade-time.
-    // -------------------------------------------------------------------------------
     public void StopMusic(float fade = 2.0f)
     {
         // If no audio source component is attached to this game object then return
@@ -201,10 +168,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeOutMusic(fade));
     }
 
-    // ------------------------------------------------------------------------------
-    // Name	:	FadeInMusic - Coroutine
-    // Desc	:	The function that does the actual fading
-    // ------------------------------------------------------------------------------
     private IEnumerator FadeInMusic(int clip, float fade)
     {
         // Minimum fade of 0.1 seconds
@@ -241,11 +204,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    // ------------------------------------------------------------------------------------
-    // Name	:	FadeOutMusic	-	Coroutine
-    // Desc :	Fades out the currently playing clip
-    // ------------------------------------------------------------------------------------
     private IEnumerator FadeOutMusic(float fade)
     {
         // Minimum fade of 1.0
@@ -254,8 +212,8 @@ public class GameManager : MonoBehaviour
         // Must have an audio source
         if (_music)
         {
-            // Force initial value to 1.0f
-            _music.volume = 1.0f;
+            // Force initial value to current volume clamped value
+            _music.volume = 0.5f;
 
             // Reset timer
             float timer = 0.0f;
@@ -264,29 +222,22 @@ public class GameManager : MonoBehaviour
             while (timer < fade)
             {
                 timer += Time.deltaTime;
-                _music.volume = 1.0f - timer / fade;
+                _music.volume = 0.5f - timer / fade;
                 yield return null;
             }
 
             // Fade-out complete so make sure value is zero and stop music playing
             _music.volume = 0.0f;
             _music.Stop();
+            readyToLoadNextScene = true;
         }
     }
 
-    // ----------------------------------------------------------------------------
-    // Name	:	IncreaseScore
-    // Desc	:	Called by the main SceneManager everytime an invader gets killed.
-    // ----------------------------------------------------------------------------
     public void IncreaseScore(int points)
     {
         _currentScore += points;
     }
 
-    // -------------------------------------------------------------------------------
-    // Name	:	StartNewGame
-    // Desc	:	Reset current score, number of lives and load the game level.
-    // -------------------------------------------------------------------------------
     public void StartNewGame()
     {
         // Reset score and lives.
@@ -301,67 +252,171 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Game");
     }
 
-    // -------------------------------------------------------------------------------
-    // Name	:	WaveComplete
-    // Desc	:	Called by the game scene when a level has been complete. This simply
-    //			increases the current game level.
-    // -------------------------------------------------------------------------------
     public void WaveComplete()
     {
-            if (_currentWave < Waves.Count - 1)
-                _currentWave++;
-
+        if (_currentWave < Waves.Count - 1)
+            _currentWave++;
     }
 
-    // -------------------------------------------------------------------------------
-    // Name	:	DecreaseLives
-    // Desc	:	Decreases the number of lives and returns the new life count
-    // -------------------------------------------------------------------------------
     public int DecreaseLives()
     {
         if (_lives > 0) _lives--;
         return _lives;
     }
 
-    // ---------------------------------------------------------------------
-    // Name	:	QuitGame
-    // Desc	:	Loads the closing credits. This is called by the MainMenu
-    //			scene when the user presses ESC.
-    // ---------------------------------------------------------------------
-    public void QuitGame()
-    {
-        SceneManager.LoadScene("Credits");
-    }
-
-
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R) && _isGameOver == true)
-        {
-            Awake();
-            PlayMusic(2, 5.0f);
-            SceneManager.LoadScene(2); // Restart New Game
-        }
-
-        if (Input.GetKeyDown(KeyCode.M) && _isGameOver == true)
-        {
-            PlayMusic(3, 5.0f);
-            SceneManager.LoadScene(1); // Main Menu Scene
-        }
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit(); // Quits the Application
+            StopMusic(2.0f);
+            Application.Quit(); // Quits the Application, no credits
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y) && isBossDefeated == true)
+        {
+            _endOfLevelDialogue.playerAcceptsMsn = true;
+            _endOfLevelDialogue.GeneratePlayerDecision();
+        }
+        if (Input.GetKeyDown(KeyCode.N) && isBossDefeated == true)
+        {
+            _endOfLevelDialogue.playerAcceptsMsn = false;
+            _endOfLevelDialogue.GeneratePlayerDecision();
         }
     }
 
     public void GameOver()
     {
-        _isGameOver = true;
+        isPlayerDestroyed = true;
+        
+ //       _isGameOver = true;
     }
 
+    public void EnemyBossDefeated()
+    {
+        _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
+        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();
 
+        if (_playerScript == null)
+        {
+            Debug.LogError("The PlayerScript is null.");
+        }
 
+        if (_endOfLevelDialogue == null)
+        {
+            Debug.LogError("The EndOfLevelDialogue script is null.");
+        }
 
+        isBossDefeated = true;
+        _endOfLevelDialogue.powerUpAudioIsBossDefeated = true;
+
+        if (difficultyLevel != 4)
+        {
+            _endOfLevelDialogue.lastLevel = false;
+        }
+        else if (difficultyLevel == 4)
+        {
+            _endOfLevelDialogue.lastLevel = true;
+            _playerScript.TurnOffContinueOptionText();
+        }
+
+        _endOfLevelDialogue.PlaySequentialSounds();
+    }
+
+    public void DisplayContinueOptionText()
+    {
+        if (_endOfLevelDialogue.msgDonePlaying == true)
+        {
+            _playerScript.ContinueOptionTxt();
+            _endOfLevelDialogue.msgDonePlaying = false; // resets value
+        }
+    }
+
+    public void TurnOffContinueOptionText()
+    {
+        _playerScript.TurnOffContinueOptionText();
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Main Menu");
+    }
+
+    public void LoadGame()
+    {
+        // Reset score and lives.
+        _currentScore = 0;
+        _currentWave = 0;
+        _lives = 3;
+
+        SceneManager.LoadScene("Game");
+    }
+
+    public void LoadGameInstructions()
+    {
+        SceneManager.LoadScene("Instructions"); // Loads options scene
+    }
+
+    public void QuitGame()
+    {
+        SceneManager.LoadScene("Credits");
+    }
+
+    public void NextLevel() // option to advance to next Difficulty Level when Boss defeated
+    {
+        isBossDefeated = false;
+        _currentWave = 0;
+        continueToNextDifficultyLevel = true;
+        _playerScript.TurnOffContinueOptionText();
+    }
+
+    public void CachePlayerScript()
+    {
+        _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
+
+        if (_playerScript == null)
+        {
+            Debug.LogError("The PlayerScript is null.");
+        }
+    }
+
+    /*
+    public void FadeIn()
+    {
+        StartCoroutine(FadeInRoutine());
+    }
+
+    public void FadeOut()
+    {
+        StartCoroutine(FadeOutRoutine());
+    }
+
+    IEnumerator FadeInRoutine()
+    {
+        _fadeImage.color = firstColor;
+        float currentTime = 0f;
+
+        while (currentTime < durationFader)
+        {
+            float alpha = Mathf.Lerp(0f, 1f, currentTime / durationFader);
+            _fadeImage.color = new Color(_fadeImage.color.r, _fadeImage.color.g, _fadeImage.color.b, alpha);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    IEnumerator FadeOutRoutine()
+    {
+        _fadeImage.color = lastColor;
+        float currentTime = 0f;
+
+        while (currentTime < durationFader)
+        {
+            float alpha = Mathf.Lerp(1f, 0f, currentTime / durationFader);
+            _fadeImage.color = new Color(_fadeImage.color.r, _fadeImage.color.g, _fadeImage.color.b, alpha);
+            currentTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+    */
 
 }

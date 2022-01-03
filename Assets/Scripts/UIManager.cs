@@ -1,13 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameManager _gameManager;
+    private FadeEffect _fadeEffect;
     [SerializeField] private PlayerScript _player;
     [SerializeField] private BoxCollider2D _playerBoxCollider2D;
     [SerializeField] private SpawnManager _spawnManager;
@@ -23,12 +22,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _readyText;
     [SerializeField] private TMP_Text _setText;
     [SerializeField] private TMP_Text _defendText;
-    [SerializeField] private TMP_Text _pressToRestart;
-    [SerializeField] private TMP_Text _pressForMainMenu;
-    [SerializeField] private TMP_Text _pressEscapeToQuit;
     [SerializeField] private TMP_Text _coreTempWarning;
     [SerializeField] private TMP_Text _coreShutdownText;
     [SerializeField] private TMP_Text _coreTempStableText;
+    [SerializeField] private Button _newGame;
+    [SerializeField] private Button _quitToCredits;
+
+    public TMP_Text continueOptionTxt;
+    public Button playerDecidesYes;
+    public Button playerDecidesNo;
 
     [SerializeField] private TMP_Text _TotalLevels;
     [SerializeField] private TMP_Text _LevelNumber;
@@ -44,18 +46,21 @@ public class UIManager : MonoBehaviour
 
     [Header("Game Over Display")]
     [SerializeField] private TMP_Text _gameOverText;
+    [SerializeField] private GameObject _gameOverTextBlock;
     [SerializeField] private float _letterDisplayDelay;
     [SerializeField] private float _flashDelay;
     [SerializeField] private int _flashCount;
-
+    
     void Start()
     {
         _scoreText.text = "SCORE: " + 0;
-        _gameOverText.enabled = false;
-        _pressToRestart.gameObject.SetActive(false);
-        _pressForMainMenu.gameObject.SetActive(false);
-        _pressEscapeToQuit.gameObject.SetActive(false);
+        _gameOverText.enabled = true;
+        _gameOverTextBlock.gameObject.SetActive(false);
+        _newGame.gameObject.SetActive(false);
+        _quitToCredits.gameObject.SetActive(false);
+
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _fadeEffect = GameObject.Find("CanvasFader").GetComponent<FadeEffect>();
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _playerBoxCollider2D = GameObject.Find("Player").GetComponent<BoxCollider2D>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
@@ -81,6 +86,23 @@ public class UIManager : MonoBehaviour
         }
 
         UpdateLevelInfo();
+
+        _letterDisplayDelay = 0.5f;
+        _flashDelay = 0.5f;
+        _flashCount = 5;
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.N) && _gameManager.isPlayerDestroyed == true)
+        {
+            FadeOutToGameScene();
+        }
+
+        if (Input.GetKeyDown(KeyCode.X) && _gameManager.isPlayerDestroyed == true)
+        {
+            FadeOutToCredits();
+        }
     }
 
     public void UpdateLevelInfo()
@@ -131,11 +153,15 @@ public class UIManager : MonoBehaviour
     {
         _homingMissileCountText.text = "Missiles: " + homingMissileCount.ToString() + "/25";
 
-        if (homingMissileCount > 0)
+        if (homingMissileCount > 15)
         {
             _homingMissileCountText.color = Color.green;
         }
-        else
+        else if (homingMissileCount <= 15 && homingMissileCount > 5)
+        {
+            _homingMissileCountText.color = Color.yellow;
+        }
+        else if (homingMissileCount <= 5)
         {
             _homingMissileCountText.color = Color.red;
         }
@@ -191,33 +217,45 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ContinueOption()
+    {
+            continueOptionTxt.gameObject.SetActive(true);
+            playerDecidesYes.gameObject.SetActive(true);
+            playerDecidesNo.gameObject.SetActive(true);
+    }
+
     private void GameOverSequence()
     {
         _gameManager.GameOver();
-        _gameOverText.enabled = true;
+        _gameOverTextBlock.SetActive(true);
         string msg = _gameOverText.text;
         _gameOverText.text = null;
         StartCoroutine(GameOverRoutine(msg));
     }
 
-    IEnumerator GameOverRoutine(string msg)
+    IEnumerator GameOverRoutine(string msg) // Types out msg and flashes text
     {
         yield return new WaitForSeconds(1.0f);
         WaitForSeconds letterDelay = new WaitForSeconds(_letterDisplayDelay);
-        WaitForSeconds flashDelay = new WaitForSeconds(_flashDelay);
 
-        for (int i = 0; i<msg.Length; i++)
+        if (msg == null)
+        {
+            _gameOverText.text = "GAME OVER";
+            msg = _gameOverText.text;
+        }
+
+        for (int i = 0; i < msg.Length; i++)
         {
             _gameOverText.text += msg[i].ToString();
             yield return letterDelay;
         }
 
+        WaitForSeconds flashDelay = new WaitForSeconds(_flashDelay);
         bool flashGameOver = true;
         int flashCount = 0;
 
-        _pressToRestart.gameObject.SetActive(true);
-        _pressForMainMenu.gameObject.SetActive(true);
-        _pressEscapeToQuit.gameObject.SetActive(true);
+        _newGame.gameObject.SetActive(true);
+        _quitToCredits.gameObject.SetActive(true);
 
         while (flashGameOver)
         {
@@ -255,15 +293,33 @@ public class UIManager : MonoBehaviour
         _playerBoxCollider2D.GetComponent<BoxCollider2D>().enabled = true;
     }
 
-    IEnumerator GameOverTextFlicker()
+    public void FadeOutToGameScene() // Fades out and loads a new game at the default difficulty level (Rookie)
+                                     // or to whichever difficulty level was set in the options scene.
+                                     // (Player lost all lives and Game Over)
     {
-        while (true)
-        {
-            yield return new WaitForSeconds(0.5f);
-            _gameOverText.gameObject.SetActive(false);
-            yield return new WaitForSeconds(0.5f);
-            _gameOverText.gameObject.SetActive(true);
-        }
-    }  
+        _gameOverText.text = null;
+        _gameManager.StopMusic(2.0f);
+        _fadeEffect.FadeOut();
+        StartCoroutine(LoadMainGame());
+    }
+
+    IEnumerator LoadMainGame() // Loads a new game from Game scene when Player has lost all lives
+    {
+        yield return new WaitForSeconds(2.0f);
+        _gameManager.LoadGame();
+    }
+
+    public void FadeOutToCredits() // Quits and fades out to the credits scene (Player lost all lives and Game Over)
+    {
+        _gameManager.StopMusic(2.0f);
+        _fadeEffect.FadeOut();
+        StartCoroutine(LoadCredits());
+    }
+
+    IEnumerator LoadCredits() // Loads credit scene from Game scene when Player has lost all lives
+    {
+        yield return new WaitForSeconds(2.0f);
+        _gameManager.QuitGame();
+    }
 }
 

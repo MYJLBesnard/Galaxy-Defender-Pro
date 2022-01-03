@@ -7,13 +7,15 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private PlayerScript _playerScript;
-    [SerializeField] private EnemyBoss _enemyBoss;
-    [SerializeField] public FireBossTurretLaser _fireBossTurretLaser;
-    [SerializeField] private GameObject _enemyContainer;
-    [SerializeField] public GameObject[] _playerPowerUps;
-    [SerializeField] public GameObject[] _typesOfEnemy;
-    [SerializeField] private bool _stopSpawning = false;
-    [SerializeField] private bool _stopSpawningEnemies = false;
+    [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
+    [SerializeField] private EnemyBoss _enemyBossScript;
+    [SerializeField] public GameObject _enemyContainer;
+    [SerializeField] private GameObject _enemyBoss;
+    public GameObject[] _playerPowerUps;
+    public GameObject[] _typesOfEnemy;
+    public GameObject depletedLateralLaserCanons;
+    public bool stopSpawningEnemies = false;
+    public bool stopSpawning = false;
     [SerializeField] private AudioClip _warningIncomingWave;
     [SerializeField] private AudioClip _attackWaveRepelled;
     public Transform[] enemyWaypoints;
@@ -29,7 +31,9 @@ public class SpawnManager : MonoBehaviour
     private float _xPos;
     private float _yPos;
     private float _triggerMineLayer = 0f;
-    [SerializeField] public bool _isMineLayerDeployed = false;
+    public bool isBossActive = false;
+    public bool isPlayerDestroyed = false;
+    public bool isMineLayerDeployed = false;
     [SerializeField] private bool _bossTurretsDestroyed = false;
     [SerializeField] private bool _bossMiniGunsDestroyed = false;
     [SerializeField] private bool _bossCanonsDestroyed = false;
@@ -39,9 +43,7 @@ public class SpawnManager : MonoBehaviour
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
-        _enemyBoss = GameObject.Find("EnemyBoss").GetComponent<EnemyBoss>();
-        _fireBossTurretLaser = GameObject.Find("FireBossTurretLaser").GetComponent<FireBossTurretLaser>();
-
+        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();  //************************************
 
         if (_gameManager == null)
         {
@@ -58,22 +60,47 @@ public class SpawnManager : MonoBehaviour
             Debug.LogError("The PlayerScript is null.");
         }
 
-        if (_enemyBoss == null)
+        if (_endOfLevelDialogue == null)
         {
-            Debug.LogError("The Enemy Boss script is null.");
+            Debug.Log("Dialogue Player is NULL.");
         }
-
-        
-        if (_fireBossTurretLaser == null)
-        {
-            Debug.LogError("The FireBossTurretLaser script is null.");
-        }
-        
 
         waveCurrent = _gameManager.currentWave;
+    }
 
-        _fireBossTurretLaser.CountdownActiveTurrets();
-        Debug.Log("running script FireBossTurretLaser in Start method of SpawnManager");
+    public void SetupBossAlien()
+    {
+        Debug.Log("Running SetupBossAlien");
+
+        _gameManager.PlayMusic(2, 5.0f);
+
+        if (isBossActive != true)
+        {
+            Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 12.0f, 0f);
+            Quaternion spawnRotation = Quaternion.Euler(0, 0, 90);
+            Instantiate(_enemyBoss, pxToSpawn, spawnRotation);
+
+            isBossActive = true;
+            stopSpawningEnemies = true;
+            stopSpawning = false;
+            _bossTurretsDestroyed = false;
+            _bossMiniGunsDestroyed = false;
+            _bossCanonsDestroyed = false;
+
+            bossTurretsDestroyed = 0;
+            bossMiniGunsDestroyed = 0;
+            bossCanonsDestroyed = 0;
+
+            if (isBossActive == true)
+            {
+                _enemyBossScript = GameObject.Find("EnemyBoss(Clone)").GetComponent<EnemyBoss>();
+
+                if (_enemyBossScript == null)
+                {
+                    Debug.LogError("The Enemy Boss script is null.");
+                }
+            }
+        }
     }
 
     public void EnemyShipsDestroyedCounter()
@@ -86,67 +113,63 @@ public class SpawnManager : MonoBehaviour
 
             {
                 Debug.Log("No more waves!");
-                _stopSpawning = true;
-                _stopSpawningEnemies = true;
-                _playerScript.PlayClip(_attackWaveRepelled);
+                stopSpawning = true;
+                stopSpawningEnemies = true;
+                _endOfLevelDialogue.PlayDialogueClip(_attackWaveRepelled);
+
+                //_playerScript.PlayClip(_attackWaveRepelled);
             }
             else
             {
                 Debug.Log("Wave completed!");
                 _gameManager.WaveComplete();
-                _playerScript.PlayClip(_attackWaveRepelled);
+                _endOfLevelDialogue.PlayDialogueClip(_attackWaveRepelled);
+
+                //_playerScript.PlayClip(_attackWaveRepelled);
 
                 StartCoroutine(StartNewWave());
             }
         }
     }
 
-    public void BossTurretDestroyedCounter()
+    public void BossTurretDestroyedCounter() // tracks destroyed turrets
     {
         bossTurretsDestroyed++;
 
         if (bossTurretsDestroyed == 3)
         {
             _bossTurretsDestroyed = true;
-            Debug.Log("Boss has no more turrets!");
             BossWeaponsDestroyedCheck();
         }
     }
 
-    public void BossMiniGunsDestroyedCounter()
+    public void BossMiniGunsDestroyedCounter() // tracks destroyed miniguns
     {
         bossMiniGunsDestroyed++;
 
         if (bossMiniGunsDestroyed == 2)
         {
             _bossMiniGunsDestroyed = true;
-            Debug.Log("Boss has no more miniguns!");
             BossWeaponsDestroyedCheck();
         }
     }
 
-    public void BossCanonsDestroyedCounter()
+    public void BossCanonsDestroyedCounter() // tracks destroyed canons
     {
         bossCanonsDestroyed++;
 
         if (bossCanonsDestroyed == 2)
         {
             _bossCanonsDestroyed = true;
-            Debug.Log("Boss has no more canons!");
             BossWeaponsDestroyedCheck();
         }
     }
 
-    public void BossWeaponsDestroyedCheck()
+    public void BossWeaponsDestroyedCheck() // checks to see if Boss still has weapons.  If no more weapons, Boss vulnerable and can be destroyed
     {
         if (_bossTurretsDestroyed == true && _bossMiniGunsDestroyed == true && _bossCanonsDestroyed == true)
         {
-            _enemyBoss.GetComponent<PolygonCollider2D>().enabled = true;
-            Debug.Log("Boss has no more weapons!");
-        }
-        else
-        {
-            Debug.Log("Boss is still armed!!!");
+            _enemyBossScript.GetComponent<PolygonCollider2D>().enabled = true;
         }
     }
 
@@ -159,7 +182,7 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnEnemyRoutine()
     {
         yield return new WaitForSeconds(2.0f); // delays start of enemy spawns
-        while (_stopSpawning == false)
+        while (stopSpawning == false)
 
         {
             _xPos = Random.Range(-8.0f, 8.0f);
@@ -167,37 +190,30 @@ public class SpawnManager : MonoBehaviour
             Vector3 pxToSpawn = new Vector3(_xPos, 7, 0);
             _triggerMineLayer = Random.Range(0, 100);
 
+            /*
             Debug.Log("Trigger Mine Layer: " + _triggerMineLayer);
             Debug.Log("Game Manager Mine Layer Chance: " + _gameManager.currentEnemyMineLayerChance);
             Debug.Log("If Trigger greater than Chance, Mine Layer should get spawned.");
+            */
 
-
-            if (_stopSpawningEnemies == false)
+            if (stopSpawningEnemies == false)
             {
                 _typeOfEnemy = null;
                 waveCurrent = _gameManager.currentWave;
 
                 switch (_gameManager.currentWave)
                 {
-                    /*
-                    case 0: // spawn basic Enenmy
+                    case 7: // spawn basic Enenmy
                         int type0 = 0;
                         _typeOfEnemy = _typesOfEnemy[type0];
                         enemyType = type0;
-                        break;
-                    */
-
-                    case 0: // test activate Boss
-                        _playerScript._enemyBoss.SetActive(true);
-                        _enemyBoss.isEnemyBossActive = true;
-                        _fireBossTurretLaser.CountdownActiveTurrets();
                         break;
 
                     case 1: // spawn basic Enemy
                         int type1 = 1;
                         _typeOfEnemy = _typesOfEnemy[type1];
                         enemyType = type1;
-                        break;
+                        break;      
 
                     case 2: // spawn dodging Enemy
                         int type2 = 2;
@@ -205,40 +221,45 @@ public class SpawnManager : MonoBehaviour
                         enemyType = type2;
                         break;
 
-                    case 3: // spawn dodging and speed burst Enemy
+                    case 3: // spawn speed burst Enemy
                         int type3 = 3;
                         //int type3 = Random.Range(2, 4);
                         _typeOfEnemy = _typesOfEnemy[type3];
                         enemyType = type3;
                         break;
 
-                    case 4: // spawn dodging, speed burst Enemy and laser burst / Player Laser avoidance Enemy
+                    case 4: // spawn laser burst / Player Laser avoidance Enemy
                         int type4 = 4;
                         //int type4 = Random.Range(2, 5);
                         _typeOfEnemy = _typesOfEnemy[type4];
                         enemyType = type4;
                         break;
 
-                    case 5: // spawn all from case 4 plus rear shooting Enemy
+                    case 5: // spawn rear shooting Enemy
                         int type5 = 5; 
                         //int type5 = Random.Range(3, 6);
                         _typeOfEnemy = _typesOfEnemy[type5];
                         enemyType = type5;
                         break;
 
-                    case 6: // spawn all from case 5 plus arc laser Enemy
+                    case 6: // spawn arc laser Enemy
                         int type6 = 6; 
                         //int type6 = Random.Range(4, 7);
                         _typeOfEnemy = _typesOfEnemy[type6];
                         enemyType = type6;
                         break;
 
+                    case 0: // Boss
+                        SetupBossAlien();
+                        _enemyBossScript.isEnemyBossActive = true;
+                        break;
+
                     default:
                         break;
                 }
 
-                // Mine Layer 
-                if (_triggerMineLayer >= _gameManager.currentEnemyMineLayerChance && _isMineLayerDeployed == false)
+                // Mine Layer Logic
+                if (_triggerMineLayer >= _gameManager.currentEnemyMineLayerChance && isMineLayerDeployed == false)
                 {
                     int type7 = 7;
                     _typeOfEnemy = _typesOfEnemy[type7];
@@ -260,39 +281,44 @@ public class SpawnManager : MonoBehaviour
                         _gameManager.enemyMineLayerDirectionRight = false;
                     }
 
-                    _isMineLayerDeployed = true;
+                    isMineLayerDeployed = true;
 
                 }
                 else
                 {
-                    if(_enemyBoss.isEnemyBossActive != true)
+                    if (isBossActive != true)
                     {
                         GameObject newEnemy = Instantiate(_typeOfEnemy, pxToSpawn, Quaternion.identity);
                         newEnemy.transform.parent = _enemyContainer.transform;
                         _shipsInWave++;
                     }
-
                 }
             }
 
             if (_shipsInWave == _gameManager.currentSizeOfWave)
             {
-                _stopSpawningEnemies = true;
+                stopSpawningEnemies = true;
             }
 
             yield return new WaitForSeconds(_gameManager.currentEnemyRateOfSpawning);
         }
     }
 
+    public void AdvanceToNextLevel()
+    {
+        StartCoroutine(StartNewWave());
+    }
+
     IEnumerator StartNewWave()
     {
-        _stopSpawning = true;
+        stopSpawning = true;
         _shipsInWave = 0;
         totalEnemyShipsDestroyed = 0;
         yield return new WaitForSeconds(5.0f);
-        _playerScript.PlayClip(_warningIncomingWave);
-        _stopSpawning = false;
-        _stopSpawningEnemies = false;
+        _endOfLevelDialogue.PlayDialogueClip(_warningIncomingWave);
+
+        stopSpawning = false;
+        stopSpawningEnemies = false;
         OnPlayerReady();
         StartSpawning();
         _uiManager.UpdateLevelInfo();
@@ -301,7 +327,7 @@ public class SpawnManager : MonoBehaviour
     IEnumerator SpawnPowerUps()
     {
         yield return new WaitForSeconds(2.0f);
-        while (_stopSpawning == false)
+        while (stopSpawning == false)
         {
             Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
             int randomPowerUp = Random.Range(0, _playerPowerUps.Length); // spawn Power Ups Elements 0 to Length of Array
@@ -312,16 +338,28 @@ public class SpawnManager : MonoBehaviour
 
     public void OnPlayerDeath()
     {
-        _stopSpawning = true;
+        stopSpawning = true;
+        isPlayerDestroyed = true;
+        _enemyBossScript.isEnemyBossActive = false;
     }
 
     public void OnPlayerReset()
     {
-        _stopSpawning = true;
+        stopSpawning = true;
+        isPlayerDestroyed = true;
+        _enemyBossScript.isEnemyBossActive = false;
     }
 
     public void OnPlayerReady()
     {
-        _stopSpawning = false;
+        stopSpawning = false;
+        isPlayerDestroyed = false;
+        StartCoroutine(TurnBossWeaponsBackOn());
+    }
+
+    IEnumerator TurnBossWeaponsBackOn()
+    {
+        yield return new WaitForSeconds(2.5f);
+        _enemyBossScript.isEnemyBossActive = true;
     }
 }
