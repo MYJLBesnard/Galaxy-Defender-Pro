@@ -808,7 +808,6 @@ public class PlayerScript : MonoBehaviour
     {
         if (_isPlayerLateralLaserActive == false) // equips Player with lateral laser canons and starts the power down timer.
         {
-            Debug.Log("Lateral Canons collected.");
             _isPlayerLateralLaserActive = true;
             _lateralLaserCanonLeft.SetActive(true);
             _lateralLaserCanonRight.SetActive(true);

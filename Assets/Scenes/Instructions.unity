@@ -3855,7 +3855,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "This represents the status of your thrusters.  You will find this indicator
-    next to your HUD.\n\nYou have the ability to activate your thrusters holding
+    next to your HUD.\n\nYou have the ability to activate your thrusters by holding
     down the LEFT-SHIFT key on your keyboard interface.  Doing so will give your
     ship an extra boost of speed for as long as you hold down this key. \n\nUsing
     your thrusters continuously may overheat your core reactor.  Be sure to pay attention

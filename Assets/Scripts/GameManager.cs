@@ -9,12 +9,11 @@ using System;
     public int LevelNumber = 1;  // Number of Level
     public string Name = null;  // Name of the Level
     public int SizeOfWave = 10;  // How many enemy ships in the wave
+    public float PowerUpSpeed = 0.5f; // Default speed of Power Ups
     public float EnemySpeed = 5.0f;    // Default speed of Enemy ships(seconds)
     public float EnemyLaserSpeed = 8.0f;     // Default speed of Enemy laser(seconds)
-    public float PowerUpSpeed = 0.5f; // Default speed of Power Ups
     public float EnemyRateOfSpawning = 5.0f;   // How often Enemy spawns (seconds)
     public float EnemyRateOfFire = 2.5f; // How often Enemy ships fire (seconds)
-    public float PowerUpRateOfSpawning = 3.5f; // How often Power-Up spawns (seconds)
     public float EnemySensorRange = 3.0f; // How far the RayCast can sense a hit
     public float EnemyMineLayerChance = 5.0f; // % (out of 100) that a Enemy Mine Layer will spawn
     public float BossEnemySpeed = 1.5f;    // Default speed of Boss Enemy ships(seconds)
@@ -47,12 +46,11 @@ public class GameManager : MonoBehaviour
     public int currentLevelNumber { get { return Waves[_currentWave].LevelNumber; } }
     public string currentLevelName { get { return Waves[_currentWave].Name; } }
     public int currentSizeOfWave { get { return Waves[_currentWave].SizeOfWave + difficultyLevel; } }
+    public float currentPowerUpSpeed { get { return Waves[_currentWave].PowerUpSpeed + (difficultyLevel / 2); } }
     public float currentEnemySpeed { get { return Waves[_currentWave].EnemySpeed + difficultyLevel; } }
     public float currentEnemyLaserSpeed { get { return Waves[_currentWave].EnemyLaserSpeed + difficultyLevel; } }
     public float currentEnemyRateOfSpawning { get { return Waves[_currentWave].EnemyRateOfSpawning - difficultyLevel; } }
     public float currentEnemyRateOfFire { get { return Waves[_currentWave].EnemyRateOfFire - difficultyLevel; } }
-    public float currentPowerUpSpeed { get { return Waves[_currentWave].PowerUpSpeed + (difficultyLevel / 2); } }
-    public float currentPowerUpRateOfSpawning { get { return Waves[_currentWave].PowerUpRateOfSpawning + difficultyLevel; } }
     public float currentEnemySensorRange { get { return Waves[_currentWave].EnemySensorRange + difficultyLevel; } }
     public float currentEnemyMineLayerChance { get { return Waves[_currentWave].EnemyMineLayerChance - (currentLevelNumber * difficultyLevel); } }
     public float currentBossEnemySpeed { get { return Waves[_currentWave].BossEnemySpeed + (difficultyLevel / 2); } }
@@ -95,7 +93,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake() // Initialize the Game Manager state 
     {
-        // Init Game State
         _lives = 3;
         _currentScore = 0;
         _currentWave = 0;
@@ -169,8 +166,7 @@ public class GameManager : MonoBehaviour
         // We can only proceed if we have an audio source
         if (_music)
         {
-            // If any music is current playing then stop it. This class assumes external
-            // script will have requested that any previous music be faded out first.
+            // If any music is current playing then stop it. 
             _music.volume = 0.0f;
             _music.Stop();
 

@@ -117,7 +117,6 @@ public class UIManager : MonoBehaviour
         _EnemyLaserSpeed.text = "Enemy Laser Speed: " + _gameManager.currentEnemyLaserSpeed.ToString();
         _EnemyROS.text = "Enemy ROS: " + _gameManager.currentEnemyRateOfSpawning.ToString();
         _EnemyROF.text = "Enemy ROF: " + _gameManager.currentEnemyRateOfFire.ToString();
-        _PowerUpROS.text = "PU ROS: " + _gameManager.currentPowerUpRateOfSpawning.ToString();
         _EnemySensorRng.text = "Enemy Sensor Rng: " + _gameManager.currentEnemySensorRange.ToString();
         _EnemyMineLayerProb.text = "Mine Layer Prob: " + _gameManager.currentEnemyMineLayerChance.ToString();
     }

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-//using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -11,7 +10,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private EnemyBoss _enemyBossScript;
     [SerializeField] public GameObject _enemyContainer;
     [SerializeField] private GameObject _enemyBoss;
-    public GameObject[] _playerPowerUps;
+    public GameObject[] _playerBasicPowerUps;
+    public GameObject[] _playerWeaponsPowerUps;
+    public GameObject[] _healthAndNegPowerUps;
     public GameObject[] _typesOfEnemy;
     public GameObject depletedLateralLaserCanons;
 
@@ -47,7 +48,7 @@ public class SpawnManager : MonoBehaviour
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
-        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();  //************************************
+        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();
 
         if (_gameManager == null)
         {
@@ -74,8 +75,6 @@ public class SpawnManager : MonoBehaviour
 
     public void SetupBossAlien()
     {
-        Debug.Log("Running SetupBossAlien");
-
         _gameManager.PlayMusic(2, 5.0f);
 
         if (isBossActive != true)
@@ -105,7 +104,9 @@ public class SpawnManager : MonoBehaviour
                 }
             }
 
-            StartCoroutine(SpawnPowerUps());
+            StartCoroutine(SpawnBasicPowerUps());
+            StartCoroutine(SpawnWeaponsPowerUps());
+            StartCoroutine(SpawnHealthAndNegPowerUps());
         }
     }
 
@@ -118,16 +119,14 @@ public class SpawnManager : MonoBehaviour
             if (waveCurrent == _gameManager.howManyLevels - 1)
 
             {
-                Debug.Log("No more waves!");
+                // No more waves
                 stopSpawning = true;
                 stopSpawningEnemies = true;
                 _endOfLevelDialogue.PlayDialogueClip(_attackWaveRepelled);
-
-                //_playerScript.PlayClip(_attackWaveRepelled);
             }
             else
             {
-                Debug.Log("Wave completed!");
+                // Current wave complete
                 _gameManager.WaveComplete();
                 _endOfLevelDialogue.PlayDialogueClip(_attackWaveRepelled);
                 totalEnemyShipsDestroyed = 0;
@@ -170,7 +169,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    public void BossWeaponsDestroyedCheck() // checks to see if Boss still has weapons.  If no more weapons, Boss vulnerable and can be destroyed
+    public void BossWeaponsDestroyedCheck() // checks to see if Boss still has weapons/shields.  If no more weapons/shields, Boss vulnerable and can be destroyed
     {
         if (_bossTurretsDestroyed == true && _bossMiniGunsDestroyed == true && _bossCanonsDestroyed == true)
         {
@@ -180,11 +179,13 @@ public class SpawnManager : MonoBehaviour
 
     public void StartSpawning()
     {
-        StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnPowerUps());
+        StartCoroutine(SpawnEnemy());
+        StartCoroutine(SpawnBasicPowerUps());
+        StartCoroutine(SpawnWeaponsPowerUps());
+        StartCoroutine(SpawnHealthAndNegPowerUps());
     }
 
-    IEnumerator SpawnEnemyRoutine()
+    IEnumerator SpawnEnemy()
     {
         yield return new WaitForSeconds(2.0f); // delays start of enemy spawns
         while (stopSpawning == false)
@@ -195,7 +196,7 @@ public class SpawnManager : MonoBehaviour
             Vector3 pxToSpawn = new Vector3(_xPos, 9, 0);
             _triggerMineLayer = Random.Range(0, 100);
 
-            /*
+            /* Left this here to explain logic for spawning Mine Layer
             Debug.Log("Trigger Mine Layer: " + _triggerMineLayer);
             Debug.Log("Game Manager Mine Layer Chance: " + _gameManager.currentEnemyMineLayerChance);
             Debug.Log("If Trigger greater than Chance, Mine Layer should get spawned.");
@@ -228,28 +229,28 @@ public class SpawnManager : MonoBehaviour
 
                     case 3: // spawn speed burst Enemy
                         int type3 = 3;
-                        //int type3 = Random.Range(2, 4);
+                        //int type3 = Random.Range(2, 4); // replace top line with this to generate random mix within specific parameters
                         _typeOfEnemy = _typesOfEnemy[type3];
                         enemyType = type3;
                         break;
 
-                    case 4: // spawn laser burst / Player Laser avoidance Enemy
+                    case 4: // spawn laser burst / Player Laser avoidance Enemy 
                         int type4 = 4;
-                        //int type4 = Random.Range(2, 5);
+                        //int type4 = Random.Range(2, 5); // replace top line with this to generate random mix within specific parameters
                         _typeOfEnemy = _typesOfEnemy[type4];
                         enemyType = type4;
                         break;
 
                     case 5: // spawn rear shooting Enemy
-                        int type5 = 5; 
-                        //int type5 = Random.Range(3, 6);
+                        int type5 = 5;
+                        //int type5 = Random.Range(3, 6); // replace top line with this to generate random mix within specific parameters
                         _typeOfEnemy = _typesOfEnemy[type5];
                         enemyType = type5;
                         break;
 
                     case 6: // spawn arc laser Enemy
-                        int type6 = 6; 
-                        //int type6 = Random.Range(4, 7);
+                        int type6 = 6;
+                        //int type6 = Random.Range(4, 7); // replace top line with this to generate random mix within specific parameters
                         _typeOfEnemy = _typesOfEnemy[type6];
                         enemyType = type6;
                         break;
@@ -309,38 +310,39 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    public void AdvanceToNextLevel()
+    IEnumerator SpawnBasicPowerUps()
     {
-        if (isPlayerDestroyed == false)
+        yield return new WaitForSeconds(2.0f);
+        while (stopSpawning != true)
         {
-            StartCoroutine(StartNewWave());
+            Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
+            int randomPowerUp = Random.Range(0, _playerBasicPowerUps.Length); // spawn Power Ups Elements 0 to Length of Array
+            Instantiate(_playerBasicPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(15f, 25f));
         }
     }
 
-    IEnumerator StartNewWave()
+    IEnumerator SpawnWeaponsPowerUps()
     {
-        stopSpawning = true;
-        _shipsInWave = 0;
-        totalEnemyShipsDestroyed = 0;
         yield return new WaitForSeconds(3.5f);
-        _endOfLevelDialogue.PlayDialogueClip(_warningIncomingWave);
-
-        stopSpawning = false;
-        stopSpawningEnemies = false;
-        OnPlayerReady();
-        StartSpawning();
-        _uiManager.UpdateLevelInfo();
-    }
-
-    IEnumerator SpawnPowerUps()
-    {
-        yield return new WaitForSeconds(2.0f);
-        while (stopSpawning == false)
+        while (stopSpawning != true)
         {
             Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
-            int randomPowerUp = Random.Range(0, _playerPowerUps.Length); // spawn Power Ups Elements 0 to Length of Array
-            Instantiate(_playerPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
-            yield return new WaitForSeconds(Random.Range(2f, 6f));
+            int randomPowerUp = Random.Range(0, _playerWeaponsPowerUps.Length); // spawn Power Ups Elements 0 to Length of Array
+            Instantiate(_playerWeaponsPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(4f, 8f));
+        }
+    }
+
+    IEnumerator SpawnHealthAndNegPowerUps()
+    {
+        yield return new WaitForSeconds(5.0f);
+        while (stopSpawning != true)
+        {
+            Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
+            int randomPowerUp = Random.Range(0, _healthAndNegPowerUps.Length); // spawn Power Ups Elements 0 to Length of Array
+            Instantiate(_healthAndNegPowerUps[randomPowerUp], pxToSpawn, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(20f, 30f));
         }
     }
 
@@ -363,6 +365,29 @@ public class SpawnManager : MonoBehaviour
         stopSpawning = false;
         isPlayerDestroyed = false;
         StartCoroutine(TurnBossWeaponsBackOn());
+    }
+
+    public void AdvanceToNextLevel()
+    {
+        if (isPlayerDestroyed == false)
+        {
+            StartCoroutine(StartNewWave());
+        }
+    }
+
+    IEnumerator StartNewWave()
+    {
+        stopSpawning = true;
+        _shipsInWave = 0;
+        totalEnemyShipsDestroyed = 0;
+        yield return new WaitForSeconds(3.5f);
+        _endOfLevelDialogue.PlayDialogueClip(_warningIncomingWave);
+
+        stopSpawning = false;
+        stopSpawningEnemies = false;
+        OnPlayerReady();
+        StartSpawning();
+        _uiManager.UpdateLevelInfo();
     }
 
     IEnumerator TurnBossWeaponsBackOn()

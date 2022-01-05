@@ -666,14 +666,16 @@ MonoBehaviour:
   _enemyContainer: {fileID: 1245580089}
   _enemyBoss: {fileID: 3984421344871241981, guid: 6ff88c007a7834374afba63e69fc39d6,
     type: 3}
-  _playerPowerUps:
+  _playerBasicPowerUps:
   - {fileID: 1964161015771805903, guid: c02ca1f22fc8d4bddba09310c885e5b2, type: 3}
   - {fileID: 5295262556367448058, guid: faf1ce081d5294d21a6a35bd54d8a990, type: 3}
   - {fileID: 4982035787275881898, guid: aaba3794d981741188931a0d2a9120e8, type: 3}
-  - {fileID: 2824699279061533061, guid: 3a0deac802eed44a38e989f73cba5168, type: 3}
+  _playerWeaponsPowerUps:
   - {fileID: 5087452030651122738, guid: fd3d6fbb66f204347b932cd3744f0e78, type: 3}
   - {fileID: 3244706802909736485, guid: 37a0390d6ce9e433ab294ea8780e7118, type: 3}
   - {fileID: 2075782326843701816, guid: 710b96dc41bab4c6fa9982b60e0ef5cd, type: 3}
+  _healthAndNegPowerUps:
+  - {fileID: 2824699279061533061, guid: 3a0deac802eed44a38e989f73cba5168, type: 3}
   - {fileID: 7320073278944905568, guid: b5b762715c9204a59b1c8a73be99729b, type: 3}
   _typesOfEnemy:
   - {fileID: 4590086578092343861, guid: 7537277db6a2d4fed828ae16382054e9, type: 3}
@@ -687,8 +689,6 @@ MonoBehaviour:
   - {fileID: 3984421344871241981, guid: 6ff88c007a7834374afba63e69fc39d6, type: 3}
   depletedLateralLaserCanons: {fileID: 2075782326843701816, guid: 69f0dca04bf1846ae8c1bd1f72d04347,
     type: 3}
-  stopSpawningEnemies: 0
-  stopSpawning: 0
   _warningIncomingWave: {fileID: 8300000, guid: bce339e76e92b4a61bf852a98c4cde86,
     type: 3}
   _attackWaveRepelled: {fileID: 8300000, guid: 278e06b136ce64005b88b88532bc6a14, type: 3}
@@ -740,16 +740,18 @@ MonoBehaviour:
   - {fileID: 760167751}
   totalEnemyShipsDestroyed: 0
   bossTurretsDestroyed: 0
+  _bossTurretsDestroyed: 0
   bossMiniGunsDestroyed: 0
+  _bossMiniGunsDestroyed: 0
   bossCanonsDestroyed: 0
+  _bossCanonsDestroyed: 0
   waveCurrent: 0
   enemyType: 1
   isBossActive: 0
   isPlayerDestroyed: 0
   isMineLayerDeployed: 0
-  _bossTurretsDestroyed: 0
-  _bossMiniGunsDestroyed: 0
-  _bossCanonsDestroyed: 0
+  stopSpawningEnemies: 0
+  stopSpawning: 0
 --- !u!4 &113864090
 Transform:
   m_ObjectHideFlags: 0
@@ -5890,8 +5892,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 1577058559
-  m_fontColor: {r: 1, g: 0, b: 0, a: 0.36862746}
+    rgba: 2332033279
+  m_fontColor: {r: 1, g: 0, b: 0, a: 0.54509807}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6774,13 +6776,6 @@ MonoBehaviour:
   _gameManager: {fileID: 0}
   _endOfLevelDialogue: {fileID: 2076884900}
   audioSource: {fileID: 391477481}
-  _numberOfProjectiles: 3
-  _spreadAngle: 30
-  _playerRateOfFire: 0.15
-  _speed: 5
-  _score: 0
-  _ammoCount: 25
-  newGamePowerUpCollected: 0
   _powerupAudioClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   _asteroidBlockingSensors: {fileID: 8300000, guid: fceea3781ce7c48649207a2c151a6228,
     type: 3}
@@ -6829,26 +6824,25 @@ MonoBehaviour:
     type: 3}
   _lateralLaserCanonLeft: {fileID: 29087393}
   _lateralLaserCanonRight: {fileID: 2012420807}
-  _tractorBeam: {fileID: 426590845}
-  tractorBeam: {fileID: 655831811}
-  minTractorBeam: 0
-  maxTractorBeam: 1000
-  currentTractorBeam: 0
-  _canPlayerUseTractorBeam: 0
-  _isTractorBeamOn: 0
+  enemyBoss: {fileID: 0}
   _hasPlayerLaserCooledDown: 1
+  _ammoCount: 25
   _gameFirstStart: 1
   _isPlayerInPosition: 0
+  newGamePowerUpCollected: 0
   _asteroidDestroyed: 0
   _isPlayerTripleShotActive: 0
-  _isPlayerShieldActive: 0
+  _numberOfProjectiles: 3
+  _spreadAngle: 30
+  _playerRateOfFire: 0.15
+  _speed: 5
   _isPlayerSpeedBoostActive: 0
-  poolDamageAnimations:
-  - {fileID: 1358226016}
-  - {fileID: 1935401785495550565}
-  - {fileID: 853987880017284913}
-  - {fileID: 998269970483307881}
-  activatedDamageAnimations: []
+  _isPlayerLateralLaserActive: 0
+  _playerHomingMissilePrefab: {fileID: 642646383187664999, guid: 137feed8102c84f9f9db3c4683598b8e,
+    type: 3}
+  _isPlayerHomingMissilesActivate: 0
+  _homingMissileCount: 20
+  _coreOnline: 1
   _coreTempDecrease: 1
   _coreTempCooledDown: 1
   _hasPlayerThrustersCooledDown: 1
@@ -6857,15 +6851,22 @@ MonoBehaviour:
   currentCoreTemp: 0
   canPlayerUseThrusters: 0
   resetExceededCoreTempWarning: 0
+  _isPlayerShieldActive: 0
   _shieldHits: 0
   _playerShieldAlpha: 1
-  _playerHomingMissilePrefab: {fileID: 642646383187664999, guid: 137feed8102c84f9f9db3c4683598b8e,
-    type: 3}
-  _isPlayerHomingMissilesActivate: 0
-  _homingMissileCount: 20
-  _isPlayerLateralLaserActive: 0
-  _coreOnline: 1
-  enemyBoss: {fileID: 0}
+  poolDamageAnimations:
+  - {fileID: 1358226016}
+  - {fileID: 1935401785495550565}
+  - {fileID: 853987880017284913}
+  - {fileID: 998269970483307881}
+  activatedDamageAnimations: []
+  _tractorBeam: {fileID: 426590845}
+  tractorBeam: {fileID: 655831811}
+  minTractorBeam: 0
+  maxTractorBeam: 1000
+  currentTractorBeam: 0
+  _canPlayerUseTractorBeam: 0
+  _isTractorBeamOn: 0
 --- !u!212 &391477478
 SpriteRenderer:
   m_ObjectHideFlags: 0

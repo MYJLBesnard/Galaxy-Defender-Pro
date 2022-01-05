@@ -5,14 +5,14 @@ public class PowerUps : MonoBehaviour
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
     [SerializeField] private int _powerUpID;  // ID for PwrUp:
-                                              // 0 = Triple Shot,
-                                              // 1 = Speed Boost,
-                                              // 2 = Shields,
-                                              // 3 = Health,
-                                              // 4 = Ammo,
-                                              // 5 = Homing Missiles,
-                                              // 6 = Lateral Laser Canon,
-                                              // 7 = Negative PowerUp,
+                                              // 0 = Triple Shot
+                                              // 1 = Speed Boost
+                                              // 2 = Shields
+                                              // 3 = Ammo
+                                              // 4 = Homing Missiles
+                                              // 5 = Lateral Laser Canon
+                                              // 6 = Health
+                                              // 7 = Negative PowerUp
     [SerializeField] private AudioClip _powerUpAudioClip = null;
     [SerializeField] private GameObject _explosionPrefab;
 
@@ -76,16 +76,16 @@ public class PowerUps : MonoBehaviour
                         player.ShieldActivate();
                         break;
                     case 3:
-                        player.HealthBoostActivate();
-                        break;
-                    case 4:
                         player.PlayerRegularAmmo();
                         break;
-                    case 5:
+                    case 4:
                         player.PlayerHomingMissiles();
                         break;
-                    case 6:
+                    case 5:
                         player.LateralLaserShotActive();
+                        break;
+                    case 6:
+                        player.HealthBoostActivate();
                         break;
                     case 7:
                         player.NegativePowerUpCollision();

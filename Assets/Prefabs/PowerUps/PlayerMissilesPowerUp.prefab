@@ -446,8 +446,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c172bdfe46ee64d488fe41aec15c4bdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedOfPowerUps: 1.5
-  _powerUpID: 5
+  _gameManager: {fileID: 0}
+  _endOfLevelDialogue: {fileID: 0}
+  _powerUpID: 4
   _powerUpAudioClip: {fileID: 8300000, guid: 286316d99781e4f7d9403222affcbf4d, type: 3}
   _explosionPrefab: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
