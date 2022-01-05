@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -14,19 +14,24 @@ public class SpawnManager : MonoBehaviour
     public GameObject[] _playerPowerUps;
     public GameObject[] _typesOfEnemy;
     public GameObject depletedLateralLaserCanons;
-    public bool stopSpawningEnemies = false;
-    public bool stopSpawning = false;
+
     [SerializeField] private AudioClip _warningIncomingWave;
     [SerializeField] private AudioClip _attackWaveRepelled;
+
     public Transform[] enemyWaypoints;
     public Transform[] bossWaypoints;
     private GameObject _typeOfEnemy;
-    private int _shipsInWave = 0;
+
     public int totalEnemyShipsDestroyed = 0;
     public int bossTurretsDestroyed = 0;
+    [SerializeField] private bool _bossTurretsDestroyed = false;
     public int bossMiniGunsDestroyed = 0;
+    [SerializeField] private bool _bossMiniGunsDestroyed = false;
     public int bossCanonsDestroyed = 0;
+    [SerializeField] private bool _bossCanonsDestroyed = false;
+
     public int waveCurrent = 0;
+    private int _shipsInWave = 0;
     public int enemyType = 0;
     private float _xPos;
     private float _yPos;
@@ -34,9 +39,8 @@ public class SpawnManager : MonoBehaviour
     public bool isBossActive = false;
     public bool isPlayerDestroyed = false;
     public bool isMineLayerDeployed = false;
-    [SerializeField] private bool _bossTurretsDestroyed = false;
-    [SerializeField] private bool _bossMiniGunsDestroyed = false;
-    [SerializeField] private bool _bossCanonsDestroyed = false;
+    public bool stopSpawningEnemies = false;
+    public bool stopSpawning = false;
 
     private void Start()
     {
@@ -100,6 +104,8 @@ public class SpawnManager : MonoBehaviour
                     Debug.LogError("The Enemy Boss script is null.");
                 }
             }
+
+            StartCoroutine(SpawnPowerUps());
         }
     }
 
@@ -124,8 +130,7 @@ public class SpawnManager : MonoBehaviour
                 Debug.Log("Wave completed!");
                 _gameManager.WaveComplete();
                 _endOfLevelDialogue.PlayDialogueClip(_attackWaveRepelled);
-
-                //_playerScript.PlayClip(_attackWaveRepelled);
+                totalEnemyShipsDestroyed = 0;
 
                 StartCoroutine(StartNewWave());
             }
@@ -187,7 +192,7 @@ public class SpawnManager : MonoBehaviour
         {
             _xPos = Random.Range(-8.0f, 8.0f);
             _yPos = Random.Range(-5.5f, 5.5f);
-            Vector3 pxToSpawn = new Vector3(_xPos, 7, 0);
+            Vector3 pxToSpawn = new Vector3(_xPos, 9, 0);
             _triggerMineLayer = Random.Range(0, 100);
 
             /*
@@ -203,7 +208,7 @@ public class SpawnManager : MonoBehaviour
 
                 switch (_gameManager.currentWave)
                 {
-                    case 7: // spawn basic Enenmy
+                    case 0: // spawn basic Enenmy
                         int type0 = 0;
                         _typeOfEnemy = _typesOfEnemy[type0];
                         enemyType = type0;
@@ -249,7 +254,7 @@ public class SpawnManager : MonoBehaviour
                         enemyType = type6;
                         break;
 
-                    case 0: // Boss
+                    case 7: // Boss
                         SetupBossAlien();
                         _enemyBossScript.isEnemyBossActive = true;
                         break;
@@ -306,7 +311,10 @@ public class SpawnManager : MonoBehaviour
 
     public void AdvanceToNextLevel()
     {
-        StartCoroutine(StartNewWave());
+        if (isPlayerDestroyed == false)
+        {
+            StartCoroutine(StartNewWave());
+        }
     }
 
     IEnumerator StartNewWave()
@@ -314,7 +322,7 @@ public class SpawnManager : MonoBehaviour
         stopSpawning = true;
         _shipsInWave = 0;
         totalEnemyShipsDestroyed = 0;
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(3.5f);
         _endOfLevelDialogue.PlayDialogueClip(_warningIncomingWave);
 
         stopSpawning = false;

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBoss : MonoBehaviour
@@ -91,7 +90,7 @@ public class EnemyBoss : MonoBehaviour
     IEnumerator DisperseBossExplosions() // upon Boss destruction, instantiates multiple explosions
     {
         yield return new WaitForSeconds(0.1f);
-        int multipleExplosions = Random.Range(5, 7);
+        int multipleExplosions = Random.Range(4, 7);
         for (int i = 0; i < multipleExplosions; i++)
         {
             float x = Random.Range(-4.5f, 4.5f);

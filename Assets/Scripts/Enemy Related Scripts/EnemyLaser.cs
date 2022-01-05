@@ -4,12 +4,21 @@ using UnityEngine;
 
 public class EnemyLaser : MonoBehaviour
 {
-    [SerializeField]
-    private float _laserSpeed = 10.0f;
+    private GameManager _gameManager;
+
+    private void Start()
+    {
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+
+        if (_gameManager == null)
+        {
+            Debug.LogError("The Game Manager is null.");
+        }
+    }
 
     void Update()
     {
-        transform.Translate(Vector3.down * _laserSpeed * Time.deltaTime);
+        transform.Translate(Vector3.down * _gameManager.currentEnemyLaserSpeed * Time.deltaTime);
 
         if (transform.position.y < -6.00f)
         {

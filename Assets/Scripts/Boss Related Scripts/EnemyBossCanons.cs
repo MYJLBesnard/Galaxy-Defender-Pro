@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyBossCanons : MonoBehaviour
 {
@@ -47,7 +45,7 @@ public class EnemyBossCanons : MonoBehaviour
                 player.Damage();
             }
 
-            //_audioSource.Play();
+            _audioSource.Play();
             DestroyCanon();
         }
 
@@ -60,7 +58,7 @@ public class EnemyBossCanons : MonoBehaviour
                     _player.AddScore(10);
             }
 
-            //_audioSource.Play();
+            _audioSource.Play();
             DestroyCanon();
         }
 
@@ -73,7 +71,7 @@ public class EnemyBossCanons : MonoBehaviour
 
             Destroy(other.gameObject);
 
-            //_audioSource.Play();
+            _audioSource.Play();
             DestroyCanon();
         }
     }

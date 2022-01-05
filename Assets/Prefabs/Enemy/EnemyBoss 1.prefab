@@ -45,6 +45,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyBossScript: {fileID: 3984421344871241969}
   EnemyBoss: {fileID: 3984421344871241981}
+  audioSource: {fileID: 0}
+  _enemyMiniGunShotAudioClip: {fileID: 0}
   _enemyBossFixedWpnLaser: {fileID: 4978144073530119704, guid: 4a67f7bf8c7bb437e8d0edf99472927d,
     type: 3}
   posAdjust: 1.23
@@ -93,6 +95,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyBossScript: {fileID: 3984421344871241969}
   EnemyBoss: {fileID: 3984421344871241981}
+  audioSource: {fileID: 0}
+  _enemyLaserCanonAudioClip: {fileID: 0}
   _enemyBossFixedWpnLaser: {fileID: 4978144073530119704, guid: 4a67f7bf8c7bb437e8d0edf99472927d,
     type: 3}
   posAdjust: 0.8
@@ -745,6 +749,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerGameObject: {fileID: 2782251405102421827, guid: a0882e4187fae4bb0ace22fcc1c1a8e2,
     type: 3}
+  _enemyBossDefaultAimPoint: {fileID: 0}
   _rotateSpeed: 350
 --- !u!114 &3984421343874742948
 MonoBehaviour:
@@ -758,11 +763,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae61e6429043548988269885772eb62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyBoss: {fileID: 3984421344871241969}
   explosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
   turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
     type: 3}
+  audioSource: {fileID: 0}
+  _enemyLaserShotAudioClip: {fileID: 0}
   bossStartShooting: 0
 --- !u!114 &3984421343874742946
 MonoBehaviour:
@@ -1134,6 +1140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerGameObject: {fileID: 2782251405102421827, guid: a0882e4187fae4bb0ace22fcc1c1a8e2,
     type: 3}
+  _enemyBossDefaultAimPoint: {fileID: 0}
   _rotateSpeed: 350
 --- !u!114 &3984421344192874088
 MonoBehaviour:
@@ -1147,11 +1154,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae61e6429043548988269885772eb62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyBoss: {fileID: 3984421344871241969}
   explosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
   turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
     type: 3}
+  audioSource: {fileID: 0}
+  _enemyLaserShotAudioClip: {fileID: 0}
   bossStartShooting: 0
 --- !u!114 &3984421344192874089
 MonoBehaviour:
@@ -1965,7 +1973,7 @@ GameObject:
   - component: {fileID: 6463307010700989562}
   - component: {fileID: 3984421344871241971}
   m_Layer: 0
-  m_Name: EnemyBoss
+  m_Name: EnemyBoss 1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2295,7 +2303,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 3206506425634432959, guid: e0f15b8043cfa471fbc1bf0bc927f9d0,
     type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2540,6 +2548,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyBossScript: {fileID: 3984421344871241969}
   EnemyBoss: {fileID: 3984421344871241981}
+  audioSource: {fileID: 0}
+  _enemyLaserCanonAudioClip: {fileID: 0}
   _enemyBossFixedWpnLaser: {fileID: 4978144073530119704, guid: 4a67f7bf8c7bb437e8d0edf99472927d,
     type: 3}
   posAdjust: 0.8
@@ -3012,6 +3022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerGameObject: {fileID: 2782251405102421827, guid: a0882e4187fae4bb0ace22fcc1c1a8e2,
     type: 3}
+  _enemyBossDefaultAimPoint: {fileID: 0}
   _rotateSpeed: 350
 --- !u!114 &3984421345336328046
 MonoBehaviour:
@@ -3025,11 +3036,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae61e6429043548988269885772eb62a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyBoss: {fileID: 3984421344871241969}
   explosionEffect: {fileID: 7121557783777554657, guid: 89c3f571286d2481bb01b26b2c8b0a3b,
     type: 3}
   turretLaserPrefab: {fileID: 2147372738703332579, guid: 32f0c24a2f9504fa8941ca22516e4409,
     type: 3}
+  audioSource: {fileID: 0}
+  _enemyLaserShotAudioClip: {fileID: 0}
   bossStartShooting: 0
 --- !u!114 &3984421345336328037
 MonoBehaviour:
@@ -3195,6 +3207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyBossScript: {fileID: 3984421344871241969}
   EnemyBoss: {fileID: 3984421344871241981}
+  audioSource: {fileID: 0}
+  _enemyMiniGunShotAudioClip: {fileID: 0}
   _enemyBossFixedWpnLaser: {fileID: 4978144073530119704, guid: 4a67f7bf8c7bb437e8d0edf99472927d,
     type: 3}
   posAdjust: 1.23

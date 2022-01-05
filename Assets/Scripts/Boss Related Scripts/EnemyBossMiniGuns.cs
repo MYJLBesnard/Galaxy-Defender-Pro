@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyBossMiniGuns : MonoBehaviour
 {
     private PlayerScript _player;
     private SpawnManager _spawnManager;
-   // private GameManager _gameManager;
     private AudioSource _audioSource;
     [SerializeField] private AudioClip _explosionSoundEffect;
     [SerializeField] private GameObject _explosionPrefab;
@@ -16,8 +13,6 @@ public class EnemyBossMiniGuns : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _audioSource = GetComponent<AudioSource>();
-      //  _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-
 
         if (_player == null)
         {
@@ -37,11 +32,6 @@ public class EnemyBossMiniGuns : MonoBehaviour
         {
             _audioSource.clip = _explosionSoundEffect;
         }
-
-     //   if (_gameManager == null)
-     //   {
-     //       Debug.LogError("The Game Manager is null.");
-     //   }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

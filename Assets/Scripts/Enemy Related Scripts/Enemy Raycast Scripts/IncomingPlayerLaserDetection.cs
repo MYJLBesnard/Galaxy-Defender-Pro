@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class IncomingPlayerLaserDetection : MonoBehaviour // Laser Burst (targets Player and PowerUps) & Dodges Player Laser
 {
-    [SerializeField] public int randomNumber;
-
+    public int randomNumber;
     public Enemy4 _enemy4Script;
     public GameObject Enemy4;
 
@@ -25,7 +24,7 @@ public class IncomingPlayerLaserDetection : MonoBehaviour // Laser Burst (target
     public void RunEnemy4Dodge()
     {
         randomNumber = Random.Range(-10, 10); // used to randomly pick left or right dodge
-        _enemy4Script._randomNumber = randomNumber;
+        _enemy4Script.randomNumber = randomNumber;
         _enemy4Script.StartCoroutine(_enemy4Script.DodgePlayerLaser());
 
     }

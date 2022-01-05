@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class EndOfLevelDialogue : MonoBehaviour
 {
     [SerializeField] private GameManager _gameManager;
+    [SerializeField] private PlayerScript _playerScript;
 
     private AudioSource _audioSource;
     public bool playOnAwake = false;
@@ -50,10 +50,17 @@ public class EndOfLevelDialogue : MonoBehaviour
     void Start()
     {
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
+
 
         if (_gameManager == null)
         {
             Debug.Log("Game Manager is NULL.");
+        }
+
+        if (_playerScript == null)
+        {
+            Debug.Log("PlayerScript is NULL.");
         }
 
         List<AudioClip> audioMsgThreatStillExists = new List<AudioClip>();
@@ -355,7 +362,7 @@ public class EndOfLevelDialogue : MonoBehaviour
     IEnumerator QuitToCredits()
     {
         yield return new WaitForSeconds(12.5f);
-        FadeOutToCredits();
+        RunCreditsDelayCoroutine();
     }
 
     IEnumerator PlayerChicken()
@@ -371,17 +378,29 @@ public class EndOfLevelDialogue : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(8.5f);
-        FadeOutToCredits();
+        yield return new WaitForSeconds(6.0f);
+        RunCreditsDelayCoroutine();
     }
 
-    public void FadeOutToCredits() // Quits and fades out to the credits scene
+    public void RunCreditsDelayCoroutine()
+    {
+        _playerScript.FadeOut();
+        StartCoroutine(LoadCreditsDelay());
+    }
+
+    IEnumerator LoadCreditsDelay() // Loads a new game
+    {
+        yield return new WaitForEndOfFrame();
+        FadeMusicOutToCredits();
+    }
+
+    public void FadeMusicOutToCredits() // Quits and fades out to the credits scene
     {
         _gameManager.StopMusic(2.0f);
         StartCoroutine(LoadCredits());
     }
 
-    IEnumerator LoadCredits()
+    IEnumerator LoadCredits() // Loads credit scene
     {
         yield return new WaitForSeconds(2.0f);
         _gameManager.QuitGame();

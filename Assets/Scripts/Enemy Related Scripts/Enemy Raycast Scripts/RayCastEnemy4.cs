@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RayCastEnemy4 : MonoBehaviour // Laser Burst (targets Player and PowerUps) & Dodges Player Laser
 {
@@ -47,7 +45,7 @@ public class RayCastEnemy4 : MonoBehaviour // Laser Burst (targets Player and Po
 
     public void RunEnemy4Dodge()
     {
-        _enemy4Script._randomNumber = Random.Range(-10, 10);
+        _enemy4Script.randomNumber = Random.Range(-10, 10);
         _enemy4Script.StartCoroutine(_enemy4Script.DodgePlayerLaser());
     }
 }

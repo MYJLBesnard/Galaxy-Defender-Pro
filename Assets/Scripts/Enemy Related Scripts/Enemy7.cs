@@ -57,10 +57,10 @@ public class Enemy7 : MonoBehaviour // Mine Layer
     {
         float minesSpawnPoint = 0.88f;
         int totalMines = 0;
-        int mineQty = 2 + _gameManager.currentLevelNumber + _gameManager.difficultyLevel;   // L1 D1 = 4, L7 D1 = 10
-                                                                                            // L1 D2 = 5, L7 D2 = 11
-                                                                                            // L1 D3 = 6, L7 D3 = 12
-                                                                                            // L1 D4 = 7, L7 D4 = 13
+        int mineQty = 3 + _gameManager.difficultyLevel; // D1 = 4
+                                                        // D2 = 5
+                                                        // D3 = 6
+                                                        // D4 = 7
 
         while (totalMines <= mineQty)
         {

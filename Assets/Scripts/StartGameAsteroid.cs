@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class StartGameAsteroid : MonoBehaviour
 {
@@ -11,8 +9,6 @@ public class StartGameAsteroid : MonoBehaviour
     private GameManager _gameManager;
     private SpawnManager _spawnManager;
     private PlayerScript _playerScript;
-    //private EndOfLevelDialogue _endOfLevelDialogue;
-
 
     private void Start()
     {
@@ -21,7 +17,6 @@ public class StartGameAsteroid : MonoBehaviour
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
-        //_endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();  //************************************
 
         if (_gameManager == null)
         {
@@ -37,13 +32,6 @@ public class StartGameAsteroid : MonoBehaviour
         {
             Debug.Log("The PlayerScript is null.");
         }
-
-        /*
-        if (_endOfLevelDialogue == null)
-        {
-            Debug.Log("Dialogue Player is NULL.");
-        }
-        */
 
         _gameManager.CachePlayerScript();
     }

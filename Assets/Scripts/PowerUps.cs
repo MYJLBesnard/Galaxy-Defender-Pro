@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PowerUps : MonoBehaviour
 {
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
-  //  [SerializeField] private float _speedOfPowerUps = .5f;
     [SerializeField] private int _powerUpID;  // ID for PwrUp:
                                               // 0 = Triple Shot,
                                               // 1 = Speed Boost,
@@ -32,7 +29,7 @@ public class PowerUps : MonoBehaviour
     private void Start()
     {
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();  //************************************
+        _endOfLevelDialogue = GameObject.Find("DialoguePlayer").GetComponent<EndOfLevelDialogue>();
 
         if (_gameManager == null)
         {

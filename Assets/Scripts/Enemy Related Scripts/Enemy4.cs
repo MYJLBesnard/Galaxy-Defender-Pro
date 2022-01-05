@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Player Laser
@@ -19,15 +18,15 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
     private float _enemyRateOfFire = 3.0f;
     private float _enemyCanFire = -1.0f;
     public float _enemySpeed;
-    public float _randomXStartPos;
-    [SerializeField] public int _randomNumber;
+    public float randomXStartPos;
+    public int randomNumber;
 
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _animEnemyDestroyed = GetComponent<Animator>();
-        _randomXStartPos = Random.Range(-8.0f, 8.0f);
+        randomXStartPos = Random.Range(-8.0f, 8.0f);
         _audioSource = GetComponent<AudioSource>();
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
 
@@ -55,7 +54,7 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
             Debug.LogError("The Game Manager is null.");
         }
 
-        _randomNumber = Random.Range(-10, 10); // used to randomly pick left or right dodge
+        randomNumber = Random.Range(-10, 10); // used to randomly pick left or right dodge
     }
 
     void Update()
@@ -89,12 +88,12 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
 
             if (_incomingPlayerLaser == true) // dodges incoming Player laser
             {
-                if (_randomNumber > 0)
+                if (randomNumber > 0)
                 {
                     transform.Translate(20f * Time.deltaTime * Vector3.left);
                     transform.Translate(_enemySpeed * Time.deltaTime * Vector3.down);
                 }
-                else if (_randomNumber < 0)
+                else if (randomNumber < 0)
                 {
                     transform.Translate(20f * Time.deltaTime * Vector3.right);
                     transform.Translate(_enemySpeed * Time.deltaTime * Vector3.down);
@@ -175,8 +174,7 @@ public class Enemy4 : MonoBehaviour // Laser Burst, PowerUp Hunter, Avoids Playe
     {
         if (_stopUpdating == false)
         {
-            //Debug.Log("Running Laser Burst");
-            Vector3 position = new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z);
+            Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.25f, transform.position.z);
             GameObject enemyLaser = Instantiate(_enemyDoubleShotLaserPrefab, position, Quaternion.identity);
             Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 

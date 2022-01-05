@@ -1,27 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using System.IO;
 
 public class PlayerScript : MonoBehaviour
 {
+    private CameraShaker _camera;
+    private FadeEffect _fadeEffect;
+    private int _score;
     [SerializeField] private UIManager _uiManager;
     [SerializeField] private SpawnManager _spawnManager;
     [SerializeField] private GameManager _gameManager;
-    private FadeEffect _fadeEffect;
     [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
+
+    [Header("AudioClips")]
     public AudioSource audioSource;
-
-    [SerializeField] private int _numberOfProjectiles = 3;
-    [Range(0, 360)] [SerializeField] private float _spreadAngle = 30;
-    [SerializeField] private float _playerRateOfFire = 0.15f;
-    [SerializeField] private float _speed = 5.0f;
-    private float _speedMultiplier = 1.75f;
-
-    [SerializeField] private int _score;
-    [SerializeField] private int _ammoCount = 20;
-
     [SerializeField] private AudioClip _powerupAudioClip;
     [SerializeField] private AudioClip _asteroidBlockingSensors;
     [SerializeField] private AudioClip _warningIncomingWave;
@@ -36,6 +28,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private AudioClip _shipRepairsUnderwayAudioClip;
     [SerializeField] private AudioClip _explosionSoundEffect;
 
+    [Header("Game Objects")]
     [SerializeField] private GameObject _player;
     [SerializeField] private GameObject _playerLaserPrefab, _playerDoubleShotLaserPrefab, _playerTripleShotLaserPrefab, _playerLateralLaserPrefab, _playerMissilesDispersed;
     [SerializeField] private GameObject _playerShield, _playerHealthPowerUpPrefab;
@@ -43,6 +36,51 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private GameObject _playerDamage01, _playerDamage02, _playerDamage03, _playerDamage04;
     [SerializeField] private GameObject _bigExplosionPrefab;
     [SerializeField] private GameObject _lateralLaserCanonLeft, _lateralLaserCanonRight;
+    public GameObject enemyBoss;
+
+    [Header("First Start / New Game Variables")]
+    [SerializeField] private bool _hasPlayerLaserCooledDown = false;
+    [SerializeField] private int _ammoCount = 20;
+    [SerializeField] private bool _gameFirstStart = true;
+    [SerializeField] private bool _isPlayerInPosition = false;
+    public int newGamePowerUpCollected = 0;
+    [SerializeField] private bool _asteroidDestroyed = false;
+
+    [Header("Triple Shot Variables")]
+    [SerializeField] private bool _isPlayerTripleShotActive = false;
+    [SerializeField] private int _numberOfProjectiles = 3;
+    [Range(0, 360)] [SerializeField] private float _spreadAngle = 30;
+    [SerializeField] private float _playerRateOfFire = 0.15f;
+    [SerializeField] private float _speed = 5.0f;
+    private float _speedMultiplier = 1.75f;
+
+    [Header("Spped Boost / Lateral Laser Canons")]
+    [SerializeField] private bool _isPlayerSpeedBoostActive = false;
+    [SerializeField] private bool _isPlayerLateralLaserActive = false;
+    Coroutine lateralLaserTimer;
+
+    [Header("Homing Missile Variables")]
+    [SerializeField] private GameObject _playerHomingMissilePrefab;
+    [SerializeField] private bool _isPlayerHomingMissilesActivate = false;
+    [SerializeField] private int _homingMissileCount = 20;
+
+    [Header("Thruster Core Variables")]
+    [SerializeField] private bool _coreOnline = true;
+    [SerializeField] private int _coreTempDecrease;
+    [SerializeField] private bool _coreTempCooledDown = true;
+    [SerializeField] private bool _hasPlayerThrustersCooledDown = true;
+    public ThrustersCoreTemp thrustersCoreTemp;
+    public int maxCoreTemp = 1000;
+    public int currentCoreTemp = 0;
+    public bool canPlayerUseThrusters = false;
+    public bool resetExceededCoreTempWarning = false;
+
+    [Header("Shields / Damage Variables")]
+    [SerializeField] private bool _isPlayerShieldActive = false;
+    [SerializeField] private int _shieldHits = 0;
+    [SerializeField] private float _playerShieldAlpha = 1.0f;
+    public List<GameObject> poolDamageAnimations = new List<GameObject>();
+    public List<GameObject> activatedDamageAnimations = new List<GameObject>();
 
     [Header("Tractor Beam Variables")]
     [SerializeField] private GameObject _tractorBeam;
@@ -53,40 +91,6 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] private bool _canPlayerUseTractorBeam;
     [SerializeField] private bool _isTractorBeamOn = false;
     private Vector3 _scaleChange; // scale of Tractor Beam
-
-
-    [SerializeField] private bool _hasPlayerLaserCooledDown = false;
-    [SerializeField] private bool _gameFirstStart = true;
-    [SerializeField] private bool _isPlayerInPosition = false;
-    [SerializeField] private bool _asteroidDestroyed = false;
-    [SerializeField] private bool _isPlayerTripleShotActive = false, _isPlayerShieldActive = false, _isPlayerSpeedBoostActive = false;
-
-    public List<GameObject> poolDamageAnimations = new List<GameObject>();
-    public List<GameObject> activatedDamageAnimations = new List<GameObject>();
-
-    private CameraShaker _camera;
-
-    [Header("Thruster Core Variables")]
-    [SerializeField] private int _coreTempDecrease;
-    [SerializeField] private bool _coreTempCooledDown = true;
-    [SerializeField] private bool _hasPlayerThrustersCooledDown = true;
-    public ThrustersCoreTemp thrustersCoreTemp;
-    public int maxCoreTemp = 1000;
-    public int currentCoreTemp = 0;
-    public bool canPlayerUseThrusters = false;
-    public bool resetExceededCoreTempWarning = false;
-
-    [SerializeField] private int _shieldHits = 0;
-    [SerializeField] private float _playerShieldAlpha = 1.0f;
-
-    [SerializeField] private GameObject _playerHomingMissilePrefab;
-    [SerializeField] private bool _isPlayerHomingMissilesActivate = false;
-    [SerializeField] private int _homingMissileCount = 20;
-
-    [SerializeField] private bool _isPlayerLateralLaserActive = false;
-    [SerializeField] private bool _coreOnline = true;
-
-    public GameObject enemyBoss;
 
     void Start()
     {
@@ -140,6 +144,11 @@ public class PlayerScript : MonoBehaviour
 
         _gameManager.PlayMusic(1, 5.0f);
         _fadeEffect.FadeIn();
+    }
+
+    public void FadeOut() // Fades out the Scene to black
+    {
+        _fadeEffect.FadeOut();
     }
 
     void Update()
@@ -200,6 +209,34 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    void CalculateMovement()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+
+        transform.Translate(direction * _speed * Time.deltaTime);
+
+        if (_asteroidDestroyed == false)
+        {
+            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 1.5f), 0);
+        }
+
+        if (_asteroidDestroyed == true)
+        {
+            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 3.0f), 0);
+        }
+
+        if (transform.position.x > 13.2f)
+        {
+            transform.position = new Vector3(-13.2f, transform.position.y, 0);
+        }
+        else if (transform.position.x < -13.2f)
+        {
+            transform.position = new Vector3(13.2f, transform.position.y, 0);
+        }
+    }
+
     public void ContinueOptionTxt()
     {
         _uiManager.continueOptionTxt.gameObject.SetActive(true);
@@ -214,13 +251,22 @@ public class PlayerScript : MonoBehaviour
         _uiManager.playerDecidesNo.gameObject.SetActive(false);
     }
 
-    private void FireHomingMissile()
+    public void PlayClip(AudioClip soundEffectClip)
     {
-        Instantiate(_playerHomingMissilePrefab, transform.position + new Vector3(0, -0.141f, 0), Quaternion.identity);
-        _homingMissileCount--;
-        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+        if (soundEffectClip != null)
+        {
+            audioSource.PlayOneShot(soundEffectClip);
+        }
     }
 
+    public void AddScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score); // communicate with the UI to update the score
+    }
+
+
+    // Tractor Beam Logic
     void ActivateTractorBeam()
     {
         if (Input.GetKey(KeyCode.T)) // Turns on the Tractor Beam
@@ -275,6 +321,8 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+
+    // Player Thrusters Logic
     void CalculateThrustersScale()
     {
         if (Input.GetKey(KeyCode.LeftShift) && _hasPlayerThrustersCooledDown && canPlayerUseThrusters)
@@ -421,34 +469,8 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    void CalculateMovement()
-    {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
-        transform.Translate(direction * _speed * Time.deltaTime);
-
-        if (_asteroidDestroyed == false)
-        {
-            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 1.5f), 0);
-        }
-
-        if (_asteroidDestroyed == true)
-        {
-            transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4.5f, 3.0f), 0);
-        }
-
-        if (transform.position.x > 13.2f)
-        {
-            transform.position = new Vector3(-13.2f, transform.position.y, 0);
-        }
-        else if (transform.position.x < -13.2f)
-        {
-            transform.position = new Vector3(13.2f, transform.position.y, 0);
-        }
-    }
-
+    // Player Laser Logic
     public void PlayerFireLaser()
     {
         if (_ammoCount <= 0)
@@ -502,39 +524,15 @@ public class PlayerScript : MonoBehaviour
         _uiManager.UpdateAmmoCount(_ammoCount);
     }
 
-    public void PlayerHomingMissiles()
-    {
-        _homingMissileCount = _homingMissileCount + 5;
-        if (_homingMissileCount > 25)
-        {
-            _homingMissileCount = 25;
-        }
-        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
-        _isPlayerHomingMissilesActivate = true;
-    }
-
-    public void PlayClip(AudioClip soundEffectClip)
-    {
-        if (soundEffectClip != null)
-        {
-            audioSource.PlayOneShot(soundEffectClip);
-        }
-    }
-
     IEnumerator PlayerLaserCoolDownTimer()
     {
         yield return new WaitForSeconds(_playerRateOfFire);
         _hasPlayerLaserCooledDown = true;
     }
 
-    public void AddScore(int points)
-    {
-        _score += points;
-        _uiManager.UpdateScore(_score); // communicate with the UI to update the score
-    }
 
-    // Damage() using the Lists and random damage locations
-    public void Damage()
+    // player Damage Logic
+    public void Damage() // Damage() using the Lists and random damage locations
     {
         if (_isPlayerShieldActive == true)
         {
@@ -601,6 +599,30 @@ public class PlayerScript : MonoBehaviour
             Instantiate(_bigExplosionPrefab, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
         }
+    }
+
+    public void HealthBoostActivate()
+    {
+        // Reverses damage by removing random (if more than 1 active) damages area and returning it to the pool.
+        if (activatedDamageAnimations.Count > 0)
+        {
+            var rdmDamage = Random.Range(0, activatedDamageAnimations.Count);
+            var temp = activatedDamageAnimations[rdmDamage];
+            poolDamageAnimations.Add(temp);
+            temp.SetActive(false);
+            activatedDamageAnimations.Remove(temp);
+            _endOfLevelDialogue.PlayPowerUpDialogue(_shipRepairsUnderwayAudioClip);
+        }
+    }
+
+    public void ShieldActivate()
+    {
+        _isPlayerShieldActive = true;
+        _playerShield.SetActive(true);
+        _endOfLevelDialogue.PlayPowerUpDialogue(_playerShields100AudioClip);
+        _shieldHits = 0;
+        _playerShieldAlpha = 1.0f;
+        _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
     }
 
     IEnumerator ResetPlayerPosition()
@@ -675,18 +697,14 @@ public class PlayerScript : MonoBehaviour
         _playerThrusterRight.gameObject.SetActive(true);
     }
 
-    public void AsteroidDestroyed()
-    {
-        _asteroidDestroyed = true;
-        StartCoroutine(WarningIncomingWave(3.0f));
-    }
-
     public void BossDefeatedRestartNextDifficultyLevel()
     {
         _spawnManager.SetupBossAlien(); // sets up Boss Alien (or resets SpawnManager when Player defeats Boss and continues at higher Difficulty Level) 
         StartCoroutine(WarningIncomingWave(3.0f));
     }
 
+
+    // Start Asteroid Logic
     public void AsteroidBlockingSensors()
     {
         _endOfLevelDialogue.PlayDialogueClip(_asteroidBlockingSensors);
@@ -695,62 +713,49 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator WeaponsFree()
     {
-        yield return new WaitForSeconds(5.0f);
-        _hasPlayerLaserCooledDown = true;
+        yield return new WaitForSeconds(4.5f);
         canPlayerUseThrusters = true;
         _canPlayerUseTractorBeam = true;
+        _uiManager.WeaponsFreeMsg();
     }
 
-    public void TripleShotActivate()
+    public void LaserIsWpnsFree()
     {
-        _isPlayerTripleShotActive = true;
-        StartCoroutine(TripleShotPowerDownTimer());
+        _hasPlayerLaserCooledDown = true;
+        newGamePowerUpCollected = 0;
     }
 
-    public void LateralLaserShotActive()
+    public void AsteroidDestroyed()
     {
-        _isPlayerLateralLaserActive = true;
-        _lateralLaserCanonLeft.SetActive(true);
-        _lateralLaserCanonRight.SetActive(true);
-        StartCoroutine(LateralShotPowerDownTimer());
+        _asteroidDestroyed = true;
+        StartCoroutine(WarningIncomingWave(3.0f));
     }
 
-    public void SpeedBoostActivate()
+    IEnumerator WarningIncomingWave(float time)
     {
-        if (_isPlayerSpeedBoostActive == false) // only give the Player a temp speed boost if the PowerUp is not already collected
+        yield return new WaitForSeconds(time);
+        _endOfLevelDialogue.PlayDialogueClip(_warningIncomingWave);
+        _spawnManager.StartSpawning();
+    }
+
+
+    // Homing Missile Logic
+    public void PlayerHomingMissiles()
+    {
+        _homingMissileCount = _homingMissileCount + 5;
+        if (_homingMissileCount > 25)
         {
-            _isPlayerSpeedBoostActive = true;
-            _speed *= _speedMultiplier;
-            StartCoroutine(SpeedBoostPowerDownTimer());
+            _homingMissileCount = 25;
         }
-        else
-        {
-            return;
-        }    
+        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
+        _isPlayerHomingMissilesActivate = true;
     }
 
-    public void HealthBoostActivate()
+    private void FireHomingMissile()
     {
-        // Reverses damage by removing random (if more than 1 active) damages area and returning it to the pool.
-        if (activatedDamageAnimations.Count > 0)
-        {
-            var rdmDamage = Random.Range(0, activatedDamageAnimations.Count);
-            var temp = activatedDamageAnimations[rdmDamage];
-            poolDamageAnimations.Add(temp);
-            temp.SetActive(false);
-            activatedDamageAnimations.Remove(temp);
-            _endOfLevelDialogue.PlayPowerUpDialogue(_shipRepairsUnderwayAudioClip);
-        }
-    }
-
-    public void ShieldActivate()
-    {
-        _isPlayerShieldActive = true;
-        _playerShield.SetActive(true);
-        _endOfLevelDialogue.PlayPowerUpDialogue(_playerShields100AudioClip);
-        _shieldHits = 0;
-        _playerShieldAlpha = 1.0f;
-        _playerShield.GetComponent<SpriteRenderer>().material.color = new Color(1f, 1f, 1f, _playerShieldAlpha);
+        Instantiate(_playerHomingMissilePrefab, transform.position + new Vector3(0, -0.141f, 0), Quaternion.identity);
+        _homingMissileCount--;
+        _uiManager.UpdateHomingMissileCount(_homingMissileCount);
     }
 
     public void HomingMissilesActivate()
@@ -783,22 +788,70 @@ public class PlayerScript : MonoBehaviour
         _uiManager.UpdateHomingMissileCount(_homingMissileCount);
     }
 
+
+    // Triple Lsaer Shot Logic
+    public void TripleShotActivate()
+    {
+        _isPlayerTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownTimer());
+    }
+
     IEnumerator TripleShotPowerDownTimer()
     {
         yield return new WaitForSeconds(5.0f);
         _isPlayerTripleShotActive = false;
     }
 
+
+    // Lateral Laser Canon Logic
+    public void LateralLaserShotActive()
+    {
+        if (_isPlayerLateralLaserActive == false) // equips Player with lateral laser canons and starts the power down timer.
+        {
+            Debug.Log("Lateral Canons collected.");
+            _isPlayerLateralLaserActive = true;
+            _lateralLaserCanonLeft.SetActive(true);
+            _lateralLaserCanonRight.SetActive(true);
+            StartLateralLaserTimerCoroutine();
+            return;
+        }
+
+        if (_isPlayerLateralLaserActive == true) // drops old canons if equipped, loads new ones, and resets the power down timer.
+        {
+            StopLateralLaserTimerCoroutine();
+            DropLateralLaserCanons();
+            _isPlayerLateralLaserActive = true;
+            _lateralLaserCanonLeft.SetActive(true);
+            _lateralLaserCanonRight.SetActive(true);
+            StartLateralLaserTimerCoroutine();
+        }
+    }
+
+    public void StartLateralLaserTimerCoroutine() // starts the coroutine to power down lateral laser canons after 15 seconds
+    {
+        lateralLaserTimer = StartCoroutine(LateralShotPowerDownTimer());
+    }
+
+    public void StopLateralLaserTimerCoroutine() // stops the coroutine to power down lateral laser canons (resets timer)
+    {
+        StopCoroutine(lateralLaserTimer);
+    }
+
     IEnumerator LateralShotPowerDownTimer()
     {
         yield return new WaitForSeconds(15.0f);
+        DropLateralLaserCanons();
+    }
+
+    public void DropLateralLaserCanons()
+    {
         _isPlayerLateralLaserActive = false;
         _lateralLaserCanonLeft.SetActive(false);
         _lateralLaserCanonRight.SetActive(false);
 
         Vector3 pxToSpawn = new Vector3(Random.Range(-8f, 8f), 7, 0);
         Instantiate(_spawnManager.depletedLateralLaserCanons, transform.position, Quaternion.identity);
-        
+
         transform.Translate(Vector3.down * _gameManager.currentPowerUpSpeed * Time.deltaTime);
 
         if (transform.position.y < -9.0f)
@@ -810,6 +863,22 @@ public class PlayerScript : MonoBehaviour
         _lateralLaserCanonRight.SetActive(false);
     }
 
+
+    // Spped Boost Logic
+    public void SpeedBoostActivate()
+    {
+        if (_isPlayerSpeedBoostActive == false) // only give the Player a temp speed boost if the PowerUp is not already collected
+        {
+            _isPlayerSpeedBoostActive = true;
+            _speed *= _speedMultiplier;
+            StartCoroutine(SpeedBoostPowerDownTimer());
+        }
+        else
+        {
+            return;
+        }
+    }
+
     IEnumerator SpeedBoostPowerDownTimer()
     {
         yield return new WaitForSeconds(5.0f);
@@ -817,13 +886,8 @@ public class PlayerScript : MonoBehaviour
         _isPlayerSpeedBoostActive = false;
     }
 
-    IEnumerator WarningIncomingWave(float time)
-    {
-        yield return new WaitForSeconds(time);
-        _endOfLevelDialogue.PlayDialogueClip(_warningIncomingWave);
-        _spawnManager.StartSpawning();
-    }
 
+    // Negative Power Up Logic
     public void NegativePowerUpCollision()
     {
         int _itemLost = Random.Range(0, 4);

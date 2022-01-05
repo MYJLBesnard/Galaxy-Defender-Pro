@@ -44,7 +44,7 @@ public class SphereCastEnemy4 : MonoBehaviour // Detects and Dodges Player Laser
 
     public void RunEnemy4Dodge()
     {
-        _enemy4Script._randomNumber = Random.Range(-10, 10);
+        _enemy4Script.randomNumber = Random.Range(-10, 10);
         _enemy4Script.StartCoroutine(_enemy4Script.DodgePlayerLaser());
     }
 }

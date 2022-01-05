@@ -1,16 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FireBossTurretLaser : MonoBehaviour
 {
     private GameManager _gameManager;
     private SpawnManager _spawnManager;
-    [SerializeField] private EnemyBoss _enemyBoss;
+    private EnemyBoss _enemyBoss;
     public GameObject explosionEffect;
     public GameObject turretLaserPrefab;
-    //public AudioClip _enemyLaserShotAudioClip;
-    //[SerializeField] private bool _stopUpdating = false;
+    public AudioSource audioSource;
+    public AudioClip _enemyLaserShotAudioClip;
     public  bool bossStartShooting = false;
 
     private float _enemyRateOfFire;
@@ -18,14 +17,11 @@ public class FireBossTurretLaser : MonoBehaviour
 
     void Start()
     {
-        if (_enemyBoss.isEnemyBossActive == true)
-        {
-            StartCoroutine(BossStartShooting());
-        }
-
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _spawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
         _enemyBoss = GameObject.Find("EnemyBoss(Clone)").GetComponent<EnemyBoss>();
+        audioSource = GetComponent<AudioSource>();
+
 
         if (_gameManager == null)
         {
@@ -40,6 +36,16 @@ public class FireBossTurretLaser : MonoBehaviour
         if (_enemyBoss == null)
         {
             Debug.LogError("The Enemy Boss script is null.");
+        }
+
+        if (audioSource == null)
+        {
+            Debug.LogError("The audio source is null.");
+        }
+
+        if (_enemyBoss.isEnemyBossActive == true)
+        {
+            StartCoroutine(BossStartShooting());
         }
     }
 
@@ -62,8 +68,16 @@ public class FireBossTurretLaser : MonoBehaviour
                     }
                 }
 
-                //PlayClip(_enemyLaserShotAudioClip);
+                PlayClip(_enemyLaserShotAudioClip);
             }
+        }
+    }
+
+    public void PlayClip(AudioClip soundEffectClip)
+    {
+        if (soundEffectClip != null)
+        {
+            audioSource.PlayOneShot(soundEffectClip);
         }
     }
 
@@ -80,8 +94,6 @@ public class FireBossTurretLaser : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
-
-            //_audioSource.Play();
     }
 
     public void CountdownActiveTurrets()
@@ -91,7 +103,7 @@ public class FireBossTurretLaser : MonoBehaviour
 
     IEnumerator BossStartShooting()
     {
-        yield return new WaitForSeconds(600.0f); // sets the delay before the Boss starts firing from his main turrets
+        yield return new WaitForSeconds(6.0f); // sets the delay before the Boss starts firing from his main turrets
         bossStartShooting = true;
     }
 }

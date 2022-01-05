@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using UnityEngine;
 
 public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player and PowerUps)
@@ -7,6 +7,9 @@ public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player 
     private GameManager _gameManager;
     public EnemyBoss _enemyBossScript;
     public GameObject EnemyBoss;
+    public AudioSource audioSource;
+    public AudioClip _enemyMiniGunShotAudioClip;
+
     [SerializeField] private GameObject _enemyBossFixedWpnLaser;
 
     public float posAdjust = 2.0f;
@@ -15,13 +18,27 @@ public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player 
     {
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         _enemyBossScript = EnemyBoss.GetComponent<EnemyBoss>();
+        audioSource = GetComponent<AudioSource>();
+
+        if (_gameManager == null)
+        {
+            Debug.LogError("The Game Manager is null.");
+        }
+
+        if (_enemyBossScript == null)
+        {
+            Debug.LogError("The EnemyBoss Script is null.");
+        }
+
+        if (audioSource == null)
+        {
+            Debug.LogError("The audio source is null.");
+        }
     }
 
     void FixedUpdate()
     {
-           //RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, _gameManager.currentEnemySensorRange);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1); // was 5
-
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, _gameManager.currentBossSensorRange);
 
         if (hit.collider != null)
             {
@@ -34,15 +51,14 @@ public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player 
                 {
                     RunLaserBurst();
                 }
-            }
+        }
 
-           //Debug.DrawRay(transform.position, Vector2.down * _gameManager.currentEnemySensorRange, Color.red);
-        Debug.DrawRay(transform.position, Vector2.down * 5, Color.red);
-
+        Debug.DrawRay(transform.position, Vector2.down * _gameManager.currentBossSensorRange, Color.red);
     }
 
     public void RunLaserBurst()
     {
+        PlayClip(_enemyMiniGunShotAudioClip);
         StartCoroutine(LaserBurst());
     }
 
@@ -58,5 +74,13 @@ public class RayCastBossMiniGuns : MonoBehaviour // Laser Burst (targets Player 
         }
 
         yield return new WaitForSeconds(0.1f);
+    }
+
+    public void PlayClip(AudioClip soundEffectClip)
+    {
+        if (soundEffectClip != null)
+        {
+            audioSource.PlayOneShot(soundEffectClip);
+        }
     }
 }

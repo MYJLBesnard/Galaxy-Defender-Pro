@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -19,6 +18,7 @@ using System;
     public float EnemySensorRange = 3.0f; // How far the RayCast can sense a hit
     public float EnemyMineLayerChance = 5.0f; // % (out of 100) that a Enemy Mine Layer will spawn
     public float BossEnemySpeed = 1.5f;    // Default speed of Boss Enemy ships(seconds)
+    public float BossSensorRange = 2.0f; // How far the RayCast can sense a hit
 }
 
 public class GameManager : MonoBehaviour
@@ -26,11 +26,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerScript _playerScript;
     [SerializeField] private EndOfLevelDialogue _endOfLevelDialogue;
 
-
     public int difficultyLevel = 1; // default difficulty level if not modified in Options Scene
     public int graphicQualityLevel = 1; // default graphic quality set to Low
-    public float musicVolume = 0f;
-    public float SFXVolume = 0f;
+    public float musicVolume = -10f;
+    public float SFXVolume = -13f;
     public float dialogueVolume = 0f;
     public bool isPlayerDestroyed = false;
     public bool isBossDefeated = false;
@@ -57,6 +56,7 @@ public class GameManager : MonoBehaviour
     public float currentEnemySensorRange { get { return Waves[_currentWave].EnemySensorRange + difficultyLevel; } }
     public float currentEnemyMineLayerChance { get { return Waves[_currentWave].EnemyMineLayerChance - (currentLevelNumber * difficultyLevel); } }
     public float currentBossEnemySpeed { get { return Waves[_currentWave].BossEnemySpeed + (difficultyLevel / 2); } }
+    public float currentBossSensorRange { get { return Waves[_currentWave].EnemySensorRange + (difficultyLevel / 2); } }
 
     // A list of AudioClips that can be played
     [SerializeField] private List<AudioClip> MusicClips = new List<AudioClip>();
@@ -100,8 +100,6 @@ public class GameManager : MonoBehaviour
         _currentScore = 0;
         _currentWave = 0;
 
-        // This is a app global object which
-        // should survive scene loads.
         DontDestroyOnLoad(gameObject);
     }
 
@@ -109,16 +107,11 @@ public class GameManager : MonoBehaviour
     {
         musicVolume = -10f;
         SFXVolume = -13f;
-        //dialogueVolume = 0f;
 
-        // Cache AudioSource component is available
         _music = GetComponent<AudioSource>();
 
-        // If an audio source exists
         if (_music)
         {
-            // Make sure this isn't set to play on awake, make sure volume is initially
-            // zero, set to loop, and that the source is not playing.
             _music.playOnAwake = false;
             _music.loop = true;
             _music.volume = 0f;
@@ -245,10 +238,6 @@ public class GameManager : MonoBehaviour
         _currentWave = 0;
         _lives = 3;
 
-        // Stop any music (3 second fade - ie from main menu to game scene)
-        StopMusic(3);
-
-        // Load the game scenne and start playing.
         SceneManager.LoadScene("Game");
     }
 
@@ -287,8 +276,6 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isPlayerDestroyed = true;
-        
- //       _isGameOver = true;
     }
 
     public void EnemyBossDefeated()
@@ -341,16 +328,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Main Menu");
     }
 
-    public void LoadGame()
-    {
-        // Reset score and lives.
-        _currentScore = 0;
-        _currentWave = 0;
-        _lives = 3;
-
-        SceneManager.LoadScene("Game");
-    }
-
     public void LoadGameInstructions()
     {
         SceneManager.LoadScene("Instructions"); // Loads options scene
@@ -378,45 +355,4 @@ public class GameManager : MonoBehaviour
             Debug.LogError("The PlayerScript is null.");
         }
     }
-
-    /*
-    public void FadeIn()
-    {
-        StartCoroutine(FadeInRoutine());
-    }
-
-    public void FadeOut()
-    {
-        StartCoroutine(FadeOutRoutine());
-    }
-
-    IEnumerator FadeInRoutine()
-    {
-        _fadeImage.color = firstColor;
-        float currentTime = 0f;
-
-        while (currentTime < durationFader)
-        {
-            float alpha = Mathf.Lerp(0f, 1f, currentTime / durationFader);
-            _fadeImage.color = new Color(_fadeImage.color.r, _fadeImage.color.g, _fadeImage.color.b, alpha);
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    IEnumerator FadeOutRoutine()
-    {
-        _fadeImage.color = lastColor;
-        float currentTime = 0f;
-
-        while (currentTime < durationFader)
-        {
-            float alpha = Mathf.Lerp(1f, 0f, currentTime / durationFader);
-            _fadeImage.color = new Color(_fadeImage.color.r, _fadeImage.color.g, _fadeImage.color.b, alpha);
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-    */
-
 }

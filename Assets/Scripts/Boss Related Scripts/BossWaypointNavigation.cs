@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BossWaypointNavigation : MonoBehaviour
 {
@@ -8,8 +6,6 @@ public class BossWaypointNavigation : MonoBehaviour
     private GameManager _gameManager;
     private EnemyBoss _enemyBoss;
     public float _enemySpeed;
- //   [SerializeField] private AudioClip _explosionSoundEffect;
- //   [SerializeField] private GameObject _explosionPrefab;
     public float startWaitTime;
     private float waitTime;
     private int randomSpot;
@@ -37,9 +33,6 @@ public class BossWaypointNavigation : MonoBehaviour
         {
             Debug.LogError("The Enemy Boss script is null.");
         }
-
-       // _enemyBoss.isEnemyBossActive = true; //******************************************************************
-
     }
 
     void Update()
@@ -47,7 +40,6 @@ public class BossWaypointNavigation : MonoBehaviour
         _enemySpeed = _gameManager.currentBossEnemySpeed;
 
         transform.position = Vector2.MoveTowards(transform.position, _spawnManager.bossWaypoints[randomSpot].position, _enemySpeed * Time.deltaTime);
-
 
         if (Vector2.Distance(transform.position, _spawnManager.bossWaypoints[randomSpot].position) < 0.2f)
         {

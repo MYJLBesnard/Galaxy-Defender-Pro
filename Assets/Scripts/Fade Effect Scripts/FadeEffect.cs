@@ -36,7 +36,6 @@ public class FadeEffect : MonoBehaviour
             yield return null;
         }
         fader.SetActive(false);
-
     }
 
     IEnumerator FadeOutRoutine()
@@ -55,7 +54,5 @@ public class FadeEffect : MonoBehaviour
             currentTime += Time.deltaTime;
             yield return null;
         }
-        //fader.SetActive(false);
-
     }
 }

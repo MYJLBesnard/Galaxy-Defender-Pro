@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class SceneManager_MainMenu : MonoBehaviour
@@ -39,13 +35,11 @@ public class SceneManager_MainMenu : MonoBehaviour
     {
         if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) && Input.GetKeyDown(KeyCode.Slash))
         {
-            //_fadeEffect.FadeOut();
             FadeToGameInstructionsScene();
         }
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            //_fadeEffect.FadeOut();
             FadeOutToGameScene();
         }
 
@@ -73,7 +67,7 @@ public class SceneManager_MainMenu : MonoBehaviour
     IEnumerator LoadMainGame() // Loads a new game
     {
         yield return new WaitForSeconds(2.0f);
-        _gameManager.LoadGame();
+        _gameManager.StartNewGame();
     }
 
     public void FadeToGameInstructionsScene() // Fades out and loads the instructions scene
@@ -104,6 +98,18 @@ public class SceneManager_MainMenu : MonoBehaviour
     public void LoadOptions() // Loads the options scene
     {
         SceneManager.LoadScene("Options"); // Loads options scene
+    }
+
+    public void RunCreditsDelayCoroutine()
+    {
+        _fadeEffect.FadeOut();
+        StartCoroutine(LoadCreditsDelay());
+    }
+
+    IEnumerator LoadCreditsDelay() // Loads a new game
+    {
+        yield return new WaitForEndOfFrame();
+        FadeOutToCredits();
     }
 
     public void FadeOutToCredits() // Quits and fades out to the credits scene

@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text _readyText;
     [SerializeField] private TMP_Text _setText;
     [SerializeField] private TMP_Text _defendText;
+    [SerializeField] private TMP_Text _weaponsFree;
     [SerializeField] private TMP_Text _coreTempWarning;
     [SerializeField] private TMP_Text _coreShutdownText;
     [SerializeField] private TMP_Text _coreTempStableText;
@@ -32,6 +33,7 @@ public class UIManager : MonoBehaviour
     public Button playerDecidesYes;
     public Button playerDecidesNo;
 
+    [Header("Debugging HUD Display")]
     [SerializeField] private TMP_Text _TotalLevels;
     [SerializeField] private TMP_Text _LevelNumber;
     [SerializeField] private TMP_Text _LevelName;
@@ -94,7 +96,7 @@ public class UIManager : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.N) && _gameManager.isPlayerDestroyed == true)
+        if (Input.GetKeyDown(KeyCode.P) && _gameManager.isPlayerDestroyed == true)
         {
             FadeOutToGameScene();
         }
@@ -227,6 +229,7 @@ public class UIManager : MonoBehaviour
     private void GameOverSequence()
     {
         _gameManager.GameOver();
+
         _gameOverTextBlock.SetActive(true);
         string msg = _gameOverText.text;
         _gameOverText.text = null;
@@ -235,20 +238,18 @@ public class UIManager : MonoBehaviour
 
     IEnumerator GameOverRoutine(string msg) // Types out msg and flashes text
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
         WaitForSeconds letterDelay = new WaitForSeconds(_letterDisplayDelay);
-
-        if (msg == null)
-        {
-            _gameOverText.text = "GAME OVER";
-            msg = _gameOverText.text;
-        }
 
         for (int i = 0; i < msg.Length; i++)
         {
             _gameOverText.text += msg[i].ToString();
             yield return letterDelay;
         }
+
+        yield return new WaitForSeconds(2.0f);
+        _gameOverText.text = null;
+        _gameOverTextBlock.SetActive(false);
 
         WaitForSeconds flashDelay = new WaitForSeconds(_flashDelay);
         bool flashGameOver = true;
@@ -269,6 +270,8 @@ public class UIManager : MonoBehaviour
             {
                 flashGameOver = false;
             }
+
+            _gameOverTextBlock.SetActive(false);
         }
     }
 
@@ -293,6 +296,18 @@ public class UIManager : MonoBehaviour
         _playerBoxCollider2D.GetComponent<BoxCollider2D>().enabled = true;
     }
 
+    public void WeaponsFreeMsg()
+    {
+        StartCoroutine(DisplayWeapnsFreeMsg());
+    }
+
+    IEnumerator DisplayWeapnsFreeMsg()
+    {
+        _weaponsFree.gameObject.SetActive(true);
+        yield return new WaitForSeconds(4.5f);
+        _weaponsFree.gameObject.SetActive(false);
+    }
+
     public void FadeOutToGameScene() // Fades out and loads a new game at the default difficulty level (Rookie)
                                      // or to whichever difficulty level was set in the options scene.
                                      // (Player lost all lives and Game Over)
@@ -306,7 +321,7 @@ public class UIManager : MonoBehaviour
     IEnumerator LoadMainGame() // Loads a new game from Game scene when Player has lost all lives
     {
         yield return new WaitForSeconds(2.0f);
-        _gameManager.LoadGame();
+        _gameManager.StartNewGame();
     }
 
     public void FadeOutToCredits() // Quits and fades out to the credits scene (Player lost all lives and Game Over)

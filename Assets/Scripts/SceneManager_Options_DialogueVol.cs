@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
-using System.IO;
 
 public class SceneManager_Options_DialogueVol : MonoBehaviour
 {

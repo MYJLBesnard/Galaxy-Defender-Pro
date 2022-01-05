@@ -1061,8 +1061,8 @@ MonoBehaviour:
   _endOfLevelDialogue: {fileID: 0}
   difficultyLevel: 1
   graphicQualityLevel: 1
-  musicVolume: 0
-  SFXVolume: 0
+  musicVolume: -10
+  SFXVolume: -13
   dialogueVolume: 0
   isPlayerDestroyed: 0
   isBossDefeated: 0
@@ -1074,15 +1074,16 @@ MonoBehaviour:
   - LevelNumber: 1
     Name: Wave 1
     SizeOfWave: 1
-    EnemySpeed: 1
+    EnemySpeed: 0
     EnemyLaserSpeed: 6
     PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
-    EnemyMineLayerChance: 200
+    EnemyMineLayerChance: 100
     BossEnemySpeed: 1.5
+    BossSensorRange: 2
   - LevelNumber: 2
     Name: Wave 2
     SizeOfWave: 1
@@ -1095,6 +1096,7 @@ MonoBehaviour:
     EnemySensorRange: 4
     EnemyMineLayerChance: 100
     BossEnemySpeed: 1.5
+    BossSensorRange: 2
   - LevelNumber: 3
     Name: Wave 3 - Dodge
     SizeOfWave: 1
@@ -1105,25 +1107,53 @@ MonoBehaviour:
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
-    EnemyMineLayerChance: 95
+    EnemyMineLayerChance: 98
     BossEnemySpeed: 1.5
+    BossSensorRange: 2
   - LevelNumber: 4
     Name: Wave 4 - Ram
     SizeOfWave: 1
     EnemySpeed: 2.5
-    EnemyLaserSpeed: 6.5
+    EnemyLaserSpeed: 6
     PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
-    EnemyMineLayerChance: 100
+    EnemyMineLayerChance: 98
     BossEnemySpeed: 1.5
+    BossSensorRange: 2
   - LevelNumber: 5
     Name: Wave 5 - Smart
     SizeOfWave: 1
-    EnemySpeed: 3
-    EnemyLaserSpeed: 7
+    EnemySpeed: 2.5
+    EnemyLaserSpeed: 6
+    PowerUpSpeed: 1.5
+    EnemyRateOfSpawning: 5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 3
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 97
+    BossEnemySpeed: 1.5
+    BossSensorRange: 2
+  - LevelNumber: 6
+    Name: Wave 6 - Rear
+    SizeOfWave: 1
+    EnemySpeed: 2.5
+    EnemyLaserSpeed: 6
+    PowerUpSpeed: 1.5
+    EnemyRateOfSpawning: 5
+    EnemyRateOfFire: 8
+    PowerUpRateOfSpawning: 3
+    EnemySensorRange: 4
+    EnemyMineLayerChance: 96
+    BossEnemySpeed: 1.5
+    BossSensorRange: 2
+  - LevelNumber: 7
+    Name: Wave 7 - Arc
+    SizeOfWave: 1
+    EnemySpeed: 2.5
+    EnemyLaserSpeed: 6
     PowerUpSpeed: 1.5
     EnemyRateOfSpawning: 5
     EnemyRateOfFire: 8
@@ -1131,42 +1161,20 @@ MonoBehaviour:
     EnemySensorRange: 4
     EnemyMineLayerChance: 95
     BossEnemySpeed: 1.5
-  - LevelNumber: 6
-    Name: Wave 6 - Rear
-    SizeOfWave: 1
-    EnemySpeed: 3.5
-    EnemyLaserSpeed: 7.5
-    PowerUpSpeed: 1.5
-    EnemyRateOfSpawning: 5
-    EnemyRateOfFire: 7
-    PowerUpRateOfSpawning: 3
-    EnemySensorRange: 4
-    EnemyMineLayerChance: 93
-    BossEnemySpeed: 1.5
-  - LevelNumber: 7
-    Name: Wave 7 - Arc
-    SizeOfWave: 1
-    EnemySpeed: 3.5
-    EnemyLaserSpeed: 7.5
-    PowerUpSpeed: 1.5
-    EnemyRateOfSpawning: 5
-    EnemyRateOfFire: 6
-    PowerUpRateOfSpawning: 3
-    EnemySensorRange: 4
-    EnemyMineLayerChance: 90
-    BossEnemySpeed: 1.5
+    BossSensorRange: 2
   - LevelNumber: 8
     Name: Wave 8 - Boss
-    SizeOfWave: 0
-    EnemySpeed: 3.5
-    EnemyLaserSpeed: 7.5
+    SizeOfWave: 1
+    EnemySpeed: 2.5
+    EnemyLaserSpeed: 6
     PowerUpSpeed: 0.5
     EnemyRateOfSpawning: 5
-    EnemyRateOfFire: 6
+    EnemyRateOfFire: 8
     PowerUpRateOfSpawning: 3
     EnemySensorRange: 4
-    EnemyMineLayerChance: 96
+    EnemyMineLayerChance: 120
     BossEnemySpeed: 1.5
+    BossSensorRange: 2
   MusicClips:
   - {fileID: 8300000, guid: a3ed9afa1a4004621ba5ad95f988ad70, type: 3}
   - {fileID: 8300000, guid: d8b4c3ae028624f3c8880ee1f8c3dcdc, type: 3}
