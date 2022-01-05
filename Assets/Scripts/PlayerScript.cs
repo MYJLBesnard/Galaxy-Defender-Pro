@@ -280,35 +280,35 @@ public class PlayerScript : MonoBehaviour
             }
         }
 
-        void PlayerTractorBeamActivate(int tractorBeamDecrease)
-        {
-            currentTractorBeam -= tractorBeamDecrease;
-            tractorBeam.SetTractorBeam(currentTractorBeam);
-            if (currentTractorBeam < 0)
-            {
-                currentTractorBeam = 0;
-
-                CollectPowerUps.isPwrUpTractorBeamActive = false;
-                _tractorBeam.SetActive(false);
-                _isTractorBeamOn = false;
-            }
-
-            if (_isTractorBeamOn == true)
-            {
-                _tractorBeam.transform.localScale += _scaleChange * 1f;
-
-                if (_tractorBeam.transform.localScale.y < 4.0f || _tractorBeam.transform.localScale.y > 40.0f)
-                {
-                    _scaleChange = -_scaleChange * 1f;
-                }
-            }
-        }
-
         if (Input.GetKeyUp(KeyCode.T)) // Turns off the Tractor Beam
         {
             CollectPowerUps.isPwrUpTractorBeamActive = false;
             _tractorBeam.SetActive(false);
             _isTractorBeamOn = false;
+        }
+    }
+
+    void PlayerTractorBeamActivate(int tractorBeamDecrease)
+    {
+        currentTractorBeam -= tractorBeamDecrease;
+        tractorBeam.SetTractorBeam(currentTractorBeam);
+        if (currentTractorBeam < 0)
+        {
+            currentTractorBeam = 0;
+
+            CollectPowerUps.isPwrUpTractorBeamActive = false;
+            _tractorBeam.SetActive(false);
+            _isTractorBeamOn = false;
+        }
+
+        if (_isTractorBeamOn == true)
+        {
+            _tractorBeam.transform.localScale += _scaleChange * 1f;
+
+            if (_tractorBeam.transform.localScale.y < 4.0f || _tractorBeam.transform.localScale.y > 40.0f)
+            {
+                _scaleChange = -_scaleChange * 1f;
+            }
         }
     }
 
